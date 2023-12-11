@@ -1,55 +1,80 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import React from 'react';
 import { Link, Tabs } from 'expo-router';
-import { Pressable, useColorScheme } from 'react-native';
+import { COLORS, FONT } from '@/constants';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 
-import Colors from '../../constants/Colors';
+type Props = {};
 
-/**
- * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
- */
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
-
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
+const layout = (props: Props) => {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: COLORS.primary,
+        // tabBarLabelStyle: {
+        // fontFamily: FONT.semiBold,
+        // },
+        tabBarLabelStyle: styles.tabBar,
+        // tabBarShowLabel: false,
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          tabBarLabel: 'Activities',
+          tabBarIcon: ({ size, color }) => (
+            <MaterialIcons name="event" size={size} color={color} />
+          ),
+        }}
+      />
+      {/* <Tabs.Screen
+        name="demo"
+        options={{
+          tabBarLabel: 'Explore',
+          tabBarIcon: ({ size, color }) => (
+            <MaterialIcons name="search" size={size} color={color} />
+          ),
+        }}
+      /> */}
+      <Tabs.Screen
+        name="whishlists"
+        options={{
+          tabBarLabel: 'Wishlists',
+          tabBarIcon: ({ size, color }) => (
+            <MaterialIcons name="favorite-outline" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="notification"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          tabBarLabel: 'Inbox',
+          tabBarIcon: ({ size, color }) => (
+            <MaterialIcons
+              name="notifications-none"
+              size={size}
+              color={color}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          tabBarLabel: 'Profile',
+          headerShown: false, // Hide the header
+          tabBarIcon: ({ size, color }) => (
+            <MaterialIcons name="account-circle" size={size} color={color} />
+          ),
         }}
       />
     </Tabs>
   );
-}
+};
+
+export default layout;
+
+const styles = StyleSheet.create({
+  tabBar: {
+    fontFamily: FONT.semiBold,
+  },
+});

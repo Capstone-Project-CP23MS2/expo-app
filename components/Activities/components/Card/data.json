@@ -1,0 +1,70 @@
+[
+    {
+        "activityId": 4,
+        "hostUserId": 3,
+        "categoryId": {
+            "categoryId": 3,
+            "name": "Tennis",
+            "description": "1v1 Tennis"
+        },
+        "title": "ใครว่างมาเทนนิสที่สนามหลังมอ",
+        "description": "สนามหลังมอ เทนนิส 1v1",
+        "place": "สนามหลังมอ",
+        "dateTime": "2023-12-09T12:04:50.523919Z",
+        "duration": 100,
+        "createdAt": "2023-12-09T12:04:50.523919Z",
+        "updatedAt": "2023-12-09T12:04:50.523919Z",
+        "noOfMembers": 12
+    },
+    {
+        "activityId": 3,
+        "hostUserId": 3,
+        "categoryId": {
+            "categoryId": 2,
+            "name": "Volleyball",
+            "description": "6 players Volleyball"
+        },
+        "title": "Come play Volley!!",
+        "description": "วอลเลย์กันเถอะ",
+        "place": "สนาม A",
+        "dateTime": "2023-12-09T12:04:50.523919Z",
+        "duration": 120,
+        "createdAt": "2023-12-09T12:04:50.523919Z",
+        "updatedAt": "2023-12-09T12:04:50.523919Z",
+        "noOfMembers": 12
+    },
+    {
+        "activityId": 2,
+        "hostUserId": 2,
+        "categoryId": {
+            "categoryId": 1,
+            "name": "Football",
+            "description": "22 players 11 each team"
+        },
+        "title": "Football After Class",
+        "description": "DescriptionZ",
+        "place": "Place2",
+        "dateTime": "2023-12-09T12:04:50.523919Z",
+        "duration": 100,
+        "createdAt": "2023-12-09T12:04:50.523919Z",
+        "updatedAt": "2023-12-09T12:04:50.523919Z",
+        "noOfMembers": 22
+    },
+    {
+        "activityId": 1,
+        "hostUserId": 1,
+        "categoryId": {
+            "categoryId": 1,
+            "name": "Football",
+            "description": "22 players 11 each team"
+        },
+        "title": "Football Party",
+        "description": "Description",
+        "place": "Place",
+        "dateTime": "2023-12-09T12:04:50.523919Z",
+        "duration": 40,
+        "createdAt": "2023-12-09T12:04:50.523919Z",
+        "updatedAt": "2023-12-09T12:04:50.523919Z",
+        "noOfMembers": 22
+    }
+]
