@@ -21,7 +21,7 @@ import axios, { AxiosResponse } from 'axios';
 import { ActivityCard } from '@/components/Activities';
 import { MaterialIcons } from '@expo/vector-icons';
 import FloatingActionButton from '@/components/Activities/components/FloatingActionButton';
-
+const apiUrl: string = process.env.EXPO_PUBLIC_BASE_URL_API!;
 type Props = {};
 type DataProp = {
   content: any;
@@ -29,9 +29,23 @@ type DataProp = {
 
 const index = (props: Props) => {
   const router = useRouter();
-  const { data, isLoading, error } = useFetch(`activities`, {});
-  const { content: activities, first, last } = data;
+  // const { data, isLoading, error } = useFetch(`activities`, {});
+  // const { content: activities, first, last } = data;
+  const [activities, setActivities] = useState<any[]>([]);
   // console.log(activities);
+  const getActivities = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/activities`);
+      setActivities(response.data.content);
+    } catch (error) {
+      console.error('Error fetching activities:', error);
+    } finally {
+      // setLoading(false);
+    }
+  };
+  useEffect(() => {
+    getActivities();
+  }, []);
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.lightWhite, flex: 1 }}>
@@ -59,12 +73,12 @@ const index = (props: Props) => {
             <View style={styles.header}>
               <Text style={styles.headerTitle}>Activities</Text>
 
-              <Pressable>
-                <Text style={styles.headerBtn}>Show all</Text>
+              <Pressable onPress={getActivities}>
+                <Text style={styles.headerBtn}>Refresh</Text>
               </Pressable>
             </View>
 
-            <View style={styles.cardsContainer}>
+            {/* <View style={styles.cardsContainer}>
               {isLoading ? (
                 <ActivityIndicator size="large" color={COLORS.primary} />
               ) : error ? (
@@ -80,6 +94,18 @@ const index = (props: Props) => {
                   />
                 ))
               )}
+            </View> */}
+
+            <View style={styles.cardsContainer}>
+              {activities?.map(activity => (
+                <ActivityCard
+                  activity={activity}
+                  key={`activity-${activity.activityId}`}
+                  handleNavigate={() =>
+                    router.push(`/activities/${activity.activityId}`)
+                  }
+                />
+              ))}
             </View>
           </View>
         </View>

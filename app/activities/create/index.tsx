@@ -11,6 +11,9 @@ import AppTextInput from '@/components/common/AppTextInput';
 import { MaterialIcons } from '@expo/vector-icons';
 import useFetch from '@/hooks/useFetch';
 import axios from 'axios';
+import { Picker } from '@react-native-picker/picker';
+import { useRouter } from 'expo-router';
+import { TextField } from 'react-native-ui-lib';
 
 type Props = {};
 type ActivityData = {
@@ -26,6 +29,8 @@ type ActivityData = {
 };
 const apiUrl: string = process.env.EXPO_PUBLIC_BASE_URL_API!;
 const CreateActivity = (props: Props) => {
+  const router = useRouter();
+
   const [activityData, setActivityData] = useState<ActivityData>({
     hostUserId: 0,
     categoryId: 0,
@@ -37,6 +42,24 @@ const CreateActivity = (props: Props) => {
     noOfMembers: 0,
     // maxParticipants: 0,
   });
+  const [isComplete, setIsComplete] = useState(false);
+
+  useEffect(() => {
+    // คำนวณค่าจากข้อมูล
+    const newValue =
+      activityData.hostUserId &&
+      activityData.categoryId &&
+      activityData.title &&
+      activityData.place &&
+      activityData.dateTime &&
+      activityData.duration &&
+      activityData.noOfMembers
+        ? 1
+        : 0;
+
+    // อัปเดต state สำหรับค่าที่คำนวณ
+    setIsComplete(Boolean(newValue));
+  }, [activityData]);
 
   const [categories, setCategories] = useState<any[]>([]);
   const [users, setUsers] = useState<any[]>([]);
@@ -55,8 +78,6 @@ const CreateActivity = (props: Props) => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get(`${apiUrl}/users`);
-        console.log(response.data);
-
         setUsers(response.data.content);
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -70,12 +91,22 @@ const CreateActivity = (props: Props) => {
     fetchUsers();
   }, []);
 
+  // console.log(categories);
+
   const handleInputChange = (name: string, value: string) => {
     // formData.set(name, value);
   };
 
   // ฟังก์ชั่นเมื่อกดปุ่ม "เพิ่มกิจกรรม"
   const handleAddActivity = async () => {
+    setActivityData({
+      ...activityData,
+      hostUserId: selectedUser.userId,
+      categoryId: selectedCategory.categoryId,
+    });
+
+    // console.log(activityData);
+
     const formData = new FormData();
 
     for (const [key, value] of Object.entries(activityData)) {
@@ -91,6 +122,13 @@ const CreateActivity = (props: Props) => {
           'Content-Type': 'multipart/form-data',
         },
       });
+
+      if (response.status === 200) {
+        console.log('Success:', response.data);
+        router.push('/(tabs)/');
+        // setUser(response.data.data);
+        // setIsLoading(false);
+      }
       console.log(response);
     } catch (error) {
       console.error('Error:', error);
@@ -100,9 +138,9 @@ const CreateActivity = (props: Props) => {
   const usePreset = () => {
     setActivityData({
       ...activityData,
-      hostUserId: 3,
-      categoryId: 3,
-      title: 'test_title',
+      // hostUserId: 3,
+      // categoryId: 3,
+      title: 'test_title' + Math.random().toString(),
       description: 'test_description',
       place: 'test_place',
       dateTime: '2024-03-10T16:20:44.431667Z',
@@ -138,10 +176,35 @@ const CreateActivity = (props: Props) => {
   const showDateTimePicker = () => {
     showMode('date');
   };
+  const [selectedCategory, setSelectedCategory] = useState<any>(categories[0]);
+  const [selectedUser, setSelectedUser] = useState<any>(users[0]);
+  const selectCategory = (category: any) => {
+    setSelectedCategory(category);
+    setActivityData({ ...activityData, categoryId: category.categoryId });
+  };
+
+  const selectUser = (user: any) => {
+    setSelectedUser(user);
+    setActivityData({ ...activityData, hostUserId: user.userId });
+  };
 
   return (
     <>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+        <Text>Category</Text>
+        <Text>{isComplete}</Text>
+        <Picker selectedValue={selectedCategory} onValueChange={selectCategory}>
+          {categories.map((item, index) => (
+            <Picker.Item key={index} value={item} label={item.name} />
+          ))}
+        </Picker>
+        <Text>Host User</Text>
+        <Picker selectedValue={selectedUser} onValueChange={selectUser}>
+          {users.map((item, index) => (
+            <Picker.Item key={index} value={item} label={item.username} />
+          ))}
+        </Picker>
+
         <AppTextInput
           value={activityData.title}
           onChangeText={text =>
@@ -151,21 +214,6 @@ const CreateActivity = (props: Props) => {
           icon={<MaterialIcons name="title" size={24} color="black" />}
         />
 
-        {/* <AppTextInput
-          value={formData.get('name') as string}
-          onChangeText={text => handleInputChange('name', text)}
-          placeholder="name"
-          icon={<MaterialIcons name="title" size={24} color="black" />}
-        /> */}
-
-        {/* <AppTextInput
-          value={activityData.categoryId.toString()}
-          onChangeText={text =>
-            setActivityData({ ...activityData, categoryId: parseInt(text, 10) })
-          }
-          placeholder="Category"
-          icon={<MaterialIcons name="category" size={24} color="black" />}
-        /> */}
         <AppTextInput
           value={activityData.place}
           onChangeText={text =>
@@ -232,27 +280,15 @@ const CreateActivity = (props: Props) => {
           icon={<MaterialIcons name="note" size={24} color="black" />}
         />
 
-        {/* <Text style={styles.label}>Max Participants:</Text>
-      <TextInput
-        style={styles.input}
-        value={activityData.maxParticipants.toString()}
-        onChangeText={text =>
-          setActivityData({
-            ...activityData,
-            maxParticipants: parseInt(text, 10),
-          })
-        }
-        keyboardType="numeric"
-      /> */}
-        {/* <BaseButton style={styles.postBtn} onPress={handleAddActivity}>
-        <Text style={styles.postBtnText}>Add Activity</Text>
-      </BaseButton> */}
         <BaseButton onPress={usePreset}>
           <Text>Use Preset</Text>
         </BaseButton>
       </ScrollView>
       <View style={styles.btnContainer}>
-        <BaseButton style={styles.addBtn} onPress={handleAddActivity}>
+        <BaseButton
+          style={[styles.addBtn, isComplete ? {} : { backgroundColor: 'gray' }]}
+          onPress={handleAddActivity}
+          enabled={isComplete}>
           <Text style={styles.addBtnText}>Add</Text>
         </BaseButton>
       </View>

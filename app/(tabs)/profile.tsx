@@ -11,6 +11,7 @@ const Page = (props: Props) => {
       <Text>Profile Page</Text>
       <Link href={'/activities/2345'}>Test</Link>
       <Link href={'/demo'}>Test</Link>
+      <Link href={'/activities/edit/'}>edit</Link>
     </View>
   );
 };
