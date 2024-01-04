@@ -6,7 +6,7 @@ import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 
 type Props = {};
 
-const layout = (props: Props) => {
+const TabsLayout = (props: Props) => {
   return (
     <Tabs
       screenOptions={{
@@ -18,9 +18,10 @@ const layout = (props: Props) => {
         // tabBarShowLabel: false,
       }}>
       <Tabs.Screen
-        name="index"
+        name="activities"
         options={{
           tabBarLabel: 'Activities',
+          headerShown: false,
           tabBarIcon: ({ size, color }) => (
             <MaterialIcons name="event" size={size} color={color} />
           ),
@@ -67,11 +68,21 @@ const layout = (props: Props) => {
           ),
         }}
       />
+      <Tabs.Screen
+        name="tests"
+        options={{
+          tabBarLabel: 'tests',
+          headerShown: false, // Hide the header
+          tabBarIcon: ({ size, color }) => (
+            <MaterialIcons name="add" size={size} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 };
 
-export default layout;
+export default TabsLayout;
 
 const styles = StyleSheet.create({
   tabBar: {

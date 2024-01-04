@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Pressable,
   ActivityIndicator,
+  Button,
 } from 'react-native';
 
 import {
@@ -21,7 +22,10 @@ import axios, { AxiosResponse } from 'axios';
 import { ActivityCard } from '@/components/Activities';
 import { MaterialIcons } from '@expo/vector-icons';
 import FloatingActionButton from '@/components/Activities/components/FloatingActionButton';
-const apiUrl: string = process.env.EXPO_PUBLIC_BASE_URL_API!;
+import { useNavigation } from '@react-navigation/native';
+import { UseGetActivities } from '@/api/activities';
+import { FAB } from 'react-native-paper';
+
 type Props = {};
 type DataProp = {
   content: any;
@@ -29,29 +33,16 @@ type DataProp = {
 
 const index = (props: Props) => {
   const router = useRouter();
-  // const { data, isLoading, error } = useFetch(`activities`, {});
-  // const { content: activities, first, last } = data;
-  const [activities, setActivities] = useState<any[]>([]);
+  // const [activities, setActivities] = useState<any[]>([]);
   // console.log(activities);
-  const getActivities = async () => {
-    try {
-      const response = await axios.get(`${apiUrl}/activities`);
-      setActivities(response.data.content);
-    } catch (error) {
-      console.error('Error fetching activities:', error);
-    } finally {
-      // setLoading(false);
-    }
-  };
-  useEffect(() => {
-    getActivities();
-  }, []);
+  const { data, isLoading, isError, error, refetch } = UseGetActivities();
+  const { content: activities, first, totalPages } = data || {};
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.lightWhite, flex: 1 }}>
       <Stack.Screen
         options={{
-          headerTitle: '',
+          headerTitle: 'test',
           headerStyle: { backgroundColor: COLORS.lightWhite },
           headerShadowVisible: false,
           headerShown: false, // TODO: change to true
@@ -64,55 +55,58 @@ const index = (props: Props) => {
         }}
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View
-          style={{
-            flex: 1,
-            padding: SIZES.medium,
-          }}>
-          <View style={styles.container}>
-            <View style={styles.header}>
-              <Text style={styles.headerTitle}>Activities</Text>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <Text style={styles.headerTitle}>Activities</Text>
 
-              <Pressable onPress={getActivities}>
-                <Text style={styles.headerBtn}>Refresh</Text>
-              </Pressable>
-            </View>
+            <Pressable onPress={() => refetch()}>
+              <Text style={styles.headerBtn}>Refresh</Text>
+            </Pressable>
+          </View>
 
-            {/* <View style={styles.cardsContainer}>
-              {isLoading ? (
-                <ActivityIndicator size="large" color={COLORS.primary} />
-              ) : error ? (
-                <Text>Something went wrong</Text>
-              ) : (
-                activities?.map(activity => (
-                  <ActivityCard
-                    activity={activity}
-                    key={`activity-${activity.activityId}`}
-                    handleNavigate={() =>
-                      router.push(`/activities/${activity.activityId}`)
-                    }
-                  />
-                ))
-              )}
-            </View> */}
-
-            <View style={styles.cardsContainer}>
-              {activities?.map(activity => (
+          <View style={styles.cardsContainer}>
+            {isLoading ? (
+              <ActivityIndicator size="large" color={COLORS.primary} />
+            ) : isError ? (
+              <Text>Error! {error.message}</Text>
+            ) : activities?.length ? (
+              activities?.map(activity => (
                 <ActivityCard
-                  activity={activity}
                   key={`activity-${activity.activityId}`}
+                  activity={activity}
                   handleNavigate={() =>
                     router.push(`/activities/${activity.activityId}`)
                   }
                 />
-              ))}
-            </View>
+              ))
+            ) : (
+              <Text>no activity</Text>
+            )}
           </View>
         </View>
       </ScrollView>
-      <FloatingActionButton
-        handleNavigate={() => router.push('/activities/create')}
-      />
+      <View
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          // justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <FAB
+          icon="plus"
+          style={{
+            // position: 'absolute',
+
+            margin: 16,
+            // right: 0,
+            // bottom: 0,
+            borderRadius: 9999,
+          }}
+          onPress={() => router.push('/activities/create-form')}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -121,6 +115,8 @@ export default index;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    padding: SIZES.medium,
     // marginTop: SIZES.xLarge,
   },
   header: {

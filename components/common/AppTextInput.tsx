@@ -3,13 +3,14 @@ import { BaseButton } from 'react-native-gesture-handler';
 import { ReactNode } from 'react';
 
 type Props = {
-  value: string;
+  value?: string;
   keyboardType?: TextInput.KeyboardType;
-  onChangeText: (text: string) => void;
+  onChangeText?: (text: string) => void;
   placeholder?: string;
   icon?: ReactNode;
   label?: string;
   error?: string;
+  disabled?: boolean;
 };
 
 const AppTextInput = ({
@@ -20,6 +21,7 @@ const AppTextInput = ({
   icon,
   label,
   error,
+  disabled,
 }: Props) => {
   return (
     <View style={styles.container}>
@@ -33,6 +35,7 @@ const AppTextInput = ({
           placeholder={placeholder}
           style={styles.input}
           // style={{borderColor: error ? 'red' : 'black',}}
+          editable={!disabled}
         />
       </View>
       {error && <Text style={{ color: 'red' }}>{error}</Text>}

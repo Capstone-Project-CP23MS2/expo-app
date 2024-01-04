@@ -18,73 +18,55 @@ import { TouchableOpacity, BaseButton } from 'react-native-gesture-handler';
 import ActivityFooter from '@/components/ActivityDetails/ActivityFooter';
 import axios from 'axios';
 import { Button, Chip, Modal, Portal, PaperProvider } from 'react-native-paper';
+import {
+  UseGetActivity,
+  UseGetActivityParticipants,
+  getActivity,
+} from '@/api/activities';
+import { useQuery } from '@tanstack/react-query';
+import { UseGetCategory, getCategory } from '@/api/category';
 type Props = {};
 const apiUrl: string = process.env.EXPO_PUBLIC_BASE_URL_API!;
 
 const Page = (props: Props) => {
   const router = useRouter();
   const { id } = useLocalSearchParams();
-  const { data: activity, isLoading, error } = useFetch(`activities/${id}`, {});
+
+  const {
+    data: activity,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = UseGetActivity(id);
+
   const {
     title,
-
     description,
     dateTime,
     duration,
     place,
-    currentParticipants,
+    // currentParticipants,
     noOfMembers,
-  } = activity;
-  const [participants, setParticipants] = useState<any[]>([]);
-  const [category, setCategory] = useState<any>({});
-  const [categoryId, setCategoryId] = useState<number>(0);
-  useEffect(() => {
-    // Function to fetch activities from the API
-    const fetchActivities = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/activities/${id}`);
-        fetchCategory(response.data.categoryId);
-      } catch (error) {
-        console.error('Error fetching activities:', error);
-      } finally {
-        // setLoading(false);
-      }
-    };
-    const fetchParticipants = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/participants`, {
-          params: { activityId: id },
-        });
-        setParticipants(response.data.content);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      } finally {
-        // setLoading(false);
-      }
-    };
+    // categoryId,
+  } = activity || {}; // Add a default empty object to prevent undefined error
+  const categoryId = activity?.categoryId;
 
-    const fetchCategory = async (cId: any) => {
-      try {
-        const response = await axios.get(`${apiUrl}/categories/${cId}`);
-        setCategory(response.data);
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-      } finally {
-        // setLoading(false);
-      }
-    };
-    // Call the fetchActivities function
-    fetchActivities();
-    fetchParticipants();
-  }, []);
-  console.log(participants);
+  const { data: category } = useQuery({
+    queryKey: ['category', categoryId],
+    queryFn: () => getCategory(categoryId),
+    enabled: !!categoryId,
+  });
+
+  const { data: participantsData } = UseGetActivityParticipants(id);
+  const { content: participants } = participantsData || {};
 
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
 
   const onDeleteActivitiy = async () => {
     try {
       const response = await axios.delete(`${apiUrl}/activities/${id}`, {});
-      router.push(`/(tabs)/`);
+      router.push('/(tabs)/activities');
     } catch (error) {
       console.error('Error fetching categories:', error);
     } finally {
@@ -148,7 +130,7 @@ const Page = (props: Props) => {
               {dayjs(dateTime).format('dddd, MMMM D, YYYY h:mm')}
             </Text>
             <Text style={styles.rooms}>{duration} min</Text>
-            <Chip icon="information">{category.name}</Chip>
+            <Chip icon="information">{category?.name}</Chip>
 
             <Text style={[styles.location, { paddingTop: 20 }]}>
               Description
@@ -157,10 +139,10 @@ const Page = (props: Props) => {
             <Text style={styles.description}>{description}</Text>
 
             <Text style={[styles.location, { paddingTop: 20 }]}>
-              Participants - {participants.length} / {noOfMembers}
+              Participants - {participants?.length} / {noOfMembers}
             </Text>
             <View>
-              {participants.map(participant => (
+              {participants?.map(participant => (
                 <View
                   key={participant.userId}
                   style={{ flex: 1, flexDirection: 'row' }}>
