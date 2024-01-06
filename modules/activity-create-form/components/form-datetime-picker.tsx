@@ -51,10 +51,11 @@ const FormDatetimePicker = ({ value, onChangeDatetime }: Props) => {
           {changed ? date.toLocaleString() : 'Select Date and Time'}
         </Text>
       </View> */}
-      <Pressable>
+      <Pressable onPress={showDateTimePicker}>
         <AppTextInput
           value={changed ? date.toLocaleString() : 'Select Date and Time'}
           icon={<MaterialIcons name="calendar-today" size={24} color="black" />}
+          disabled
         />
       </Pressable>
       {show && (

@@ -7,4 +7,16 @@ const config = getDefaultConfig(__dirname, {
   isCSSEnabled: true,
 });
 
-module.exports = config;
+module.exports = (() => {
+  const {
+    resolver: { sourceExts },
+  } = config;
+
+  return {
+    ...config,
+    resolver: {
+      ...config.resolver,
+      sourceExts: [...sourceExts, 'mjs'],
+    },
+  };
+})();

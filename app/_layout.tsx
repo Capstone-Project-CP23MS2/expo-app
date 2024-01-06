@@ -20,6 +20,8 @@ import {
 import useAppLoading from '@/hooks/useAppLoading';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
+import 'utils/unistyles';
+
 // Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
