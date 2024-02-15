@@ -19,9 +19,9 @@ const keyboardAvoidingWrapper = ({ children }: Props) => {
   const headerHeight = useHeaderHeight();
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
       keyboardVerticalOffset={headerHeight}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}>
       {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
       {children}
       {/* </TouchableWithoutFeedback> */}
