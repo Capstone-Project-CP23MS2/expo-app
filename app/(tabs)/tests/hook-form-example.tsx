@@ -17,13 +17,17 @@ export default function HookFormExample() {
       lastName: '',
     },
   });
-  const onSubmit = (data: FormData) => console.log(data);
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+    console.log(errors);
+  };
   return (
     <View>
       <Controller
         control={control}
         rules={{
           required: true,
+          maxLength: 2,
         }}
         render={({ field: { onChange, onBlur, value } }) => (
           <TextInput
@@ -35,7 +39,7 @@ export default function HookFormExample() {
         )}
         name="firstName"
       />
-      {errors.firstName && <Text>This is required.</Text>}
+      {/* {errors.firstName && <Text>This is required.</Text>} */}
 
       <Controller
         control={control}
@@ -54,6 +58,7 @@ export default function HookFormExample() {
       />
 
       <Button title="Submit" onPress={handleSubmit(onSubmit)} />
+      <Button title="Erros" onPress={() => console.log(errors)} />
     </View>
   );
 }

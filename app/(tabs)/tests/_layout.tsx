@@ -8,6 +8,7 @@ const _Layout = (props: Props) => {
   return (
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
+      {/* <Stack.Screen name="winwin" options={{}} /> */}
     </Stack>
   );
 };
