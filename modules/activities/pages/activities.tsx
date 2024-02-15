@@ -47,11 +47,19 @@ const index = (props: Props) => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>Activities</Text>
-
-            <Pressable onPress={() => refetch()}>
+            <View style={styles.headerSecond}>
+              <Text style={styles.headerTitle}>Activities</Text>
+              <Text>{activities?.length} activites</Text>
+            </View>
+            <FAB
+              icon="plus"
+              variant="primary"
+              style={styles.headerSecond}
+              onPress={() => router.push('/activities/create-form')}
+            />
+            {/* <Pressable onPress={() => refetch()}>
               <Text style={styles.headerBtn}>Refresh</Text>
-            </Pressable>
+            </Pressable> */}
           </View>
 
           <View style={styles.cardsContainer}>
@@ -88,17 +96,7 @@ const index = (props: Props) => {
           // justifyContent: 'center',
           alignItems: 'center',
         }}
-      >
-        <FAB
-          icon="plus"
-          variant="primary"
-          style={{
-            margin: 16,
-            borderRadius: 9999,
-          }}
-          onPress={() => router.push('/activities/create-form')}
-        />
-      </View>
+      ></View>
     </SafeAreaView>
   )
 }
@@ -111,6 +109,7 @@ const styles = StyleSheet.create({
     padding: SIZES.medium,
     // marginTop: SIZES.xLarge,
   },
+
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -120,7 +119,8 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: SIZES.large,
     fontFamily: FONT.medium,
-    color: COLORS.primary,
+    color: COLORS.black,
+    fontWeight: 'bold',
   },
   headerBtn: {
     fontSize: SIZES.medium,
@@ -130,5 +130,9 @@ const styles = StyleSheet.create({
   cardsContainer: {
     marginTop: SIZES.medium,
     gap: SIZES.small,
+  },
+  headerSecond: {
+    flex: 1,
+    padding: SIZES.small,
   },
 })

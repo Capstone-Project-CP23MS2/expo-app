@@ -1,25 +1,21 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { SplashScreen, Stack, useRouter } from 'expo-router';
-import { useEffect } from 'react';
-import { Pressable, useColorScheme } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import { COLORS, FONT } from '@/constants';
+import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
+import { useFonts } from 'expo-font'
+import { SplashScreen, Stack, useRouter } from 'expo-router'
+import { useEffect } from 'react'
+import { Pressable, useColorScheme } from 'react-native'
+import { MaterialIcons } from '@expo/vector-icons'
+import { COLORS, FONT } from '@/constants'
 import {
   useQuery,
   useMutation,
   useQueryClient,
   QueryClient,
   QueryClientProvider,
-} from '@tanstack/react-query';
-import useAppLoading from '@/hooks/useAppLoading';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { DesignSystem } from '@/utils/design-system';
+} from '@tanstack/react-query'
+import useAppLoading from '@/hooks/useAppLoading'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+// import { DesignSystem } from '@/utils/design-system';
 
 // import 'utils/unistyles';
 
@@ -31,32 +27,32 @@ const queryClient = new QueryClient({
       // refetchOnWindowFocus: false,
     },
   },
-});
+})
 
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
-} from 'expo-router';
+} from 'expo-router'
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(tabs)',
-};
+}
 
-DesignSystem.setup();
+// DesignSystem.setup()
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-  const appLoaded = useAppLoading();
-  if (!appLoaded) return null;
-  return <RootLayoutNav />;
+  const appLoaded = useAppLoading()
+  if (!appLoaded) return null
+  return <RootLayoutNav />
 }
 
 function RootLayoutNav() {
-  const router = useRouter();
-  const colorScheme = useColorScheme();
+  const router = useRouter()
+  const colorScheme = useColorScheme()
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -97,7 +93,8 @@ function RootLayoutNav() {
                   borderRadius: 20,
                   borderWidth: 1,
                   padding: 4,
-                }}>
+                }}
+              >
                 <MaterialIcons name="close" size={22} />
               </Pressable>
             ),
@@ -107,7 +104,7 @@ function RootLayoutNav() {
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       {/* </ThemeProvider> */}
     </QueryClientProvider>
-  );
+  )
 }
 //     <Stack.Screen name="modal" options={{ presentation: "modal" }} />
 

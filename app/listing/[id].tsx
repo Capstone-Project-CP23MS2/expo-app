@@ -1,47 +1,39 @@
-import { useLocalSearchParams, useNavigation } from 'expo-router';
-import React, { useLayoutEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  Share,
-} from 'react-native';
-import listingsData from '@/assets/data/airbnb-listings.json';
-import { Ionicons } from '@expo/vector-icons';
-import Colors from '@/constants/Colors';
+import { useLocalSearchParams, useNavigation } from 'expo-router'
+import React, { useLayoutEffect } from 'react'
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, Share } from 'react-native'
+import listingsData from '@/assets/data/airbnb-listings.json'
+import { Ionicons } from '@expo/vector-icons'
+import Colors from '@/constants/Colors'
 import Animated, {
   SlideInDown,
   interpolate,
   useAnimatedRef,
   useAnimatedStyle,
   useScrollViewOffset,
-} from 'react-native-reanimated';
-import { defaultStyles } from '@/constants/Styles';
-import { FONT } from '@/constants';
-import { TextInput } from 'react-native-gesture-handler';
+} from 'react-native-reanimated'
+import { defaultStyles } from '@/constants/Styles'
+import { FONT } from '@/constants'
+import { TextInput } from 'react-native-gesture-handler'
 
-const { width } = Dimensions.get('window');
-const IMG_HEIGHT = 300;
+const { width } = Dimensions.get('window')
+const IMG_HEIGHT = 300
 
 const DetailsPage = () => {
-  const { id } = useLocalSearchParams();
-  const listing = (listingsData as any[]).find(item => item.id === id);
-  const navigation = useNavigation();
-  const scrollRef = useAnimatedRef<Animated.ScrollView>();
+  const { id } = useLocalSearchParams()
+  const listing = (listingsData as any[]).find(item => item.id === id)
+  const navigation = useNavigation()
+  const scrollRef = useAnimatedRef<Animated.ScrollView>()
 
   const shareListing = async () => {
     try {
       await Share.share({
         title: listing.name,
         url: listing.listing_url,
-      });
+      })
     } catch (err) {
-      console.log(err);
+      console.log(err)
     }
-  };
+  }
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -49,8 +41,7 @@ const DetailsPage = () => {
       headerTransparent: true,
 
       headerBackground: () => (
-        <Animated.View
-          style={[headerAnimatedStyle, styles.header]}></Animated.View>
+        <Animated.View style={[headerAnimatedStyle, styles.header]}></Animated.View>
       ),
       headerRight: () => (
         <View style={styles.bar}>
@@ -63,16 +54,14 @@ const DetailsPage = () => {
         </View>
       ),
       headerLeft: () => (
-        <TouchableOpacity
-          style={styles.roundButton}
-          onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={styles.roundButton} onPress={() => navigation.goBack()}>
           <Ionicons name="chevron-back" size={24} color={'#000'} />
         </TouchableOpacity>
       ),
-    });
-  }, []);
+    })
+  }, [])
 
-  const scrollOffset = useScrollViewOffset(scrollRef);
+  const scrollOffset = useScrollViewOffset(scrollRef)
 
   const imageAnimatedStyle = useAnimatedStyle(() => {
     return {
@@ -85,28 +74,25 @@ const DetailsPage = () => {
           ),
         },
         {
-          scale: interpolate(
-            scrollOffset.value,
-            [-IMG_HEIGHT, 0, IMG_HEIGHT],
-            [2, 1, 1],
-          ),
+          scale: interpolate(scrollOffset.value, [-IMG_HEIGHT, 0, IMG_HEIGHT], [2, 1, 1]),
         },
       ],
-    };
-  });
+    }
+  })
 
   const headerAnimatedStyle = useAnimatedStyle(() => {
     return {
       opacity: interpolate(scrollOffset.value, [0, IMG_HEIGHT / 1.5], [0, 1]),
-    };
-  }, []);
+    }
+  }, [])
 
   return (
     <View style={styles.container}>
       <Animated.ScrollView
         contentContainerStyle={{ paddingBottom: 100 }}
         ref={scrollRef}
-        scrollEventThrottle={16}>
+        scrollEventThrottle={16}
+      >
         <Animated.Image
           source={{ uri: listing.xl_picture_url }}
           style={[styles.image, imageAnimatedStyle]}
@@ -119,28 +105,22 @@ const DetailsPage = () => {
             {listing.room_type} in {listing.smart_location}
           </Text>
           <Text style={styles.rooms}>
-            {listing.guests_included} guests · {listing.bedrooms} bedrooms ·{' '}
-            {listing.beds} bed · {listing.bathrooms} bathrooms
+            {listing.guests_included} guests · {listing.bedrooms} bedrooms · {listing.beds} bed ·{' '}
+            {listing.bathrooms} bathrooms
           </Text>
           <View style={{ flexDirection: 'row', gap: 4 }}>
             <Ionicons name="star" size={16} />
             <Text style={styles.ratings}>
-              {listing.review_scores_rating / 20} · {listing.number_of_reviews}{' '}
-              reviews
+              {listing.review_scores_rating / 20} · {listing.number_of_reviews} reviews
             </Text>
           </View>
           <View style={styles.divider} />
 
           <View style={styles.hostView}>
-            <Image
-              source={{ uri: listing.host_picture_url }}
-              style={styles.host}
-            />
+            <Image source={{ uri: listing.host_picture_url }} style={styles.host} />
 
             <View>
-              <Text style={{ fontWeight: '500', fontSize: 16 }}>
-                Hosted by {listing.host_name}
-              </Text>
+              <Text style={{ fontWeight: '500', fontSize: 16 }}>Hosted by {listing.host_name}</Text>
               <Text>Host since {listing.host_since}</Text>
             </View>
           </View>
@@ -151,29 +131,27 @@ const DetailsPage = () => {
         </View>
       </Animated.ScrollView>
 
-      <Animated.View
-        style={defaultStyles.footer}
-        entering={SlideInDown.delay(200)}>
+      <Animated.View style={defaultStyles.footer} entering={SlideInDown.delay(200)}>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
-          }}>
+          }}
+        >
           <TouchableOpacity style={styles.footerText}>
             <Text style={styles.footerPrice}>€{listing.price}</Text>
             <Text>night</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[defaultStyles.btn, { paddingRight: 20, paddingLeft: 20 }]}>
+          <TouchableOpacity style={[defaultStyles.btn, { paddingRight: 20, paddingLeft: 20 }]}>
             <Text style={defaultStyles.btnText}>Reserve</Text>
           </TouchableOpacity>
         </View>
       </Animated.View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -262,6 +240,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontFamily: FONT.regular,
   },
-});
+})
 
-export default DetailsPage;
+export default DetailsPage

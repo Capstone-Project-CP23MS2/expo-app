@@ -11,7 +11,7 @@ const COLORS = {
   white: '#F3F4F8',
   lightWhite: '#FAFAFC',
 
-  primary: '#FF385C',
+  primary: '#3E64FF',
   gray: '#5E5D5E',
   dark: '#1A1A1A',
 
@@ -21,8 +21,8 @@ const COLORS = {
   light: '#F3F4FB',
   darkBlue: '#7978B5',
   red: 'red',
-};
-//gradients 
+}
+//gradients
 // const gradients = {
 //   blueLight: {start: '#5A71FA', end: colors.blue3}, // buttons
 //   blue: {start: '#5E55FB', end: colors.blue3}, // fab
@@ -41,7 +41,7 @@ const FONT = {
   md: 'NunitoMedium',
   sb: 'NunitoSemiBold',
   b: 'NunitoBold',
-};
+}
 
 const SIZES = {
   xSmall: 10,
@@ -50,7 +50,7 @@ const SIZES = {
   large: 20,
   xLarge: 24,
   xxLarge: 32,
-};
+}
 
 const SHADOWS = {
   small: {
@@ -73,6 +73,6 @@ const SHADOWS = {
     shadowRadius: 5.84,
     elevation: 5,
   },
-};
+}
 
-export { COLORS, FONT, SHADOWS, SIZES };
+export { COLORS, FONT, SHADOWS, SIZES }
