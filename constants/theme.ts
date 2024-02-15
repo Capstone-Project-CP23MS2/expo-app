@@ -14,6 +14,13 @@ const COLORS = {
   primary: '#FF385C',
   gray: '#5E5D5E',
   dark: '#1A1A1A',
+
+  black: '#000',
+  blue: '#5D5FEE',
+  grey: '#BABBC3',
+  light: '#F3F4FB',
+  darkBlue: '#7978B5',
+  red: 'red',
 };
 //gradients 
 // const gradients = {

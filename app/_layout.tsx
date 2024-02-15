@@ -19,8 +19,9 @@ import {
 } from '@tanstack/react-query';
 import useAppLoading from '@/hooks/useAppLoading';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { DesignSystem } from '@/utils/design-system';
 
-import 'utils/unistyles';
+// import 'utils/unistyles';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -41,6 +42,8 @@ export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(tabs)',
 };
+
+DesignSystem.setup();
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

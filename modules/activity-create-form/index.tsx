@@ -1,213 +1,304 @@
-import { StyleSheet, Text, View, Button, Pressable } from 'react-native';
-import { useEffect, useState } from 'react';
-import {
-  BaseButton,
-  ScrollView,
-  TextInput,
-} from 'react-native-gesture-handler';
-import { COLORS, FONT, SIZES } from '@/constants';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import AppTextInput from '@/components/common/AppTextInput';
-import { MaterialIcons } from '@expo/vector-icons';
-import useFetch from '@/hooks/useFetch';
-import axios from 'axios';
-import { Picker } from '@react-native-picker/picker';
-import { useRouter } from 'expo-router';
-import { TextField } from 'react-native-ui-lib';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createActivity } from '@/api/activities';
-import FormDatetimePicker from './components/form-datetime-picker';
-import { objToFormData } from '@/utils';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper';
-import AppWrapper from '../shared/AppWrapper';
-import { UseGetCategories } from '@/api/category';
-import { UseGetUsers } from '@/api/users';
-import Colors from '@/constants/Colors';
-type Props = {};
+import { StyleSheet, Text, View, Button, Pressable } from 'react-native'
+import { useEffect, useState } from 'react'
+import { BaseButton, ScrollView, TextInput } from 'react-native-gesture-handler'
+import { COLORS, FONT, SIZES } from '@/constants'
+import DateTimePicker from '@react-native-community/datetimepicker'
+import AppTextInput from '@/components/common/AppTextInput'
+import { MaterialIcons } from '@expo/vector-icons'
+import useFetch from '@/hooks/useFetch'
+import axios from 'axios'
+// import { Picker } from '@react-native-picker/picker';
+import { useRouter } from 'expo-router'
+import { TextField } from 'react-native-ui-lib'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createActivity } from '@/api/activities'
+import FormDatetimePicker from './components/form-datetime-picker'
+
+import { objToFormData } from '@/utils'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper'
+import AppWrapper from '../shared/AppWrapper'
+import { UseGetCategories } from '@/api/category'
+import { UseGetUsers } from '@/api/users'
+
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { ActivityInfoSchema, ActivityInfo } from './activity.schema'
+
+import { Colors, Picker } from 'react-native-ui-lib'
+import errorMap from 'zod/lib/locales/en'
+import { TextInput as TextInputPaper } from 'react-native-paper'
+
+type Props = {}
 type ActivityData = {
-  hostUserId: number;
-  categoryId: number;
-  title: string;
-  description: string;
-  place: string;
-  dateTime: any;
-  duration: number;
-  noOfMembers: number;
+  hostUserId: number
+  categoryId: number
+  title: string
+  description: string
+  place: string
+  dateTime: any
+  duration: number
+  noOfMembers: number
   // maxParticipants: number;
-};
-const apiUrl: string = process.env.EXPO_PUBLIC_BASE_URL_API!;
+}
+
 const CreateActivity = (props: Props) => {
-  const router = useRouter();
+  const router = useRouter()
 
-  const [activityData, setActivityData] = useState<ActivityData>({
-    hostUserId: 0,
-    categoryId: 0,
-    title: '',
-    description: '',
-    place: '',
-    dateTime: new Date().toISOString(),
-    duration: 0,
-    noOfMembers: 0,
-    // maxParticipants: 0,
-  });
-  const [isComplete, setIsComplete] = useState(false);
+  const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories()
+  const { content: categories } = categoriesData || {}
 
-  const { data: categoriesData, isLoading: isLoadingCategories } =
-    UseGetCategories();
-  const { content: categories } = categoriesData || {};
+  const { data: usersData, isLoading: isLoadingUsers } = UseGetUsers()
+  const { content: users } = usersData || {}
 
-  const { data: usersData, isLoading: isLoadingUsers } = UseGetUsers();
-  const { content: users } = usersData || {};
-
-  useEffect(() => {
-    // คำนวณค่าจากข้อมูล
-    const newValue =
-      activityData.hostUserId &&
-      activityData.categoryId &&
-      activityData.title &&
-      activityData.place &&
-      activityData.dateTime &&
-      activityData.duration &&
-      activityData.noOfMembers
-        ? 1
-        : 0;
-
-    // อัปเดต state สำหรับค่าที่คำนวณ
-    setIsComplete(Boolean(newValue));
-  }, [activityData]);
-
+  const {
+    formState: { isValid, isSubmitting, errors, isDirty },
+    control,
+    handleSubmit,
+    getValues,
+    setValue,
+    getFieldState,
+  } = useForm<ActivityInfo>({
+    resolver: zodResolver(ActivityInfoSchema),
+  })
+  // const test: FieldErrors = null
   const handleInputChange = (name: string, value: string) => {
     // formData.set(name, value);
-  };
-  const queryClient = useQueryClient();
+  }
+  const queryClient = useQueryClient()
   const { mutateAsync: addActivityMutation } = useMutation({
     mutationFn: createActivity,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['activities'] });
-      router.push('/(tabs)/activities');
+      queryClient.invalidateQueries({ queryKey: ['activities'] })
+      router.push('/(tabs)/activities')
     },
     onError: error => {
-      console.log(error);
+      console.log(error)
     },
-  });
+  })
 
   // ฟังก์ชั่นเมื่อกดปุ่ม "เพิ่มกิจกรรม"
-  const onSummit = async () => {
-    setActivityData({
-      ...activityData,
-      // hostUserId: selectedUser.userId,
-      // categoryId: selectedCategory.categoryId,
-      hostUserId: 1,
-      categoryId: 1,
-    });
+  const onSummit = handleSubmit(async activityData => {
+    const formData = objToFormData(activityData)
+    addActivityMutation(formData)
+  })
 
-    const formData = objToFormData(activityData);
-    addActivityMutation(formData);
-  };
-
-  const usePreset = () => {
-    setActivityData({
-      ...activityData,
-      // hostUserId: 3,
-      // categoryId: 3,
-      title: 'test_title' + Math.random().toString(),
-      description: 'test_description',
-      place: 'test_place',
-      dateTime: '2024-03-10T16:20:44.431667Z',
-      duration: 30,
-      noOfMembers: 10,
-    });
-  };
-
-  const [selectedCategory, setSelectedCategory] = useState<any>(0);
-  const [selectedUser, setSelectedUser] = useState<any>(0);
-  const selectCategory = (category: any) => {
-    setSelectedCategory(category);
-    setActivityData({ ...activityData, categoryId: category.categoryId });
-  };
-
-  const selectUser = (user: any) => {
-    setSelectedUser(user);
-    setActivityData({ ...activityData, hostUserId: user.userId });
-  };
+  const usePreset = (e: any) => {
+    setValue('categoryId', 1)
+    setValue('hostUserId', 1)
+    setValue('title', 'test_title-' + Math.random().toString())
+    setValue('description', 'test_description')
+    setValue('place', 'test_place')
+    setValue('dateTime', '2024-03-10T16:20:44.431667Z')
+    setValue('duration', 30)
+    setValue('noOfMembers', 10)
+  }
 
   return (
     <KeyboardAvoidingWrapper>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        // contentContainerStyle={{ flex: 1 }}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.container}>
-          <Text>Category</Text>
-          <Text>{isComplete}</Text>
-          <Picker
-            selectedValue={selectedCategory}
-            onValueChange={selectCategory}>
-            {categories?.map((item, index) => (
-              <Picker.Item key={index} value={item} label={item.name} />
-            ))}
-          </Picker>
-          <Text>Host User</Text>
-          <Picker selectedValue={selectedUser} onValueChange={selectUser}>
-            {users?.map((item, index) => (
-              <Picker.Item key={index} value={item} label={item.username} />
-            ))}
-          </Picker>
-
-          <AppTextInput
-            value={activityData.title}
-            onChangeText={text =>
-              setActivityData({ ...activityData, title: text })
-            }
-            placeholder="Title"
-            icon={<MaterialIcons name="title" size={24} color="black" />}
+          <Controller
+            control={control}
+            name="categoryId"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Picker
+                placeholder={'Category'}
+                floatingPlaceholder
+                value={value}
+                enableModalBlur={false}
+                onChange={onChange}
+                onBlur={onBlur}
+                topBarProps={{ title: 'Categories' }}
+                showSearch
+                searchPlaceholder={'Search a category'}
+                searchStyle={{
+                  color: Colors.blue30,
+                  placeholderTextColor: Colors.grey50,
+                }}
+              >
+                {categories?.map(category => (
+                  <Picker.Item
+                    key={category.categoryId}
+                    value={category.categoryId}
+                    label={category.name}
+                  />
+                ))}
+              </Picker>
+            )}
+          />
+          <Controller
+            control={control}
+            name="hostUserId"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Picker
+                placeholder={'Host User (only sprint 1)'}
+                floatingPlaceholder
+                value={value}
+                enableModalBlur={false}
+                onChange={onChange}
+                onBlur={onBlur}
+                topBarProps={{ title: 'Users' }}
+                showSearch
+                searchPlaceholder={'Search a user'}
+                searchStyle={{
+                  color: Colors.blue30,
+                  placeholderTextColor: Colors.grey50,
+                }}
+              >
+                {users?.map(user => (
+                  <Picker.Item key={user.userId} value={user.userId} label={user.username} />
+                ))}
+              </Picker>
+            )}
           />
 
-          <AppTextInput
-            value={activityData.place}
-            onChangeText={text =>
-              setActivityData({ ...activityData, place: text })
-            }
-            placeholder="Place"
-            icon={<MaterialIcons name="place" size={24} color="black" />}
+          <Controller
+            control={control}
+            name="title"
+            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+              <AppTextInput
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                error={error}
+                placeholder="Title"
+                showCharCounter
+                maxLength={30}
+                // icon={<MaterialIcons name="title" size={24} color="black" />}
+                iconName="title"
+              />
+            )}
           />
-          <Text>{activityData.dateTime}</Text>
-          <FormDatetimePicker
-            onChangeDatetime={datetime =>
-              setActivityData({ ...activityData, dateTime: datetime })
-            }
+          {/* <TextInputPaper
+            mode="outlined"
+            dense
+            placeholder="Dense outlined input without label"
+            // label="Password"
+            // secureTextEntry
+            left={<TextInputPaper.Icon icon="eye" />}
+          /> */}
+          {/* <Controller
+            control={control}
+            name="title"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextField
+                placeholder={'Placeholder'}
+                floatingPlaceholder
+                onChangeText={onChange}
+                value={value}
+                enableErrors
+                validationMessage={'Field is required'}
+                showCharCounter
+                maxLength={30}
+              />
+            )}
+          /> */}
+
+          <Controller
+            control={control}
+            name="place"
+            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+              <AppTextInput
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                error={error}
+                placeholder="Place"
+                showCharCounter
+                maxLength={30}
+                icon={<MaterialIcons name="place" size={24} color="black" />}
+                iconName="place"
+              />
+            )}
           />
 
-          <AppTextInput
-            keyboardType="numeric"
-            value={activityData.duration.toString()}
-            onChangeText={text =>
-              setActivityData({ ...activityData, duration: parseInt(text, 10) })
-            }
-            placeholder="Duration"
-            icon={<MaterialIcons name="schedule" size={24} color="black" />}
+          <Controller
+            control={control}
+            name="dateTime"
+            render={({ field: { onChange, onBlur, value } }) => {
+              // console.log(value);
+              // console.log(typeof value);
+
+              return <FormDatetimePicker value={value} onChangeDatetime={onChange} />
+            }}
+          />
+          <Controller
+            control={control}
+            name="duration"
+            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+              <AppTextInput
+                keyboardType="numeric"
+                value={value || value === 0 ? value.toString() : ''}
+                onBlur={onBlur}
+                onChangeText={text => onChange(parseInt(text, 10))}
+                error={error}
+                placeholder="Duration"
+                icon={<MaterialIcons name="schedule" size={24} color="black" />}
+                iconName="schedule"
+              />
+            )}
           />
 
-          <AppTextInput
-            keyboardType="numeric"
-            value={activityData.noOfMembers.toString()}
-            onChangeText={text =>
-              setActivityData({
-                ...activityData,
-                noOfMembers: parseInt(text, 10) | 2,
-              })
-            }
-            placeholder="Max Participants"
-            icon={<MaterialIcons name="people" size={24} color="black" />}
+          <Controller
+            control={control}
+            name="noOfMembers"
+            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+              <AppTextInput
+                keyboardType="numeric"
+                value={value || value === 0 ? value.toString() : ''}
+                onBlur={onBlur}
+                onChangeText={text => onChange(parseInt(text, 10))}
+                error={error}
+                placeholder="Max Participants"
+                icon={<MaterialIcons name="people" size={24} color="black" />}
+                iconName="people"
+              />
+            )}
           />
-          {/* note */}
 
-          <AppTextInput
-            value={activityData.description}
-            onChangeText={text =>
-              setActivityData({ ...activityData, description: text })
-            }
-            placeholder="Note"
-            icon={<MaterialIcons name="note" size={24} color="black" />}
+          <Controller
+            control={control}
+            name="description"
+            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+              <AppTextInput
+                value={value}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                placeholder="Description"
+                error={error}
+                showCharCounter
+                maxLength={500}
+                icon={<MaterialIcons name="note" size={24} color="black" />}
+                iconName="note"
+              />
+            )}
           />
+          <View style={{ flex: 1, gap: 6 }}>
+            <Button title="Submit" onPress={onSummit} />
+            {Boolean(0) && <Button title="Get Value" onPress={() => console.log(getValues())} />}
+            {Boolean(0) && (
+              <Button
+                title="Get Status"
+                onPress={() => console.log({ isValid, isSubmitting, isDirty })}
+              />
+            )}
+            {Boolean(1) && <Button title="Get Errors" onPress={() => console.log(errors)} />}
+            {Boolean(0) && (
+              <Button title="Field Status" onPress={() => console.log(getFieldState('title'))} />
+            )}
+            {Boolean(1) && (
+              <Button
+                title="Test"
+                onPress={() => {
+                  console.log(users)
+                }}
+              />
+            )}
+          </View>
         </View>
       </ScrollView>
       <View style={styles.footer}>
@@ -222,21 +313,23 @@ const CreateActivity = (props: Props) => {
               borderRadius: SIZES.medium,
               padding: 12,
             },
-          ]}>
+          ]}
+        >
           <Text style={styles.addBtnText}>preset</Text>
         </BaseButton>
         <BaseButton
-          style={[styles.addBtn, isComplete ? {} : { backgroundColor: 'gray' }]}
+          style={[styles.addBtn, isValid ? {} : { backgroundColor: 'gray' }]}
+          // enabled={isValid}
           onPress={onSummit}
-          enabled={isComplete}>
+        >
           <Text style={styles.addBtnText}>Add</Text>
         </BaseButton>
       </View>
     </KeyboardAvoidingWrapper>
-  );
-};
+  )
+}
 
-export default CreateActivity;
+export default CreateActivity
 
 const styles = StyleSheet.create({
   container: {
@@ -294,4 +387,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
   },
-});
+})

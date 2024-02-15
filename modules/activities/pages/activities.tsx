@@ -1,42 +1,32 @@
-import { COLORS, FONT, SIZES } from '@/constants';
-import useFetch from '@/hooks/useFetch';
-import { Link, Stack, useRouter } from 'expo-router';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  ActivityIndicator,
-  Button,
-} from 'react-native';
+import { COLORS, FONT, SIZES } from '@/constants'
+import useFetch from '@/hooks/useFetch'
+import { Link, Stack, useRouter } from 'expo-router'
+import { View, Text, StyleSheet, Pressable, ActivityIndicator, Button } from 'react-native'
 
-import {
-  BaseButton,
-  ScrollView,
-  TextInput,
-} from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useEffect, useState } from 'react';
+import { BaseButton, ScrollView, TextInput } from 'react-native-gesture-handler'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useEffect, useState } from 'react'
 
-import axios, { AxiosResponse } from 'axios';
-import { ActivityCard } from '@/components/Activities';
-import { MaterialIcons } from '@expo/vector-icons';
-import FloatingActionButton from '@/components/Activities/components/FloatingActionButton';
-import { useNavigation } from '@react-navigation/native';
-import { UseGetActivities } from '@/api/activities';
-import { FAB } from 'react-native-paper';
+import axios, { AxiosResponse } from 'axios'
+import { ActivityCard } from '@/components/Activities'
+import { MaterialIcons } from '@expo/vector-icons'
+import FloatingActionButton from '@/components/Activities/components/FloatingActionButton'
+import { useNavigation } from '@react-navigation/native'
+import { UseGetActivities } from '@/api/activities'
+import { FAB } from 'react-native-paper'
+import { FloatingButton } from 'react-native-ui-lib'
 
-type Props = {};
+type Props = {}
 type DataProp = {
-  content: any;
-};
+  content: any
+}
 
 const index = (props: Props) => {
-  const router = useRouter();
+  const router = useRouter()
   // const [activities, setActivities] = useState<any[]>([]);
   // console.log(activities);
-  const { data, isLoading, isError, error, refetch } = UseGetActivities();
-  const { content: activities, first, totalPages } = data || {};
+  const { data, isLoading, isError, error, refetch } = UseGetActivities()
+  const { content: activities, first, totalPages } = data || {}
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.lightWhite, flex: 1 }}>
@@ -74,9 +64,7 @@ const index = (props: Props) => {
                 <ActivityCard
                   key={`activity-${activity.activityId}`}
                   activity={activity}
-                  handleNavigate={() =>
-                    router.push(`/activities/${activity.activityId}`)
-                  }
+                  handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
                 />
               ))
             ) : (
@@ -85,6 +73,12 @@ const index = (props: Props) => {
           </View>
         </View>
       </ScrollView>
+      {/* <FloatingButton
+        visible={true}
+        hideBackgroundOverlay
+        button={{ label: 'Approve', onPress: () => console.log('approved') }}
+      /> */}
+
       <View
         style={{
           position: 'absolute',
@@ -93,25 +87,23 @@ const index = (props: Props) => {
           bottom: 0,
           // justifyContent: 'center',
           alignItems: 'center',
-        }}>
+        }}
+      >
         <FAB
           icon="plus"
+          variant="primary"
           style={{
-            // position: 'absolute',
-
             margin: 16,
-            // right: 0,
-            // bottom: 0,
             borderRadius: 9999,
           }}
           onPress={() => router.push('/activities/create-form')}
         />
       </View>
     </SafeAreaView>
-  );
-};
+  )
+}
 
-export default index;
+export default index
 
 const styles = StyleSheet.create({
   container: {
@@ -139,4 +131,4 @@ const styles = StyleSheet.create({
     marginTop: SIZES.medium,
     gap: SIZES.small,
   },
-});
+})
