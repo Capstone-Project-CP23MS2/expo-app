@@ -13,7 +13,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import FloatingActionButton from '@/components/Activities/components/FloatingActionButton'
 import { useNavigation } from '@react-navigation/native'
 import { UseGetActivities } from '@/api/activities'
-import { FAB } from 'react-native-paper'
+import { FAB, Icon } from 'react-native-paper'
 import { FloatingButton } from 'react-native-ui-lib'
 
 type Props = {}
@@ -48,15 +48,14 @@ const index = (props: Props) => {
         <View style={styles.container}>
           <View style={styles.header}>
             <View style={styles.headerSecond}>
-              <Text style={styles.headerTitle}>Activities</Text>
-              <Text>{activities?.length} activites</Text>
+              <Text style={styles.headerTitle}>Available Activities</Text>
+              <Text style={styles.subHeader}>found {activities?.length} activites</Text>
             </View>
-            <FAB
-              icon="plus"
-              variant="primary"
-              style={styles.headerSecond}
-              onPress={() => router.push('/activities/create-form')}
-            />
+            <View style={{ padding: SIZES.small }}>
+              <Pressable onPress={() => router.push('/activities/create-form')}>
+                <Icon source={'plus'} color={COLORS.black} size={30}></Icon>
+              </Pressable>
+            </View>
             {/* <Pressable onPress={() => refetch()}>
               <Text style={styles.headerBtn}>Refresh</Text>
             </Pressable> */}
@@ -86,17 +85,6 @@ const index = (props: Props) => {
         hideBackgroundOverlay
         button={{ label: 'Approve', onPress: () => console.log('approved') }}
       /> */}
-
-      <View
-        style={{
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          // justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      ></View>
     </SafeAreaView>
   )
 }
@@ -115,6 +103,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     // marginTop: SIZES.small,
+  },
+  subHeader: {
+    color: COLORS.gray,
   },
   headerTitle: {
     fontSize: SIZES.large,

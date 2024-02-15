@@ -1,34 +1,29 @@
-import { COLORS, SHADOWS, SIZES } from '@/constants';
-import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
-import dayjs from 'dayjs';
+import { COLORS, SHADOWS, SIZES } from '@/constants'
+import { View, Text, StyleSheet, Pressable, Image } from 'react-native'
+import { Icon, MD3Colors } from 'react-native-paper'
+
+import dayjs from 'dayjs'
 
 type ActivityCardProps = {
   activity: {
-    activityId: number;
-    title: string;
-    description: string;
-    dateTime: string;
-    duration: number;
-    place?: string;
-    createdAt: string;
-    updatedAt: string;
-    currentParticipants?: number;
-    maxParticipants?: number;
-  };
-  handleNavigate: () => void;
-};
+    activityId: number
+    title: string
+    description: string
+    dateTime: string
+    duration: number
+    place?: string
+    createdAt: string
+    updatedAt: string
+    currentParticipants?: number
+    maxParticipants?: number
+  }
+  handleNavigate: () => void
+}
 
 const index = ({ activity, handleNavigate }: ActivityCardProps) => {
-  const {
-    title,
-    dateTime,
-    duration,
-    place,
-    currentParticipants,
-    maxParticipants,
-  } = activity;
+  const { title, dateTime, duration, place, currentParticipants, maxParticipants } = activity
   // console.log(activity);
-  const array = [1, 2];
+  const array = [1, 2]
   return (
     <Pressable style={styles.container} onPress={handleNavigate}>
       {/* <Pressable style={styles.logoContainer}>
@@ -47,19 +42,34 @@ const index = ({ activity, handleNavigate }: ActivityCardProps) => {
         <Text style={styles.title} numberOfLines={1}>
           {title}
         </Text>
-
-        <Text style={styles.infoText}>
-          {dayjs(dateTime).format('dddd, MMMM D, YYYY h:mm')}
-        </Text>
+        <View
+          style={{
+            borderBottomColor: 'gray',
+            borderBottomWidth: StyleSheet.hairlineWidth,
+            marginTop: 5,
+            marginBottom: 5,
+            opacity: 0.3,
+          }}
+        />
+        <View style={styles.infoContainer}>
+          <View style={styles.infoSubContainer}>
+            <Icon source={'calendar'} color={COLORS.gray} size={18}></Icon>
+            <Text style={styles.infoText}>{dayjs(dateTime).format('ddd, MMM D')}</Text>
+          </View>
+          <View style={styles.infoSubContainer}>
+            <Icon source={'clock'} color={COLORS.gray} size={18}></Icon>
+            <Text style={styles.infoText}>{dayjs(dateTime).format('h:mm A')}</Text>
+          </View>
+        </View>
         {/* <Text style={styles.infoText}>Duration: {duration}</Text> */}
-        <Text style={styles.infoText}>{place}</Text>
+        <Text style={styles.infoText}>Location: {place}</Text>
         {/* <Text style={styles.infoText}>
           Participants: {1} / {1}
         </Text> */}
       </View>
     </Pressable>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   card: {
@@ -72,14 +82,27 @@ const styles = StyleSheet.create({
   title: {
     fontSize: SIZES.medium,
     fontFamily: 'DMBold',
-    color: COLORS.primary,
+    color: COLORS.black,
   },
   infoText: {
     fontSize: SIZES.small + 2,
     fontFamily: 'DMRegular',
     color: COLORS.gray,
-    marginTop: 3,
     textTransform: 'capitalize',
+  },
+  infoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignContent: 'center',
+    marginTop: 5,
+    marginBottom: 5,
+    gap: 10,
+  },
+  infoSubContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignContent: 'center',
+    gap: 5,
   },
   container: {
     flex: 1,
@@ -108,6 +131,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: SIZES.medium,
   },
-});
+})
 
-export default index;
+export default index
