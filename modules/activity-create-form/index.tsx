@@ -28,6 +28,7 @@ import { ActivityInfoSchema, ActivityInfo } from './activity.schema'
 import { Colors, Picker } from 'react-native-ui-lib'
 import errorMap from 'zod/lib/locales/en'
 import { TextInput as TextInputPaper } from 'react-native-paper'
+import AppButton from '../shared/AppButton'
 
 type Props = {}
 type ActivityData = {
@@ -83,7 +84,7 @@ const CreateActivity = (props: Props) => {
     addActivityMutation(formData)
   })
 
-  const usePreset = (e: any) => {
+  const usePreset = () => {
     setValue('categoryId', 1)
     setValue('hostUserId', 1)
     setValue('title', 'test_title-' + Math.random().toString())
@@ -277,6 +278,7 @@ const CreateActivity = (props: Props) => {
               />
             )}
           />
+
           <View style={{ flex: 1, gap: 6 }}>
             <Button title="Submit" onPress={onSummit} />
             {Boolean(0) && <Button title="Get Value" onPress={() => console.log(getValues())} />}
@@ -301,29 +303,10 @@ const CreateActivity = (props: Props) => {
           </View>
         </View>
       </ScrollView>
-      <View style={styles.footer}>
-        <BaseButton
-          onPress={usePreset}
-          style={[
-            {
-              backgroundColor: COLORS.tertiary,
 
-              justifyContent: 'center',
-              alignItems: 'center',
-              borderRadius: SIZES.medium,
-              padding: 12,
-            },
-          ]}
-        >
-          <Text style={styles.addBtnText}>preset</Text>
-        </BaseButton>
-        <BaseButton
-          style={[styles.addBtn, isValid ? {} : { backgroundColor: 'gray' }]}
-          // enabled={isValid}
-          onPress={onSummit}
-        >
-          <Text style={styles.addBtnText}>Add</Text>
-        </BaseButton>
+      <View style={styles.footer}>
+        <AppButton type="secondary" label="preset" onPress={usePreset} />
+        <AppButton type="primary" label="preset" onPress={usePreset} fullWidth />
       </View>
     </KeyboardAvoidingWrapper>
   )
