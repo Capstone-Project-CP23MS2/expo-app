@@ -53,7 +53,7 @@ const index = (props: Props) => {
             </View>
             <View style={{ padding: SIZES.small }}>
               <Pressable onPress={() => router.push('/activities/create-form')}>
-                <Icon source={'plus'} color={COLORS.black} size={30}></Icon>
+                <MaterialIcons name="control-point" size={38} color="black" />
               </Pressable>
             </View>
             {/* <Pressable onPress={() => refetch()}>
@@ -63,7 +63,7 @@ const index = (props: Props) => {
 
           <View style={styles.cardsContainer}>
             {isLoading ? (
-              <ActivityIndicator size="large" color={COLORS.primary} />
+              <ActivityIndicator size="large" color={COLORS.gray} />
             ) : isError ? (
               <Text>Error! {error.message}</Text>
             ) : activities?.length ? (

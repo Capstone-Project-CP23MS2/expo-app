@@ -1,41 +1,28 @@
-import {
-  Image,
-  Linking,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native'
 
-import React from 'react';
-import { COLORS, FONT, SIZES } from '@/constants';
-import { MaterialIcons } from '@expo/vector-icons';
-import { BaseButton, TouchableOpacity } from 'react-native-gesture-handler';
+import React from 'react'
+import { COLORS, FONT, SIZES } from '@/constants'
+import { MaterialIcons } from '@expo/vector-icons'
+import { BaseButton, TouchableOpacity } from 'react-native-gesture-handler'
 
-type Props = {};
+type Props = {}
 
 const index = (props: Props) => {
   return (
     <View style={styles.container}>
-      <BaseButton style={styles.likeBtn}>
-        {/* <Image
-          source={icons.heartOutline}
-          resizeMode="contain"
-          style={styles.likeBtnImage}
-        /> */}
+      {/* <BaseButton style={styles.likeBtn}>
+        <Image source={icons.heartOutline} resizeMode="contain" style={styles.likeBtnImage} />
         <MaterialIcons name="favorite-outline" size={36} color="black" />
-      </BaseButton>
+      </BaseButton> */}
 
-      <BaseButton
-        style={styles.applyBtn}
-        onPress={() => console.log(`Join activity`)}>
-        <Text style={styles.applyBtnText}>👋 Join</Text>
+      <BaseButton style={styles.applyBtn} onPress={() => console.log(`Join activity`)}>
+        <Text style={styles.applyBtnText}>Join Activity</Text>
       </BaseButton>
     </View>
-  );
-};
+  )
+}
 
-export default index;
+export default index
 
 const styles = StyleSheet.create({
   container: {
@@ -63,8 +50,8 @@ const styles = StyleSheet.create({
   },
   applyBtn: {
     flex: 1,
-    backgroundColor: COLORS.primary,
-    height: '100%',
+    backgroundColor: COLORS.gray,
+    padding: 5,
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: SIZES.medium,
@@ -75,4 +62,4 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontFamily: FONT.bold,
   },
-});
+})

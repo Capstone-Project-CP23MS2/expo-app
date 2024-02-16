@@ -10,7 +10,7 @@ const TabsLayout = (props: Props) => {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: COLORS.primary,
+        tabBarActiveTintColor: COLORS.black,
         // tabBarLabelStyle: {
         // fontFamily: FONT.semiBold,
         // },
@@ -23,7 +23,9 @@ const TabsLayout = (props: Props) => {
         options={{
           tabBarLabel: 'Activities',
           headerShown: false,
-          tabBarIcon: ({ size, color }) => <MaterialIcons name="event" size={size} color={color} />,
+          tabBarIcon: ({ size, color }) => (
+            <MaterialIcons name="directions-run" size={size} color={color} />
+          ),
         }}
       />
       {/* <Tabs.Screen
@@ -40,7 +42,7 @@ const TabsLayout = (props: Props) => {
         options={{
           tabBarLabel: 'Wishlists',
           tabBarIcon: ({ size, color }) => (
-            <MaterialIcons name="favorite-outline" size={size} color={color} />
+            <MaterialIcons name="inventory" size={size} color={color} />
           ),
         }}
       />
@@ -49,7 +51,7 @@ const TabsLayout = (props: Props) => {
         options={{
           tabBarLabel: 'Inbox',
           tabBarIcon: ({ size, color }) => (
-            <MaterialIcons name="notifications-none" size={size} color={color} />
+            <MaterialIcons name="forward-to-inbox" size={size} color={color} />
           ),
         }}
       />

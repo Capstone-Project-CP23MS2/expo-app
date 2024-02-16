@@ -17,7 +17,7 @@ import { defaultStyles } from '@/constants/Styles'
 import { TouchableOpacity, BaseButton } from 'react-native-gesture-handler'
 import ActivityFooter from '@/components/ActivityDetails/ActivityFooter'
 import axios from 'axios'
-import { Button, Chip, Modal, Portal, PaperProvider } from 'react-native-paper'
+import { Button, Chip, Modal, Portal, PaperProvider, Icon, Card } from 'react-native-paper'
 import { UseGetActivity, UseGetActivityParticipants, getActivity } from '@/api/activities'
 import { useQuery } from '@tanstack/react-query'
 import { UseGetCategory, getCategory } from '@/api/category'
@@ -112,43 +112,73 @@ const Page = (props: Props) => {
               </Modal>
             </Portal>
 
-            <Text style={styles.name}>{title}</Text>
-            <Text style={styles.location}>{place}</Text>
-
-            <Text style={styles.rooms}>{dayjs(dateTime).format('dddd, MMMM D, YYYY h:mm')}</Text>
-            <Text style={styles.rooms}>{duration} min</Text>
-            <Chip icon="information">{category?.name}</Chip>
-
-            <Text style={[styles.location, { paddingTop: 20 }]}>Description</Text>
-
-            <Text style={styles.description}>{description}</Text>
-
-            <Text style={[styles.location, { paddingTop: 20 }]}>
-              Participants - {participants?.length} / {noOfMembers}
-            </Text>
-            <View>
-              {participants?.map(participant => (
-                <View key={participant.userId} style={{ flex: 1, flexDirection: 'row' }}>
-                  <MaterialIcons name="person" size={24} color="black" />
-                  <Text>{participant.username}</Text>
-                </View>
-              ))}
+            <View style={styles.infoHeader}>
+              <Text style={styles.name}>{title}</Text>
+              <View style={styles.participants}>
+                <Text style={[{ color: 'white' }, { fontWeight: 'bold' }]}>
+                  {participants?.length} / {noOfMembers}
+                </Text>
+              </View>
             </View>
-
-            <View style={{ flex: 1, flexDirection: 'row', gap: 10 }}>
-              {/* <BaseButton
+            <Text style={styles.location}>{place}</Text>
+            <View
+              style={{
+                borderBottomColor: 'gray',
+                borderBottomWidth: StyleSheet.hairlineWidth,
+                marginTop: 5,
+                marginBottom: 5,
+                opacity: 0.3,
+              }}
+            />
+            <View style={styles.block}>
+              <View>
+                <Text style={styles.subHeader}>{category?.name}</Text>
+                <View style={[{ flexDirection: 'row' }, { alignItems: 'center' }, { gap: 5 }]}>
+                  <MaterialIcons name="date-range" size={20} color="black" />
+                  <Text style={styles.rooms}>
+                    {dayjs(dateTime).format('ddd, MMM D h:mm A')}
+                  </Text>{' '}
+                </View>
+                <View style={[{ flexDirection: 'row' }, { alignItems: 'center' }, { gap: 5 }]}>
+                  <MaterialIcons name="timer" size={20} color="black" />
+                  <Text style={styles.rooms}>{duration} Minutes</Text>
+                </View>
+              </View>
+              <View>
+                <Text style={styles.subHeader}>Description</Text>
+                <View style={styles.descriptionBox}>
+                  <Text style={styles.description}>{description}</Text>
+                </View>
+              </View>
+              <View>
+                <Text style={styles.subHeader}>Participants</Text>
+                <View style={styles.descriptionBox}>
+                  {participants?.map(participant => (
+                    <View
+                      key={participant.userId}
+                      style={{ flex: 1, flexDirection: 'row', gap: 5, alignItems: 'center' }}
+                    >
+                      <MaterialIcons name="account-circle" size={24} color="gray" />
+                      <Text style={{ color: COLORS.gray }}>{participant.username}</Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+              <View style={{ flex: 1, flexDirection: 'row' }}>
+                {/* <BaseButton
                 onPress={showModal}
                 style={[defaultStyles.btn, { backgroundColor: 'yellow' }]}>
                 <Text style={[defaultStyles.btnText, { color: 'black' }]}>
                   Edit
                 </Text>
               </BaseButton> */}
-              <BaseButton
-                style={[defaultStyles.btn, { backgroundColor: 'red' }]}
-                onPress={showModal}
-              >
-                <Text style={defaultStyles.btnText}>Delete</Text>
-              </BaseButton>
+                <BaseButton
+                  style={[defaultStyles.btn, { backgroundColor: 'red' }]}
+                  onPress={showModal}
+                >
+                  <Text>Delete</Text>
+                </BaseButton>
+              </View>
             </View>
             {/* <View style={styles.hostView}>
             <Image
@@ -185,8 +215,8 @@ const Page = (props: Props) => {
           </BaseButton>
         </View>
       </View> */}
-        <ActivityFooter />
       </View>
+      <ActivityFooter />
     </PaperProvider>
   )
 }
@@ -196,29 +226,44 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-  // image: {
-  //   height: IMG_HEIGHT,
-  //   width: width,
-  // },
+  block: {
+    gap: 5,
+  },
+  participants: {
+    backgroundColor: 'green',
+    borderRadius: 20,
+    padding: 8,
+  },
+  infoHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    gap: 8,
+  },
   infoContainer: {
     padding: 24,
     backgroundColor: '#fff',
   },
   name: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    fontFamily: FONT.semiBold,
+    fontSize: 20,
+    fontFamily: FONT.bold,
   },
   location: {
     fontSize: 18,
-    marginBottom: 10,
-    fontFamily: FONT.semiBold,
+    fontFamily: FONT.medium,
+    color: COLORS.gray,
   },
   rooms: {
     fontSize: 16,
     color: Colors.grey,
     marginVertical: 4,
     fontFamily: FONT.regular,
+  },
+  subHeader: {
+    fontSize: 16,
+    color: Colors.grey,
+    marginVertical: 4,
+    fontFamily: FONT.semiBold,
   },
   ratings: {
     fontSize: 16,
@@ -272,11 +317,26 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: Colors.grey,
   },
-
   description: {
     fontSize: 16,
-    marginTop: 10,
     fontFamily: FONT.regular,
+    color: COLORS.gray,
+  },
+  descriptionBox: {
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: COLORS.grey,
+    padding: 10,
+    backgroundColor: '#FFF',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 4,
   },
 })
 
