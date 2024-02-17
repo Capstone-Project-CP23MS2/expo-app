@@ -18,29 +18,30 @@ export class DesignSystem {
     });
 
     Typography.loadTypographies({
-      h1: { fontSize: 40, fontFamily: 'NunitoBold' },
-      h2: { fontSize: 32, fontFamily: 'NunitoBold' },
-      h3: { fontSize: 28, fontFamily: 'NunitoBold' },
-      h4: { fontSize: 24, fontFamily: 'NunitoBold' },
-      h5: { fontSize: 20, fontFamily: 'NunitoBold' },
-      large: { fontSize: 18, fontFamily: 'NunitoRegular' },
-      regular: { fontSize: 16, fontFamily: 'NunitoRegular' },
-      regularB: { fontSize: 16, fontFamily: 'NunitoBold' },
-      small: { fontSize: 14, fontFamily: 'NunitoRegular' },
-      tiny: { fontSize: 12, fontFamily: 'NunitoRegular' },
-      // test: {
-      //   test2: {
-      //     fontSize: 14,
-      //     fontFamily: 'NunitoRegular',
-
-      //   }
-      // }
+      h1: { fontSize: 32, fontFamily: 'NotoSansThaiBold' },
+      h2: { fontSize: 28, fontFamily: 'NotoSansThaiBold' },
+      h3: { fontSize: 24, fontFamily: 'NotoSansThaiBold' },
+      h4: { fontSize: 22, fontFamily: 'NotoSansThaiSemiBold' },
+      h5: { fontSize: 20, fontFamily: 'NotoSansThaiSemiBold' },
+      lg: { fontSize: 18, fontFamily: 'NotoSansThaiRegular' },
+      md: { fontSize: 16, fontFamily: 'NotoSansThaiRegular' },
+      sm: { fontSize: 14, fontFamily: 'NotoSansThaiRegular' },
+      xs: { fontSize: 12, fontFamily: 'NotoSansThaiRegular' },
+      "md-b": { fontSize: 16, fontFamily: 'NotoSansThaiBold' },
+      "lg-b": { fontSize: 16, fontFamily: 'NotoSansThaiBold' },
+      "sm-b": { fontSize: 14, fontFamily: 'NotoSansThaiBold' },
+      "xs-b": { fontSize: 12, fontFamily: 'NotoSansThaiBold' },
     });
 
     Spacings.loadSpacings({
       page: 20,
       card: 12,
-      gridGutter: 16
+      gridGutter: 16,
+      xs: 4,
+      sm: 8,
+      md: 16,
+      lg: 24,
+      xl: 40,
     });
     // RNUIThemeManagerInit();
 

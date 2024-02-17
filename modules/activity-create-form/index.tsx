@@ -305,8 +305,8 @@ const CreateActivity = (props: Props) => {
       </ScrollView>
 
       <View style={styles.footer}>
-        <AppButton type="secondary" label="preset" onPress={usePreset} />
-        <AppButton type="primary" label="preset" onPress={usePreset} fullWidth />
+        <AppButton variant="secondary" label="preset" onPress={usePreset} />
+        <AppButton variant="primary" label="preset" onPress={usePreset} fullWidth />
       </View>
     </KeyboardAvoidingWrapper>
   )
