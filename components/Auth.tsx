@@ -54,11 +54,15 @@ export default function () {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <GoogleSigninButton
-        size={GoogleSigninButton.Size.Wide}
-        color={GoogleSigninButton.Color.Dark}
-        onPress={isSignedIn}
-      />
+      {userInfo ? (
+        <Button title="Logout" onPress={signOut} />
+      ) : (
+        <GoogleSigninButton
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Dark}
+          onPress={isSignedIn}
+        />
+      )}
     </View>
   )
 }
