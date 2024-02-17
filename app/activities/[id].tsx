@@ -135,9 +135,7 @@ const Page = (props: Props) => {
                 <Text style={styles.subHeader}>{category?.name}</Text>
                 <View style={[{ flexDirection: 'row' }, { alignItems: 'center' }, { gap: 5 }]}>
                   <MaterialIcons name="date-range" size={20} color="black" />
-                  <Text style={styles.rooms}>
-                    {dayjs(dateTime).format('ddd, MMM D h:mm A')}
-                  </Text>{' '}
+                  <Text style={styles.rooms}>{dayjs(dateTime).format('ddd, MMM D h:mm A')}</Text>
                 </View>
                 <View style={[{ flexDirection: 'row' }, { alignItems: 'center' }, { gap: 5 }]}>
                   <MaterialIcons name="timer" size={20} color="black" />

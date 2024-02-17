@@ -1245,11 +1245,6 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.56.0.tgz#ef20350fec605a7f7035a01764731b2de0f3782b"
   integrity sha512-gMsVel9D7f2HLkBma9VbtzZRehRogVRfbr++f06nL2vnCGCNlzOD+/MUov/F4p8myyAHspEhVobgjpX64q5m6A==
 
-"@expo-google-fonts/noto-sans-thai@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@expo-google-fonts/noto-sans-thai/-/noto-sans-thai-0.2.3.tgz#199bcc553acfafc3f778ce04d6150dcf9237a6f8"
-  integrity sha512-bKsPMn663w86mIunlfCdnIXGCEoVRboaB1C22IuRfM0jf+aHDfJEJeIjmAe0kyrgsrqk+k8gQOjsjcR7/mRPew==
-
 "@expo/bunyan@4.0.0", "@expo/bunyan@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@expo/bunyan/-/bunyan-4.0.0.tgz#be0c1de943c7987a9fbd309ea0b1acd605890c7b"
@@ -2158,11 +2153,6 @@
   integrity sha512-dO1sQy83M/EvnHE2egto05iwXZX7EYn5f/VDMp6afZFRFXRiRo7CzB3VFg4B55gJRJMNBv06NYMLPM3SlpnEGQ==
   dependencies:
     invariant "^2.2.4"
-
-"@react-native-google-signin/google-signin@12.1.0":
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/@react-native-google-signin/google-signin/-/google-signin-11.0.0.tgz#b1732cf61758f8c6554adefd8cdc9a9f640df9b1"
-  integrity sha512-J8BFFGr5HcEWE2gRaVSJ0rQN8ztxYIr2wdWMG4PS1vhQZJqUzmRr6vpu12O1GppItq8ai7AA0rl/ja7hSytSXA==
 
 "@react-native-picker/picker@2.4.10":
   version "2.4.10"
