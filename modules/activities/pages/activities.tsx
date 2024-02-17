@@ -36,11 +36,9 @@ const index = (props: Props) => {
             <Text style={styles.headerTitle}>Available Activities</Text>
             <Text style={styles.subHeader}>found {activities?.length} activites</Text>
           </View>
-          <View style={{ padding: SIZES.small }}>
-            <Pressable onPress={() => router.push('/activities/create-form')}>
-              <MaterialIcons name="control-point" size={38} color="black" />
-            </Pressable>
-          </View>
+          <Pressable onPress={() => router.push('/activities/create-form')}>
+            <MaterialIcons name="control-point" size={38} color="black" />
+          </Pressable>
           {/* <Pressable onPress={() => refetch()}>
               <Text style={styles.headerBtn}>Refresh</Text>
             </Pressable> */}
@@ -100,13 +98,21 @@ const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: COLORS.lightWhite,
     elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
   },
   headerArea: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingLeft: 20,
-    paddingRight: 5,
+    paddingRight: 20,
+    paddingBottom: 10,
   },
   container: {
     paddingTop: 0,

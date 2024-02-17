@@ -61,11 +61,7 @@ const index = ({ activity, handleNavigate }: ActivityCardProps) => {
             <Text style={styles.infoText}>{dayjs(dateTime).format('h:mm A')}</Text>
           </View>
         </View>
-        {/* <Text style={styles.infoText}>Duration: {duration}</Text> */}
         <Text style={styles.infoText}>Location: {place}</Text>
-        {/* <Text style={styles.infoText}>
-          Participants: {1} / {1}
-        </Text> */}
       </View>
     </Pressable>
   )

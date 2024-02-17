@@ -15,6 +15,7 @@ export default function () {
     GoogleSignin.configure({
       scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
       webClientId: '30535345538-08koucd1b3fl5fhaufbel0c5kke2aq9a.apps.googleusercontent.com', // client ID of type WEB for your server. Required to get the idToken on the user object, and for offline access.
+      iosClientId: '30535345538-757nuip8mi810r02g6noq4kfi5j7pjg0.apps.googleusercontent.com',
     })
   }
 
