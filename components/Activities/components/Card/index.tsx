@@ -1,4 +1,4 @@
-import { COLORS, SHADOWS, SIZES } from '@/constants'
+import { COLORS, SHADOWS, SIZES, FONT } from '@/constants'
 import { View, Text, StyleSheet, Pressable, Image } from 'react-native'
 import { Icon, MD3Colors } from 'react-native-paper'
 
@@ -81,12 +81,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: SIZES.medium,
-    fontFamily: 'DMBold',
+    fontFamily: FONT.medium,
     color: COLORS.black,
   },
   infoText: {
     fontSize: SIZES.small + 2,
-    fontFamily: 'DMRegular',
+    fontFamily: FONT.medium,
     color: COLORS.gray,
     textTransform: 'capitalize',
   },

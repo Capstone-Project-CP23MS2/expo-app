@@ -1,9 +1,10 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
-import { SplashScreen, Stack, useRouter } from 'expo-router'
-import { useEffect } from 'react'
-import { Pressable, useColorScheme } from 'react-native'
+import { Stack, useRouter } from 'expo-router'
+import * as SplashScreen from 'expo-splash-screen'
+import { useEffect, useCallback } from 'react'
+import { Pressable, useColorScheme, View, Text } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 import { COLORS, FONT } from '@/constants'
 import {
@@ -106,30 +107,3 @@ function RootLayoutNav() {
     </QueryClientProvider>
   )
 }
-//     <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-
-// const [fontsLoaded, fontsError] = useFonts({
-//   NunitoRegular: require('@/assets/fonts/Nunito-Regular.ttf'),
-//   NunitoMedium: require('@/assets/fonts/Nunito-Medium.ttf'),
-//   NunitoSemiBold: require('@/assets/fonts/Nunito-SemiBold.ttf'),
-//   NunitoBold: require('@/assets/fonts/Nunito-Bold.ttf'),
-//   DMBold: require('@/assets/fonts/DMSans-Bold.ttf'),
-//   DMMedium: require('@/assets/fonts/DMSans-Medium.ttf'),
-//   DMRegular: require('@/assets/fonts/DMSans-Regular.ttf'),
-//   // ...FontAwesome.font,
-// });
-
-// // Expo Router uses Error Boundaries to catch errors in the navigation tree.
-// useEffect(() => {
-//   if (fontsError) throw fontsError;
-// }, [fontsError]);
-
-// useEffect(() => {
-//   if (fontsLoaded) {
-//     SplashScreen.hideAsync();
-//   }
-// }, [fontsLoaded]);
-
-// if (!fontsLoaded) {
-//   return null;
-// }
