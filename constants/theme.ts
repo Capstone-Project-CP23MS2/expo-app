@@ -75,4 +75,13 @@ const SHADOWS = {
   },
 };
 
-export { COLORS, FONT, SHADOWS, SIZES };
+const SPACINGS = {
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 40,
+  page: 24,
+};
+
+export { COLORS, FONT, SHADOWS, SIZES, SPACINGS };

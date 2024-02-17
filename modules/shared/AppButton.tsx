@@ -4,17 +4,18 @@ import { BaseButton } from 'react-native-gesture-handler'
 import { COLORS, FONT, SIZES } from '@/constants'
 
 type Props = {
-  type: 'primary' | 'secondary' | 'tertiary'
+  variant: 'primary' | 'secondary' | 'tertiary'
   label: string
   onPress: () => void
   fullWidth?: true
+  round?: true
 }
 
-const AppButton = ({ type, label, onPress, fullWidth }: Props) => {
+const AppButton = ({ variant, label, onPress, fullWidth }: Props) => {
   return (
     <BaseButton
       onPress={onPress}
-      style={[styles.button, { backgroundColor: COLORS[type] }, fullWidth && { flex: 1 }]}
+      style={[styles.button, { backgroundColor: COLORS[variant] }, fullWidth && { flex: 1 }]}
     >
       <Text style={styles.label}>{label}</Text>
     </BaseButton>
@@ -28,8 +29,8 @@ const styles = StyleSheet.create({
     // backgroundColor: COLORS.tertiary,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: SIZES.large,
-    padding: 12,
+    borderRadius: 9999,
+    padding: 16,
   },
 
   label: {
