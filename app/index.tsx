@@ -1,16 +1,14 @@
 import { StyleSheet, Text, View, Button } from 'react-native'
-import React from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useRouter } from 'expo-router'
+import Auth from '@/components/Auth'
 
 type Props = {}
 
 const index = (props: Props) => {
-  // const router = useRouter();
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Link href={'/(tabs)/activities'} asChild>
-        <Button title="Open App" />
-      </Link>
+      <Auth />
     </View>
   )
 }
