@@ -1,4 +1,4 @@
-export { default } from '@/components/notification';
+export { default } from '@/modules/notification'
 
 // import { StyleSheet, Text, View } from 'react-native';
 // import React, { useState } from 'react';

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Pressable } from 'react-native'
 import { useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import AppTextInput from '@/components/common/AppTextInput'
+import AppTextInput from '@/modules/shared/AppTextInput'
 
 type Props = {
   value: string

@@ -15,7 +15,7 @@ import useFetch from '@/hooks/useFetch'
 import dayjs from 'dayjs'
 import { defaultStyles } from '@/constants/Styles'
 import { TouchableOpacity, BaseButton } from 'react-native-gesture-handler'
-import ActivityFooter from '@/components/ActivityDetails/ActivityFooter'
+import ActivityFooter from '@/modules/activity-detail/components/ActivityFooter'
 import axios from 'axios'
 import { Button, Chip, Modal, Portal, PaperProvider } from 'react-native-paper'
 import { UseGetActivity, UseGetActivityParticipants, getActivity } from '@/api/activities'
@@ -56,7 +56,7 @@ const Page = (props: Props) => {
   const onDeleteActivitiy = async () => {
     try {
       const response = await axios.delete(`${apiUrl}/activities/${id}`, {})
-      router.push('/(tabs)/activities')
+      router.push('/(app)/(tabs)/activities')
     } catch (error) {
       console.error('Error fetching categories:', error)
     } finally {
