@@ -62,7 +62,7 @@ function RootLayoutNav() {
       <StatusBar style="dark" />
 
       <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="index" options={{ headerShown: true }} />
         <Stack.Screen name="(app)/(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="(app)/listing/[id]" options={{ headerTitle: '' }} />
         <Stack.Screen name="(app)/activities/[id]" options={{ headerTitle: 'Activities' }} />
