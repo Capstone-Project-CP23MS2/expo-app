@@ -71,7 +71,7 @@ const CreateActivity = (props: Props) => {
     mutationFn: createActivity,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['activities'] })
-      router.push('/(tabs)/activities')
+      router.push('/(app)/(tabs)/activities')
     },
     onError: error => {
       console.log(error)

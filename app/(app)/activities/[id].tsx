@@ -56,7 +56,7 @@ const Page = (props: Props) => {
   const onDeleteActivitiy = async () => {
     try {
       const response = await axios.delete(`${apiUrl}/activities/${id}`, {})
-      router.push('/(tabs)/activities')
+      router.push('/(app)/(tabs)/activities')
     } catch (error) {
       console.error('Error fetching categories:', error)
     } finally {

@@ -29,7 +29,7 @@ export default function () {
       const userInfo = await GoogleSignin.signIn()
       setUserInfo(userInfo.idToken)
       if (userInfo) {
-        router.replace('/(tabs)/activities')
+        router.replace('/(app)/(tabs)/activities')
         console.log(userInfo.user.email)
       } else {
         console.log('User not found')

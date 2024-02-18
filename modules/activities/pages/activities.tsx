@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     paddingRight: 20,
     paddingBottom: 10,
+    paddingTop: 10,
   },
   container: {
     paddingTop: 0,

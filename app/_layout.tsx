@@ -16,6 +16,7 @@ import {
 } from '@tanstack/react-query'
 import useAppLoading from '@/hooks/useAppLoading'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { StatusBar } from 'expo-status-bar'
 // import { DesignSystem } from '@/utils/design-system';
 
 // import 'utils/unistyles';
@@ -37,7 +38,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: '(app)/(tabs)',
 }
 
 // DesignSystem.setup()
@@ -58,13 +59,16 @@ function RootLayoutNav() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}> */}
+      <StatusBar style="dark" />
+
       <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="listing/[id]" options={{ headerTitle: '' }} />
-        <Stack.Screen name="activities/[id]" options={{ headerTitle: '' }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen name="(app)/(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(app)/listing/[id]" options={{ headerTitle: '' }} />
+        <Stack.Screen name="(app)/activities/[id]" options={{ headerTitle: 'Activities' }} />
 
         <Stack.Screen
-          name="(modals)/login"
+          name="(app)/(modals)/login"
           options={{
             presentation: 'modal',
             title: 'Log in or sign up',
@@ -79,7 +83,7 @@ function RootLayoutNav() {
           }}
         />
         <Stack.Screen
-          name="(modals)/booking"
+          name="(app)/(modals)/booking"
           options={{
             presentation: 'transparentModal',
             animation: 'fade',
