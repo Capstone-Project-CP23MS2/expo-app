@@ -1,9 +1,10 @@
-import { Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Image, Linking, Pressable, StyleSheet, Text, View, Button } from 'react-native'
 
 import React from 'react'
 import { COLORS, FONT, SIZES } from '@/constants'
 import { MaterialIcons } from '@expo/vector-icons'
 import { BaseButton, TouchableOpacity } from 'react-native-gesture-handler'
+import AppButton from '../../../modules/shared/AppButton'
 
 type Props = {}
 
@@ -15,9 +16,15 @@ const index = (props: Props) => {
         <MaterialIcons name="favorite-outline" size={36} color="black" />
       </BaseButton> */}
 
-      <BaseButton style={styles.applyBtn} onPress={() => console.log(`Join activity`)}>
+      {/* <TouchableOpacity style={styles.applyBtn} onPress={() => console.log(`Join activity`)}>
         <Text style={styles.applyBtnText}>Join Activity</Text>
-      </BaseButton>
+      </TouchableOpacity> */}
+      <AppButton
+        variant="primary"
+        label="Join Activity"
+        onPress={() => console.log(`Join activity`)}
+        fullWidth
+      />
     </View>
   )
 }
@@ -30,8 +37,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    padding: SIZES.small,
-    backgroundColor: '#FFF',
+    padding: SIZES.large,
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
@@ -50,8 +56,8 @@ const styles = StyleSheet.create({
   },
   applyBtn: {
     flex: 1,
-    backgroundColor: COLORS.gray,
-    padding: 5,
+    backgroundColor: COLORS.primary,
+    padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: SIZES.medium,

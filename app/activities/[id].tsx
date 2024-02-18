@@ -9,7 +9,7 @@ import Animated, {
   useScrollViewOffset,
 } from 'react-native-reanimated'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
-import { COLORS, FONT } from '@/constants'
+import { COLORS, FONT, SIZES } from '@/constants'
 import Colors from '@/constants/Colors'
 import useFetch from '@/hooks/useFetch'
 import dayjs from 'dayjs'
@@ -68,7 +68,13 @@ const Page = (props: Props) => {
 
   const showModal = () => setVisible(true)
   const hideModal = () => setVisible(false)
-  const containerStyle = { backgroundColor: 'white', padding: 20 }
+  const containerStyle = {
+    backgroundColor: 'white',
+    padding: 20,
+    margin: 20,
+    borderRadius: 20,
+    gap: 5,
+  }
 
   return (
     <PaperProvider>
@@ -87,7 +93,7 @@ const Page = (props: Props) => {
           <View style={styles.infoContainer}>
             <Portal>
               <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-                <Text>Confirm to delete</Text>
+                <Text>This activity will be gone.</Text>
                 <View
                   style={{
                     flexDirection: 'row',
@@ -106,7 +112,7 @@ const Page = (props: Props) => {
                     style={[defaultStyles.btn, { backgroundColor: 'red' }]}
                     onPress={onDeleteActivitiy}
                   >
-                    <Text style={defaultStyles.btnText}>Confirm</Text>
+                    <Text style={[defaultStyles.btnText, { color: 'white' }]}>Confirm</Text>
                   </BaseButton>
                 </View>
               </Modal>
@@ -114,11 +120,11 @@ const Page = (props: Props) => {
 
             <View style={styles.infoHeader}>
               <Text style={styles.name}>{title}</Text>
-              <View style={styles.participants}>
+              {/* <View style={styles.participants}>
                 <Text style={[{ color: 'white' }, { fontWeight: 'bold' }]}>
                   {participants?.length} / {noOfMembers}
                 </Text>
-              </View>
+              </View> */}
             </View>
             <Text style={styles.location}>{place}</Text>
             <View
@@ -149,7 +155,9 @@ const Page = (props: Props) => {
                 </View>
               </View>
               <View>
-                <Text style={styles.subHeader}>Participants</Text>
+                <Text style={styles.subHeader}>
+                  Participants {participants?.length} / {noOfMembers}
+                </Text>
                 <View style={styles.descriptionBox}>
                   {participants?.map(participant => (
                     <View
@@ -162,19 +170,22 @@ const Page = (props: Props) => {
                   ))}
                 </View>
               </View>
-              <View style={{ flex: 1, flexDirection: 'row' }}>
+              <View style={{ flex: 1, flexDirection: 'row', marginTop: 20, gap: 10 }}>
                 {/* <BaseButton
-                onPress={showModal}
-                style={[defaultStyles.btn, { backgroundColor: 'yellow' }]}>
-                <Text style={[defaultStyles.btnText, { color: 'black' }]}>
-                  Edit
-                </Text>
-              </BaseButton> */}
+                  onPress={showModal}
+                  style={[
+                    defaultStyles.btn,
+                    { backgroundColor: 'lightskyblue' },
+                    { borderRadius: 30 },
+                  ]}
+                >
+                  <Text style={[defaultStyles.btnText, { color: 'black' }]}>Edit</Text>
+                </BaseButton> */}
                 <BaseButton
-                  style={[defaultStyles.btn, { backgroundColor: 'red' }]}
+                  style={[defaultStyles.btn, { backgroundColor: 'gray' }, { borderRadius: 30 }]}
                   onPress={showModal}
                 >
-                  <Text>Delete</Text>
+                  <Text style={{ color: COLORS.white, fontFamily: FONT.bold }}>Delete</Text>
                 </BaseButton>
               </View>
             </View>
@@ -227,11 +238,11 @@ const styles = StyleSheet.create({
   block: {
     gap: 5,
   },
-  participants: {
-    backgroundColor: 'green',
-    borderRadius: 20,
-    padding: 8,
-  },
+  // participants: {
+  //   backgroundColor: 'green',
+  //   borderRadius: 20,
+  //   padding: 8,
+  // },
   infoHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -239,8 +250,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   infoContainer: {
-    padding: 24,
-    backgroundColor: '#fff',
+    padding: SIZES.medium,
   },
   name: {
     fontSize: 20,

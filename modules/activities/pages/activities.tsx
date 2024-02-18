@@ -14,7 +14,7 @@ import FloatingActionButton from '@/components/Activities/components/FloatingAct
 import { useNavigation } from '@react-navigation/native'
 import { UseGetActivities } from '@/api/activities'
 import { FAB, Icon } from 'react-native-paper'
-import { FloatingButton } from 'react-native-ui-lib'
+import { FloatingButton, TouchableOpacity } from 'react-native-ui-lib'
 
 type Props = {}
 type DataProp = {
