@@ -25,8 +25,8 @@ export default function useAppLoading() {
 
   useEffect(() => {
     if (fontsLoaded && !appLoaded) {
-      SplashScreen.hideAsync()
       setAppLoaded(true)
+      SplashScreen.hideAsync()
     }
   }, [fontsLoaded])
 

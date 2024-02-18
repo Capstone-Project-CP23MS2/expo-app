@@ -1,11 +1,10 @@
 import { StyleSheet, Text, View, Button } from 'react-native'
-import { useEffect, useState } from 'react'
-import { Link, useRouter } from 'expo-router'
 import Auth from '@/components/Auth'
 
 type Props = {}
 
-const index = (props: Props) => {
+const login = (props: Props) => {
+  const { Auth } = useAuth();
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Auth />
@@ -13,6 +12,5 @@ const index = (props: Props) => {
   )
 }
 
-export default index
+export default login
 // export { default } from '@/components/home/page';
-const styles = StyleSheet.create({})
