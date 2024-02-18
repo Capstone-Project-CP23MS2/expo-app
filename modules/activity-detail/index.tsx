@@ -26,7 +26,7 @@ import useFetch from '@/hooks/useFetch'
 import dayjs from 'dayjs'
 import { defaultStyles } from '@/constants/Styles'
 import { TouchableOpacity, BaseButton, ScrollView } from 'react-native-gesture-handler'
-import ActivityFooter from '@/components/ActivityDetails/ActivityFooter'
+import ActivityFooter from '@/modules/activity-detail/components/ActivityFooter'
 import axios from 'axios'
 
 import { UseGetActivity, UseGetActivityParticipants, getActivity } from '@/api/activities'

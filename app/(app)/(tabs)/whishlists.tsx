@@ -1,27 +1,16 @@
-import {
-  Image,
-  StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-  Button,
-} from 'react-native';
-import { useEffect } from 'react';
-import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import categories from '@/components/ExploreHeader/categories';
-import { Stack, Link, useNavigation, useRouter } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import {
-  UseGetActivities,
-  deleteActivity,
-  getActivities,
-} from '@/api/activities';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { COLORS, SIZES } from '@/constants';
-import { ActivityCard } from '@/components/Activities';
-import { FAB } from 'react-native-paper';
+import { Image, StyleSheet, Text, View, ActivityIndicator, Button } from 'react-native'
+import { useEffect } from 'react'
+import { FlatList, ScrollView } from 'react-native-gesture-handler'
+import categories from '@/modules/test/demo/components/ExploreHeader/categories'
+import { Stack, Link, useNavigation, useRouter } from 'expo-router'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { UseGetActivities, deleteActivity, getActivities } from '@/api/activities'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { COLORS, SIZES } from '@/constants'
+import ActivityCard from '@/modules/activities/components/Card'
+import { FAB } from 'react-native-paper'
 
-type Props = {};
+type Props = {}
 
 function LogoTitle() {
   return (
@@ -29,29 +18,29 @@ function LogoTitle() {
       style={{ width: 50, height: 50 }}
       source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
     />
-  );
+  )
 }
 
 export default function Page(props: Props) {
-  const router = useRouter();
-  const navigation = useNavigation();
-  const { data, isLoading, isError, error } = UseGetActivities();
+  const router = useRouter()
+  const navigation = useNavigation()
+  const { data, isLoading, isError, error } = UseGetActivities({})
   // const { data, isLoading, isError, error } = useQuery({
   //   queryKey: ['activities'],
   //   queryFn: getActivities,
   // });
-  const { content: activities, first, totalPages } = data || {};
+  const { content: activities, first, totalPages } = data || {}
 
   const { mutate } = useMutation({
     mutationFn: () => deleteActivity(20),
     onSuccess: data => {
-      console.log(data);
+      console.log(data)
     },
-  });
+  })
 
   useEffect(() => {
-    navigation.setOptions({ headerShown: false });
-  }, [navigation]);
+    navigation.setOptions({ headerShown: false })
+  }, [navigation])
 
   return (
     <SafeAreaView>
@@ -68,9 +57,7 @@ export default function Page(props: Props) {
               <ActivityCard
                 key={`nearby-job-${activity.activityId}`}
                 activity={activity}
-                handleNavigate={() =>
-                  router.push(`/activities/${activity.activityId}`)
-                }
+                handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
               />
             ))
           ) : (
@@ -90,7 +77,7 @@ export default function Page(props: Props) {
         />
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -131,4 +118,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: COLORS.gray,
   },
-});
+})

@@ -8,13 +8,14 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useEffect, useState } from 'react'
 
 import axios, { AxiosResponse } from 'axios'
-import { ActivityCard } from '@/components/Activities'
+
 import { MaterialIcons } from '@expo/vector-icons'
-import FloatingActionButton from '@/components/Activities/components/FloatingActionButton'
+import FloatingActionButton from '@/modules/activities/components/FloatingActionButton'
 import { useNavigation } from '@react-navigation/native'
 import { UseGetActivities } from '@/api/activities'
 import { FAB, Icon } from 'react-native-paper'
 import { FloatingButton, TouchableOpacity } from 'react-native-ui-lib'
+import ActivityCard from '../components/Card/'
 
 type Props = {}
 type DataProp = {

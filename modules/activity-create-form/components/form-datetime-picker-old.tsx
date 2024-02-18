@@ -1,42 +1,41 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native';
-import { useState } from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import AppTextInput from '@/components/common/AppTextInput';
-
+import { StyleSheet, Text, View, Pressable } from 'react-native'
+import { useState } from 'react'
+import { MaterialIcons } from '@expo/vector-icons'
+import DateTimePicker from '@react-native-community/datetimepicker'
+import AppTextInput from '@/modules/shared/AppTextInput'
 type Props = {
-  value?: Date | undefined;
+  value?: Date | undefined
   // onChangeDatetime?: (event: any, selectedDate: Date | undefined) => void;
-  onChangeDatetime: (datetime: any) => void;
-};
+  onChangeDatetime: (datetime: any) => void
+}
 
 const FormDatetimePicker = ({ value, onChangeDatetime }: Props) => {
-  const [date, setDate] = useState<Date>(new Date());
-  const [changed, setChanged] = useState(false);
-  const [mode, setMode] = useState<'date' | 'time'>('date');
-  const [show, setShow] = useState(false);
+  const [date, setDate] = useState<Date>(new Date())
+  const [changed, setChanged] = useState(false)
+  const [mode, setMode] = useState<'date' | 'time'>('date')
+  const [show, setShow] = useState(false)
 
   const onChange = (event: any, selectedDate: Date | undefined) => {
-    const currentDate = selectedDate || date;
-    setShow(false);
-    setDate(currentDate);
-    setChanged(true);
-    onChangeDatetime(currentDate.toISOString());
+    const currentDate = selectedDate || date
+    setShow(false)
+    setDate(currentDate)
+    setChanged(true)
+    onChangeDatetime(currentDate.toISOString())
 
     // show time picker when date is selected
     if (mode === 'date' && event.type === 'set') {
-      showMode('time');
+      showMode('time')
     }
-  };
+  }
 
   const showMode = (currentMode: 'date' | 'time') => {
-    setMode(currentMode);
-    setShow(true);
-  };
+    setMode(currentMode)
+    setShow(true)
+  }
 
   const showDateTimePicker = () => {
-    showMode('date');
-  };
+    showMode('date')
+  }
 
   return (
     <View style={{}}>
@@ -69,10 +68,10 @@ const FormDatetimePicker = ({ value, onChangeDatetime }: Props) => {
         />
       )}
     </View>
-  );
-};
+  )
+}
 
-export default FormDatetimePicker;
+export default FormDatetimePicker
 
 const styles = StyleSheet.create({
   input: {
@@ -83,4 +82,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flex: 1,
   },
-});
+})

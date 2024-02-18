@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Button } from 'react-native'
 import { useEffect, useState } from 'react'
 import { Link, useRouter } from 'expo-router'
-import Auth from '@/components/Auth'
+import Auth from '@/modules/auth/Auth'
 
 type Props = {}
 

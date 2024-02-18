@@ -1,35 +1,24 @@
-import React, { useState } from 'react';
-import {
-  SafeAreaView,
-  Button,
-  Modal,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
-import { Task } from '@/components/Tasks/Task';
-import TaskList from '@/components/Tasks/TaskList';
-import AddTaskForm from '@/components/Tasks/AddTaskForm';
-
-type Props = {};
+import React, { useState } from 'react'
+import { SafeAreaView, Button, Modal, StyleSheet, Text, View } from 'react-native'
+type Props = {}
 
 const Page = (props: Props) => {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [isModalVisible, setModalVisible] = useState(false);
+  // const [tasks, setTasks] = useState<Task[]>([])
+  // const [isModalVisible, setModalVisible] = useState(false)
 
-  const handleAddTask = (text: string) => {
-    const newTask: Task = {
-      id: Math.random().toString(),
-      text,
-      completed: false,
-    };
-    setTasks(prevTasks => [...prevTasks, newTask]);
-    setModalVisible(false);
-  };
+  // const handleAddTask = (text: string) => {
+  //   const newTask: Task = {
+  //     id: Math.random().toString(),
+  //     text,
+  //     completed: false,
+  //   };
+  //   setTasks(prevTasks => [...prevTasks, newTask]);
+  //   setModalVisible(false);
+  // };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
+      {/* <View style={styles.header}>
         <Text style={styles.headerText}>Tasks</Text>
         <Button title="Add Task" onPress={() => setModalVisible(true)} />
       </View>
@@ -42,10 +31,10 @@ const Page = (props: Props) => {
         <View style={styles.modalContainer}>
           <AddTaskForm onAddTask={handleAddTask} />
         </View>
-      </Modal>
+      </Modal> */}
     </SafeAreaView>
-  );
-};
+  )
+}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -65,6 +54,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 16,
   },
-});
+})
 
-export default Page;
+export default Page

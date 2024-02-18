@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { View, Text, TextInput, StyleSheet, KeyboardType } from 'react-native'
 
 import { MaterialIcons } from '@expo/vector-icons'
@@ -34,8 +34,8 @@ const Input = ({
   disabled,
   ...props
 }: Props) => {
-  const [hidePassword, setHidePassword] = React.useState(password)
-  const [isFocused, setIsFocused] = React.useState(false)
+  const [hidePassword, setHidePassword] = useState(password)
+  const [isFocused, setIsFocused] = useState(false)
   const { maxLength, error } = props
   console.log(props)
 

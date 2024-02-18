@@ -4,7 +4,7 @@ import React from 'react'
 import { COLORS, FONT, SIZES } from '@/constants'
 import { MaterialIcons } from '@expo/vector-icons'
 import { BaseButton, TouchableOpacity } from 'react-native-gesture-handler'
-import AppButton from '../../../modules/shared/AppButton'
+import AppButton from '@/modules/shared/AppButton'
 
 type Props = {}
 
