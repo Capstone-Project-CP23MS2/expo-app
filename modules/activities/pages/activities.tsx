@@ -25,7 +25,7 @@ const index = (props: Props) => {
   const router = useRouter()
   // const [activities, setActivities] = useState<any[]>([]);
   // console.log(activities);
-  const { data, isLoading, isError, error, refetch } = UseGetActivities()
+  const { data, isLoading, isError, error, refetch } = UseGetActivities({})
   const { content: activities, first, totalPages } = data || {}
 
   function ActivityTitle() {
