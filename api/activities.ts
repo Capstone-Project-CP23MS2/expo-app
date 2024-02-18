@@ -1,54 +1,20 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-
+import { requestParams, Activity, Participant, ActivitiesResponse, ParticipantsResponse } from './type';
 const API_URL: string = process.env.EXPO_PUBLIC_BASE_URL_API!;
 
-type Activity = {
-    activityId: number;
-    hostUserId: number;
-    categoryId: number;
-    title: string;
-    description: string;
-    place: string;
-    dateTime: string;
-    duration: number;
-    createdAt: string;
-    updatedAt: string;
-    noOfMembers: number;
-};
-type ApiPaginationResponse<Data extends object> = {
-    content: Data[];
-    number: number;
-    size: number;
-    totalPages: number;
-    numberOfElements: number;
-    totalElements: number;
-    last: boolean;
-    first: boolean;
 
-};
-
-type ActivityResponse = ApiPaginationResponse<Activity>;
-type TestResponse = ApiPaginationResponse<any>;
-
-interface requestParams {
-    pageNum: number;
-    pageSize: number;
-    sortBy: string;
-}
-
-export const getActivities = async (): Promise<ActivityResponse> => {
-    const { data } = await axios.get(`${API_URL}/activities`, { params: { pageSize: 100 } });
+export const getActivities = async (params: requestParams): Promise<ActivitiesResponse> => {
+    const { data } = await axios.get(`${API_URL}/activities`, { params });
     return data;
 };
 
-export const UseGetActivities = () => {
+export const UseGetActivities = (params: requestParams) => {
     return useQuery({
         queryKey: ['activities'],
-        queryFn: getActivities,
+        queryFn: () => getActivities(params),
         // refetchInterval: 1000, // 1 second
     });
-
 };
 
 export const getActivity = async (id: string | string[]): Promise<Activity> => {
@@ -100,7 +66,7 @@ export const deleteActivity = async (id: number): Promise<any> => {
     return data;
 };
 
-export const getActivityParticipants = async (activityId: string | string[]): Promise<TestResponse> => {
+export const getActivityParticipants = async (activityId: string | string[]): Promise<ParticipantsResponse> => {
     const { data } = await axios.get(`${API_URL}/participants`, { params: { activityId: activityId } });
     return data;
 };
@@ -110,4 +76,13 @@ export const UseGetActivityParticipants = (activityId: string | string[]) => {
         queryKey: ['activityParticipants', activityId],
         queryFn: () => getActivityParticipants(activityId),
     });
+};
+
+export const createParticipant = async (participant: FormData): Promise<Participant> => {
+    const { data } = await axios.post(`${API_URL}/participants`, participant, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    });
+    return data;
 };

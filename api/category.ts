@@ -1,25 +1,10 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { CategoriesResponse, Category } from "./type";
 
-interface Category {
-    categoryId: number;
-    name: string;
-    description: string;
-}
-
-interface CategoryResponse {
-    content: Category[];
-    number: number;
-    size: number;
-    totalPages: number;
-    numberOfElements: number;
-    totalElements: number;
-    last: boolean;
-    first: boolean;
-}
 const API_URL: string = process.env.EXPO_PUBLIC_BASE_URL_API!;
 
-export const getCategories = async (): Promise<CategoryResponse> => {
+export const getCategories = async (): Promise<CategoriesResponse> => {
     const { data } = await axios.get(`${API_URL}/categories`, { params: { pageSize: 100 } });
     return data;
 };
