@@ -56,16 +56,16 @@ export default function () {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      {userInfo ? (
-        <Button title="Logout" onPress={signOut} />
-      ) : (
-        <GoogleSigninButton
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={isSignedIn}
-        />
-      )}
-    </View>
+    // <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    //   {userInfo ? (
+    //     <Button title="Logout" onPress={signOut} />
+    //   ) : (
+    //     <GoogleSigninButton
+    //       size={GoogleSigninButton.Size.Wide}
+    //       color={GoogleSigninButton.Color.Dark}
+    //       onPress={isSignedIn}
+    //     />
+    //   )}
+    // </View>
   )
 }
