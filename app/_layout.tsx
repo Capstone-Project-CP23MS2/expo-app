@@ -1,8 +1,8 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
-import { Stack, useRouter, Slot } from 'expo-router'
-import * as SplashScreen from 'expo-splash-screen'
+import { Stack, useRouter, Slot, SplashScreen } from 'expo-router'
+// import * as SplashScreen from 'expo-splash-screen'
 import { useEffect, useCallback } from 'react'
 import { Pressable, useColorScheme, View, Text } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -17,7 +17,9 @@ import {
 import useAppLoading from '@/hooks/useAppLoading'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { StatusBar } from 'expo-status-bar'
-// import { DesignSystem } from '@/utils/design-system';
+import Auth from '@/modules/auth/Auth'
+import { AuthProvider } from '@/context/auth'
+import { DesignSystem } from '@/utils/design-system'
 
 // import 'utils/unistyles';
 
@@ -41,7 +43,7 @@ export const unstable_settings = {
   initialRouteName: '(app)/(tabs)',
 }
 
-// DesignSystem.setup()
+DesignSystem.setup()
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -49,18 +51,18 @@ SplashScreen.preventAutoHideAsync()
 export default function RootLayout() {
   const appLoaded = useAppLoading()
   if (!appLoaded) return null
-  return <RootLayoutNav />
+  return (
+    <QueryClientProvider client={queryClient}>
+      {/* <StatusBar style="dark" /> */}
+      <RootLayoutNav />
+    </QueryClientProvider>
+  )
 }
 
 function RootLayoutNav() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <StatusBar style="dark" />
-      <Stack>
-        <Stack.Screen name="(app)/(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(app)/listing/[id]" options={{ headerTitle: '' }} />
-        <Stack.Screen name="(app)/activities/[id]" options={{ headerTitle: 'Activities' }} />
-      </Stack>
-    </QueryClientProvider>
+    <AuthProvider>
+      <Slot />
+    </AuthProvider>
   )
 }

@@ -16,6 +16,19 @@ export const UseGetUsers = () => {
     });
 };
 
+export const getUser = async (id: string): Promise<UsersResponse> => {
+    const { data } = await axios.get(`${API_URL}/users/${id}`);
+    return data;
+};
+
+
+export const UseGetUser = (userId: any) => {
+    return useQuery({
+        queryKey: ['user', userId],
+        queryFn: () => getUser(userId),
+    });
+};
+
 export const createUser = async (users: FormData): Promise<UsersResponse> => {
     const { data } = await axios.post(`${API_URL}/users`, users, {
         headers: {

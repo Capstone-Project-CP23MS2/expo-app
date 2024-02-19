@@ -59,18 +59,10 @@ const TabsLayout = (props: Props) => {
         name="profile"
         options={{
           tabBarLabel: 'Profile',
-          headerShown: false, // Hide the header
+          // headerShown: false, // Hide the header
           tabBarIcon: ({ size, color }) => (
             <MaterialIcons name="account-circle" size={size} color={color} />
           ),
-        }}
-      />
-      <Tabs.Screen
-        name="tests"
-        options={{
-          tabBarLabel: 'tests',
-          headerShown: false, // Hide the header
-          tabBarIcon: ({ size, color }) => <MaterialIcons name="add" size={size} color={color} />,
         }}
       />
     </Tabs>

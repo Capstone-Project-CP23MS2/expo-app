@@ -1,23 +1,17 @@
+import { useAuth } from '@/context/auth'
 import React, { useState } from 'react'
-import { SafeAreaView, Button, Modal, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, Modal, StyleSheet, Text, View } from 'react-native'
+import { Button } from 'react-native-ui-lib'
 type Props = {}
 
 const Page = (props: Props) => {
-  // const [tasks, setTasks] = useState<Task[]>([])
-  // const [isModalVisible, setModalVisible] = useState(false)
-
-  // const handleAddTask = (text: string) => {
-  //   const newTask: Task = {
-  //     id: Math.random().toString(),
-  //     text,
-  //     completed: false,
-  //   };
-  //   setTasks(prevTasks => [...prevTasks, newTask]);
-  //   setModalVisible(false);
-  // };
+  const { user, signIn, signOut } = useAuth()
 
   return (
     <SafeAreaView style={styles.container}>
+      <Text>{user.idToken}</Text>
+      <Text>{user.username}</Text>
+      <Text>{user.email}</Text>
       {/* <View style={styles.header}>
         <Text style={styles.headerText}>Tasks</Text>
         <Button title="Add Task" onPress={() => setModalVisible(true)} />
@@ -32,6 +26,8 @@ const Page = (props: Props) => {
           <AddTaskForm onAddTask={handleAddTask} />
         </View>
       </Modal> */}
+      <Button label="Sign Out" onPress={signOut} />
+      <Button label="Sign In (for test)" onPress={signIn} />
     </SafeAreaView>
   )
 }
