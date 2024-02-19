@@ -55,7 +55,12 @@ export default function RootLayout() {
 function RootLayoutNav() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Slot />
+      <StatusBar style="dark" />
+      <Stack>
+        <Stack.Screen name="(app)/(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(app)/listing/[id]" options={{ headerTitle: '' }} />
+        <Stack.Screen name="(app)/activities/[id]" options={{ headerTitle: 'Activities' }} />
+      </Stack>
     </QueryClientProvider>
   )
 }
