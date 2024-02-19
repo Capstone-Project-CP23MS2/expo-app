@@ -1,17 +1,19 @@
 import { useAuth } from '@/context/auth'
+import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
-import { SafeAreaView, Modal, StyleSheet, Text, View } from 'react-native'
-import { Button } from 'react-native-ui-lib'
+import { SafeAreaView, Modal, StyleSheet, View } from 'react-native'
+import { Button, Text } from 'react-native-ui-lib'
 type Props = {}
 
 const Page = (props: Props) => {
-  const { user, signIn, signOut } = useAuth()
-
+  const { user, signIn, signOut, email } = useAuth()
+  const router = useRouter()
   return (
     <SafeAreaView style={styles.container}>
-      <Text>{user.idToken}</Text>
-      <Text>{user.username}</Text>
-      <Text>{user.email}</Text>
+      <Text md>userId: {user?.userId!}</Text>
+      <Text md>username: {user?.userName!}</Text>
+      <Text md>email: {user?.email!}</Text>
+
       {/* <View style={styles.header}>
         <Text style={styles.headerText}>Tasks</Text>
         <Button title="Add Task" onPress={() => setModalVisible(true)} />
@@ -28,6 +30,7 @@ const Page = (props: Props) => {
       </Modal> */}
       <Button label="Sign Out" onPress={signOut} />
       <Button label="Sign In (for test)" onPress={signIn} />
+      <Button label="createUser (for test)" onPress={() => router.push('/(auth)/createUser')} />
     </SafeAreaView>
   )
 }

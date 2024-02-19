@@ -67,7 +67,7 @@ const CreateActivity = (props: Props) => {
   const queryClient = useQueryClient()
   const { mutateAsync: addActivityMutation } = useMutation({
     mutationFn: createActivity,
-    onSuccess: () => {
+    onSuccess: data => {
       queryClient.invalidateQueries({ queryKey: ['activities'] })
       router.push('/(app)/(tabs)/activities')
     },

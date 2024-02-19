@@ -3,7 +3,12 @@ import { useRouter, useSegments } from 'expo-router'
 
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
 import { set } from 'zod'
+import { UseGetActivities } from '@/api/activities'
+import { UseGetUserByEmail, postUser } from '@/api/users'
+import axios from 'axios'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 type UserType = {
+  userId?: string | any
   userName: string | any
   email: string
   idToken: string | any
@@ -15,7 +20,7 @@ type AuthContextType = {
   signOut: () => void
 }
 
-const AuthContext = createContext<AuthContextType | null>(null)
+const AuthContext = createContext<AuthContextType | null | any>(null)
 
 export function useAuth() {
   return useContext(AuthContext)
@@ -25,8 +30,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const rootSegment = useSegments()[0]
   const router = useRouter()
   // const [userInfo, setUserInfo] = useState(null as any)
-  const [user, setUser] = useState<UserType | any>(undefined)
+  const [user, setUser] = useState<UserType | any>(null)
   // const [idToken, setIdToken] = useState<any>('')
+  const [email, setEmail] = useState<string | any>(null)
 
   const configureGoogleSignIn = async () => {
     GoogleSignin.configure({
@@ -41,27 +47,29 @@ export function AuthProvider({ children }: PropsWithChildren) {
     configureGoogleSignIn()
   })
   useEffect(() => {
-    if (user === null) return
+    // if (1) return router.replace('/(auth)/createUser')
 
-    if (!user && rootSegment !== '(auth)') {
-      router.replace('/(auth)/login')
-    } else if (user && rootSegment !== '(app)') {
-      router.replace('/(app)/(tabs)/activities')
+    if (email === undefined) return
+    if (!email && rootSegment !== '(auth)') return router.replace('/(auth)/login')
+    if (email && rootSegment !== '(app)') {
+      console.log('auth', email)
+
+      return router.replace(`/(auth)/createUser/${email}`)
+      // return router.replace('/(app)/(tabs)/activities')
     }
-  }, [user, rootSegment])
+  }, [email, rootSegment])
 
   const signIn = async () => {
     try {
       await GoogleSignin.hasPlayServices()
-      const userInfo = await GoogleSignin.signIn()
+      const { idToken, user } = await GoogleSignin.signIn()
+      setEmail(user.email)
       setUser({
-        userName: userInfo.user.name,
-        email: userInfo.user.email,
-        idToken: userInfo.idToken,
-        photo: userInfo.user.photo,
+        idToken: idToken,
+        userName: user.name,
+        email: user.email,
+        photo: user.photo,
       })
-
-      console.log('login success')
     } catch (error: any) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
@@ -71,12 +79,14 @@ export function AuthProvider({ children }: PropsWithChildren) {
         // play services not available or outdated
       } else {
         // some other error happened
+        console.log('some other error happened')
       }
     }
   }
 
   const signOut = async () => {
-    setUser(null)
+    // setUser(null)
+    setEmail(null)
     GoogleSignin.revokeAccess()
     GoogleSignin.signOut()
   }
@@ -85,8 +95,10 @@ export function AuthProvider({ children }: PropsWithChildren) {
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         signIn,
         signOut,
+        email,
       }}
     >
       {children}

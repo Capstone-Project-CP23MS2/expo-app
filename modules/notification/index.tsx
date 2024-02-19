@@ -1,20 +1,27 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React, { useState } from 'react';
-import { Picker } from '@react-native-picker/picker';
-import { Link } from 'expo-router';
+import { StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { Picker } from '@react-native-picker/picker'
+import { Link } from 'expo-router'
+import { UseGetUserByEmail, UseGetUsers } from '@/api/users'
 
-type Props = {};
+type Props = {}
 
 const Page = (props: Props) => {
-  const [selectedLanguage, setSelectedLanguage] = useState();
+  const [selectedLanguage, setSelectedLanguage] = useState()
+  const { data: usersData, isLoading: isLoadingUsers } = UseGetUsers()
+  const { content: users } = usersData || {}
+  console.log(users)
+
   return (
     <View>
       {/* TODO */}
       <Text>Noti Page</Text>
+
       <Picker
         selectedValue={selectedLanguage}
         onValueChange={(itemValue, itemIndex) => setSelectedLanguage(itemValue)}
-        placeholder="Select a language">
+        placeholder="Select a language"
+      >
         <Picker.Item label="Java" value="java" />
         <Picker.Item label="JavaScript" value="js" />
       </Picker>
@@ -22,9 +29,9 @@ const Page = (props: Props) => {
       <Link href={'/tests/test-form-2'}>to test form 2</Link>
       <Link href={'/demo'}>to Demo</Link>
     </View>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({})
