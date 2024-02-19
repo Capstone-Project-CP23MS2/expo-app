@@ -4,18 +4,20 @@ import { BaseButton } from 'react-native-gesture-handler'
 import { COLORS, FONT, SIZES } from '@/constants'
 
 type Props = {
-  variant: 'primary' | 'secondary' | 'tertiary' | 'danger'
+  variant: 'primary' | 'secondary' | 'tertiary' | 'danger' | 'disable'
   label: string
   onPress: () => void
-  fullWidth?: true
-  round?: true
+  fullWidth?: boolean
+  round?: boolean
+  enabled?: boolean
 }
 
-const AppButton = ({ variant, label, onPress, fullWidth }: Props) => {
+const AppButton = ({ variant, label, onPress, fullWidth, ...otherProps }: Props) => {
   return (
     <BaseButton
       onPress={onPress}
       style={[styles.button, { backgroundColor: COLORS[variant] }, fullWidth && { flex: 1 }]}
+      {...otherProps}
     >
       <Text style={styles.label}>{label}</Text>
     </BaseButton>

@@ -29,8 +29,6 @@ const Page = (props: Props) => {
         </View>
       </Modal> */}
       <Button label="Sign Out" onPress={signOut} />
-      <Button label="Sign In (for test)" onPress={signIn} />
-      <Button label="createUser (for test)" onPress={() => router.push('/(auth)/createUser')} />
     </SafeAreaView>
   )
 }

@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Text, TextField } from 'react-native-ui-lib'
+import { LoaderScreen, Text, TextField } from 'react-native-ui-lib'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NewUserInfoSchema, NewUserInfo } from '@/modules/auth/newUser.schema'
@@ -75,7 +75,9 @@ const createUser = (props: Props) => {
       console.log(error)
     },
   })
-
+  if (isLoading) {
+    return <LoaderScreen />
+  }
   if (isSuccess) {
     setUser({
       ...user,
@@ -134,12 +136,6 @@ const createUser = (props: Props) => {
       </ScrollView>
       <View style={styles.footer}>
         <AppButton variant="primary" label="Add" onPress={onSummit} fullWidth />
-        <AppButton
-          variant="primary"
-          label="Get"
-          onPress={() => console.log(getValues())}
-          fullWidth
-        />
       </View>
     </SafeAreaView>
   )

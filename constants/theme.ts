@@ -22,6 +22,7 @@ const COLORS = {
   darkBlue: '#7978B5',
   red: 'red',
   danger: 'red',
+  disable: '#BABBC3'
 };
 //gradients
 // const gradients = {

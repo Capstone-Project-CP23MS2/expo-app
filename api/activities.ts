@@ -60,8 +60,29 @@ export const UseCreateActivity = () => {
     });
 };
 
+// export const updateActivity = async (id: number, activity: FormData): Promise<Activity> => {
+//     const { data } = await axios.put(`${API_URL}/activities/${id}`, activity, {
+//         headers: {
+//             'Content-Type': 'multipart/form-data',
+//         },
+//     });
+//     return data;
+// }
 
-export const deleteActivity = async (id: number): Promise<any> => {
+// export const UseUpdateActivity = () => {
+//     return useMutation({
+//         mutationKey: ['updateActivity'],
+//         mutationFn: updateActivity,
+//         onSuccess: () => {
+
+//         },
+//         onError: () => {
+
+//         }
+//     });
+// };
+
+export const deleteActivity = async (id: string): Promise<any> => {
     const { data } = await axios.delete(`${API_URL}/activities/${id}`);
     return data;
 };
@@ -78,6 +99,12 @@ export const UseGetActivityParticipants = (activityId: string | string[]) => {
     });
 };
 
+//TODO: ย้าย Formdata มาที่นี่ทั้งหมด
+type ParticipantRequestBody = {
+    userId: string;
+    activityId: string;
+    status?: string;
+};
 export const createParticipant = async (participant: FormData): Promise<Participant> => {
     const { data } = await axios.post(`${API_URL}/participants`, participant, {
         headers: {

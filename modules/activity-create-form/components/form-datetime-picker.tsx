@@ -39,7 +39,7 @@ const FormDatetimePicker = ({ value, onChangeDatetime }: Props) => {
     <>
       <Pressable onPress={showDateTimePicker}>
         <AppTextInput
-          value={value?.toLocaleString() || 'Select Date and Time'}
+          value={value?.toLocaleString() || 'เลือกวันและเวลา'}
           icon={<MaterialIcons name="calendar-today" size={24} color="black" />}
           iconName="calendar-today"
           disabled

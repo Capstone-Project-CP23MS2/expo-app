@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { View, Pressable, Text, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import Animated, {
@@ -8,58 +8,36 @@ import Animated, {
   useAnimatedStyle,
   useScrollViewOffset,
 } from 'react-native-reanimated'
-import {
-  Button,
-  Colors,
-  Incubator,
-  Picker,
-  Text,
-  TextField,
-  View,
-  PanningProvider,
-  Assets,
-} from 'react-native-ui-lib'
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
-import { COLORS, FONT } from '@/constants'
-// import Colors from '@/constants/Colors'
+import { COLORS, FONT, SIZES } from '@/constants'
+import Colors from '@/constants/Colors'
 import useFetch from '@/hooks/useFetch'
 import dayjs from 'dayjs'
 import { defaultStyles } from '@/constants/Styles'
-import { TouchableOpacity, BaseButton, ScrollView } from 'react-native-gesture-handler'
+import { TouchableOpacity, BaseButton } from 'react-native-gesture-handler'
 import ActivityFooter from '@/modules/activity-detail/components/ActivityFooter'
 import axios from 'axios'
-
-import { UseGetActivity, UseGetActivityParticipants, getActivity } from '@/api/activities'
-import { useQuery } from '@tanstack/react-query'
+import { Button, Chip, Modal, Portal, PaperProvider, Icon, Card } from 'react-native-paper'
+import {
+  UseGetActivity,
+  UseGetActivityParticipants,
+  deleteActivity,
+  getActivity,
+} from '@/api/activities'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { UseGetCategory, getCategory } from '@/api/category'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import ActivityInfo from './components/ActivityInfo'
+import { useAuth } from '@/context/auth'
+import AppButton from '@/modules/shared/AppButton'
+import JoinButton from './components/JoinButton'
 type Props = {}
 const apiUrl: string = process.env.EXPO_PUBLIC_BASE_URL_API!
 
 const Page = (props: Props) => {
   const router = useRouter()
   const { id } = useLocalSearchParams()
+  const { user } = useAuth()
 
   const { data: activity, isLoading, isError, error, refetch } = UseGetActivity(id)
-
-  const {
-    title,
-    description,
-    dateTime,
-    duration,
-    place,
-    // currentParticipants,
-    noOfMembers,
-    // categoryId,
-  } = activity || {} // Add a default empty object to prevent undefined error
-  const categoryId = activity?.categoryId
-
-  const { data: category } = useQuery({
-    queryKey: ['category', categoryId],
-    queryFn: () => getCategory(categoryId),
-    enabled: !!categoryId,
-  })
 
   const { data: participantsData } = UseGetActivityParticipants(id)
   const { content: participants } = participantsData || {}
@@ -69,7 +47,7 @@ const Page = (props: Props) => {
   const onDeleteActivitiy = async () => {
     try {
       const response = await axios.delete(`${apiUrl}/activities/${id}`, {})
-      router.push('/(tabs)/activities')
+      router.push('/(app)/(tabs)/activities')
     } catch (error) {
       console.error('Error fetching categories:', error)
     } finally {
@@ -77,56 +55,239 @@ const Page = (props: Props) => {
     }
   }
 
+  const queryClient = useQueryClient()
+  const { mutateAsync: deleteActivityMutation } = useMutation({
+    mutationFn: deleteActivity,
+    onSuccess: (data, vaiables) => {
+      queryClient.invalidateQueries({ queryKey: ['activities'] })
+      router.push('/(app)/(tabs)/activities')
+    },
+    onError: error => {
+      console.log(error)
+    },
+  })
+
   const [visible, setVisible] = React.useState(false)
 
   const showModal = () => setVisible(true)
   const hideModal = () => setVisible(false)
-  const containerStyle = { backgroundColor: 'white', padding: 20 }
+  const containerStyle = {
+    backgroundColor: 'white',
+    padding: 20,
+    margin: 20,
+    borderRadius: 20,
+    gap: 5,
+  }
+
+  const isParticipant = participants?.some(participant => participant.userId === user?.userId)
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <ActivityInfo
-          title={title}
-          dateTime={dateTime}
-          category={category?.name}
-          noOfMembers={noOfMembers}
-        />
-        {/* <Participant /> */}
-      </ScrollView>
-      {/* <Footer /> */}
-    </SafeAreaView>
+    <PaperProvider>
+      <View style={styles.container}>
+        <Animated.ScrollView
+          contentContainerStyle={{ paddingBottom: 100 }}
+          ref={scrollRef}
+          scrollEventThrottle={16}
+        >
+          {/* <Animated.Image
+          source={{ uri: listing.xl_picture_url }}
+          style={[styles.image, imageAnimatedStyle]}
+          resizeMode="cover"
+        /> */}
+
+          <View style={styles.infoContainer}>
+            <Portal>
+              <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
+                <Text>This activity will be gone.</Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: 10,
+                  }}
+                >
+                  <BaseButton
+                    onPress={hideModal}
+                    style={[defaultStyles.btn, { backgroundColor: 'gray' }]}
+                  >
+                    <Text style={[defaultStyles.btnText, { color: 'black' }]}>Cancel</Text>
+                  </BaseButton>
+                  <BaseButton
+                    style={[defaultStyles.btn, { backgroundColor: 'red' }]}
+                    onPress={() => deleteActivityMutation(String(id))}
+                  >
+                    <Text style={[defaultStyles.btnText, { color: 'white' }]}>Confirm</Text>
+                  </BaseButton>
+                </View>
+              </Modal>
+            </Portal>
+
+            <View style={styles.infoHeader}>
+              <Text style={styles.name}>{activity?.title}</Text>
+              <View>
+                <Text style={[{ color: 'white' }, { fontWeight: 'bold' }]}>
+                  {participants?.length} / {activity?.noOfMembers}
+                </Text>
+              </View>
+            </View>
+            <Text style={styles.location}>{activity?.place}</Text>
+            <View
+              style={{
+                borderBottomColor: 'gray',
+                borderBottomWidth: StyleSheet.hairlineWidth,
+                marginTop: 5,
+                marginBottom: 5,
+                opacity: 0.3,
+              }}
+            />
+            <View style={styles.block}>
+              <View>
+                <Text style={styles.subHeader}>{activity?.categoryName}</Text>
+                <View style={[{ flexDirection: 'row' }, { alignItems: 'center' }, { gap: 5 }]}>
+                  <MaterialIcons name="date-range" size={20} color="black" />
+                  <Text style={styles.rooms}>
+                    {dayjs(activity?.dateTime).format('ddd, MMM D h:mm A')}
+                  </Text>
+                </View>
+                <View style={[{ flexDirection: 'row' }, { alignItems: 'center' }, { gap: 5 }]}>
+                  <MaterialIcons name="timer" size={20} color="black" />
+                  <Text style={styles.rooms}>{activity?.duration} Minutes</Text>
+                </View>
+              </View>
+              <View>
+                <Text style={styles.subHeader}>Description</Text>
+                <View style={styles.descriptionBox}>
+                  <Text style={styles.description}>{activity?.description}</Text>
+                </View>
+              </View>
+              <View>
+                <Text style={styles.subHeader}>
+                  Participants {participants?.length} / {activity?.noOfMembers}
+                </Text>
+                <View style={styles.descriptionBox}>
+                  {participants?.map(participant => (
+                    <View
+                      key={participant.userId}
+                      style={{ flex: 1, flexDirection: 'row', gap: 5, alignItems: 'center' }}
+                    >
+                      <MaterialIcons name="account-circle" size={24} color="gray" />
+                      <Text
+                        style={[
+                          user?.userId === activity?.hostUserId
+                            ? { color: COLORS.primary }
+                            : { color: COLORS.gray },
+                        ]}
+                      >
+                        {participant.username}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+              <View style={{ flex: 1, flexDirection: 'row', marginTop: 20, gap: 10 }}>
+                {/* <BaseButton
+                  onPress={showModal}
+                  style={[
+                    defaultStyles.btn,
+                    { backgroundColor: 'lightskyblue' },
+                    { borderRadius: 30 },
+                  ]}
+                >
+                  <Text style={[defaultStyles.btnText, { color: 'black' }]}>Edit</Text>
+                </BaseButton> */}
+              </View>
+            </View>
+            {/* <View style={styles.hostView}>
+            <Image
+              source={{ uri: listing.host_picture_url }}
+              style={styles.host}
+            />
+
+            <View>
+              <Text style={{ fontWeight: '500', fontSize: 16 }}>
+                Hosted by {listing.host_name}
+              </Text>
+              <Text>Host since {listing.host_since}</Text>
+            </View>
+          </View> */}
+
+            {/* <View style={styles.divider} /> */}
+          </View>
+        </Animated.ScrollView>
+
+        {/* <View style={defaultStyles.footer}>
+        <View
+          style={{
+            flexDirection: 'row',
+            gap: 20,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <BaseButton>
+            <MaterialIcons name="favorite-outline" size={36} color="black" />
+          </BaseButton>
+          <BaseButton
+            style={[defaultStyles.btn, { paddingRight: 20, paddingLeft: 20 }]}>
+            <Text style={defaultStyles.btnText}>👋 Join</Text>
+          </BaseButton>
+        </View>
+      </View> */}
+      </View>
+      {/* <ActivityFooter /> */}
+      <View style={styles.footerContainer}>
+        {user?.userId === activity?.hostUserId ? (
+          <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
+        ) : (
+          <JoinButton userId={user?.userId} activityId={String(id)} isParticipant={isParticipant} />
+        )}
+      </View>
+    </PaperProvider>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
-    // backgroundColor: 'white',
+    flex: 1,
+    backgroundColor: 'white',
   },
-  // image: {
-  //   height: IMG_HEIGHT,
-  //   width: width,
+  block: {
+    gap: 5,
+  },
+  // participants: {
+  //   backgroundColor: 'green',
+  //   borderRadius: 20,
+  //   padding: 8,
   // },
+  infoHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    gap: 8,
+  },
   infoContainer: {
-    padding: 24,
-    backgroundColor: '#fff',
+    padding: SIZES.medium,
   },
   name: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    fontFamily: FONT.semiBold,
+    fontSize: 20,
+    fontFamily: FONT.bold,
   },
   location: {
     fontSize: 18,
-    marginBottom: 10,
-    fontFamily: FONT.semiBold,
+    fontFamily: FONT.medium,
+    color: COLORS.gray,
   },
   rooms: {
     fontSize: 16,
     color: Colors.grey,
     marginVertical: 4,
     fontFamily: FONT.regular,
+  },
+  subHeader: {
+    fontSize: 16,
+    color: Colors.grey,
+    marginVertical: 4,
+    fontFamily: FONT.semiBold,
   },
   ratings: {
     fontSize: 16,
@@ -180,11 +341,36 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderColor: Colors.grey,
   },
-
   description: {
     fontSize: 16,
-    marginTop: 10,
     fontFamily: FONT.regular,
+    color: COLORS.gray,
+  },
+  descriptionBox: {
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: COLORS.grey,
+    padding: 10,
+    backgroundColor: '#FFF',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+
+    elevation: 4,
+  },
+  footerContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: SIZES.large,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
 })
 
