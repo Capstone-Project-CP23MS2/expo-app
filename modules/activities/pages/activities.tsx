@@ -8,13 +8,14 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useEffect, useState } from 'react'
 
 import axios, { AxiosResponse } from 'axios'
-import { ActivityCard } from '@/components/Activities'
+
 import { MaterialIcons } from '@expo/vector-icons'
-import FloatingActionButton from '@/components/Activities/components/FloatingActionButton'
+import FloatingActionButton from '@/modules/activities/components/FloatingActionButton'
 import { useNavigation } from '@react-navigation/native'
 import { UseGetActivities } from '@/api/activities'
 import { FAB, Icon } from 'react-native-paper'
-import { FloatingButton } from 'react-native-ui-lib'
+import { FloatingButton, TouchableOpacity } from 'react-native-ui-lib'
+import ActivityCard from '../components/Card/'
 
 type Props = {}
 type DataProp = {
@@ -25,17 +26,35 @@ const index = (props: Props) => {
   const router = useRouter()
   // const [activities, setActivities] = useState<any[]>([]);
   // console.log(activities);
-  const { data, isLoading, isError, error, refetch } = UseGetActivities()
+  const { data, isLoading, isError, error, refetch } = UseGetActivities({})
   const { content: activities, first, totalPages } = data || {}
 
+  function ActivityTitle() {
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.headerArea}>
+          <View>
+            <Text style={styles.headerTitle}>Available Activities</Text>
+            <Text style={styles.subHeader}>found {activities?.length} activites</Text>
+          </View>
+          <Pressable onPress={() => router.push('/activities/create-form')}>
+            <MaterialIcons name="control-point" size={38} color="black" />
+          </Pressable>
+          {/* <Pressable onPress={() => refetch()}>
+              <Text style={styles.headerBtn}>Refresh</Text>
+            </Pressable> */}
+        </View>
+      </SafeAreaView>
+    )
+  }
+
   return (
-    <SafeAreaView style={{ backgroundColor: COLORS.lightWhite, flex: 1 }}>
+    <View style={{ flex: 1, marginTop: 0 }}>
       <Stack.Screen
         options={{
-          headerTitle: 'test',
-          headerStyle: { backgroundColor: COLORS.lightWhite },
-          headerShadowVisible: false,
-          headerShown: false, // TODO: change to true
+          header: () => <ActivityTitle />,
+          headerShadowVisible: true,
+          headerShown: true,
           // headerLeft: () => (
           //   <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
           // ),
@@ -46,21 +65,6 @@ const index = (props: Props) => {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <View style={styles.header}>
-            <View style={styles.headerSecond}>
-              <Text style={styles.headerTitle}>Available Activities</Text>
-              <Text style={styles.subHeader}>found {activities?.length} activites</Text>
-            </View>
-            <View style={{ padding: SIZES.small }}>
-              <Pressable onPress={() => router.push('/activities/create-form')}>
-                <MaterialIcons name="control-point" size={38} color="black" />
-              </Pressable>
-            </View>
-            {/* <Pressable onPress={() => refetch()}>
-              <Text style={styles.headerBtn}>Refresh</Text>
-            </Pressable> */}
-          </View>
-
           <View style={styles.cardsContainer}>
             {isLoading ? (
               <ActivityIndicator size="large" color={COLORS.gray} />
@@ -85,24 +89,41 @@ const index = (props: Props) => {
         hideBackgroundOverlay
         button={{ label: 'Approve', onPress: () => console.log('approved') }}
       /> */}
-    </SafeAreaView>
+    </View>
   )
 }
 
 export default index
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: SIZES.medium,
-    // marginTop: SIZES.xLarge,
+  safeArea: {
+    backgroundColor: COLORS.lightWhite,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
   },
-
+  headerArea: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingBottom: 10,
+    paddingTop: 10,
+  },
+  container: {
+    paddingTop: 0,
+    padding: SIZES.medium,
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // marginTop: SIZES.small,
   },
   subHeader: {
     color: COLORS.gray,
@@ -121,9 +142,5 @@ const styles = StyleSheet.create({
   cardsContainer: {
     marginTop: SIZES.medium,
     gap: SIZES.small,
-  },
-  headerSecond: {
-    flex: 1,
-    padding: SIZES.small,
   },
 })

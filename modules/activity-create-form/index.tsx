@@ -3,11 +3,9 @@ import { useEffect, useState } from 'react'
 import { BaseButton, ScrollView, TextInput } from 'react-native-gesture-handler'
 import { COLORS, FONT, SIZES } from '@/constants'
 import DateTimePicker from '@react-native-community/datetimepicker'
-import AppTextInput from '@/components/common/AppTextInput'
+import AppTextInput from '@/modules/shared/AppTextInput'
 import { MaterialIcons } from '@expo/vector-icons'
-import useFetch from '@/hooks/useFetch'
-import axios from 'axios'
-// import { Picker } from '@react-native-picker/picker';
+
 import { useRouter } from 'expo-router'
 import { TextField } from 'react-native-ui-lib'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -69,9 +67,9 @@ const CreateActivity = (props: Props) => {
   const queryClient = useQueryClient()
   const { mutateAsync: addActivityMutation } = useMutation({
     mutationFn: createActivity,
-    onSuccess: () => {
+    onSuccess: data => {
       queryClient.invalidateQueries({ queryKey: ['activities'] })
-      router.push('/(tabs)/activities')
+      router.push('/(app)/(tabs)/activities')
     },
     onError: error => {
       console.log(error)
@@ -306,7 +304,7 @@ const CreateActivity = (props: Props) => {
 
       <View style={styles.footer}>
         <AppButton variant="secondary" label="preset" onPress={usePreset} />
-        <AppButton variant="primary" label="preset" onPress={usePreset} fullWidth />
+        <AppButton variant="primary" label="Add" onPress={onSummit} fullWidth />
       </View>
     </KeyboardAvoidingWrapper>
   )

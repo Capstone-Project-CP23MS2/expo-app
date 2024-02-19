@@ -1,9 +1,9 @@
-import { useFonts } from 'expo-font'
-import { useState, useEffect } from 'react'
-import * as SplashScreen from 'expo-splash-screen'
+import { useFonts } from 'expo-font';
+import { useState, useEffect } from 'react';
+import * as SplashScreen from 'expo-splash-screen';
 
 export default function useAppLoading() {
-  const [appLoaded, setAppLoaded] = useState(false)
+  const [appLoaded, setAppLoaded] = useState(false);
   const [fontsLoaded, fontsError] = useFonts({
     NunitoRegular: require('@/assets/fonts/Nunito-Regular.ttf'),
     NunitoMedium: require('@/assets/fonts/Nunito-Medium.ttf'),
@@ -17,18 +17,22 @@ export default function useAppLoading() {
     DMMedium: require('@/assets/fonts/DMSans-Medium.ttf'),
     DMRegular: require('@/assets/fonts/DMSans-Regular.ttf'),
     // ...FontAwesome.font,
-  })
+  });
 
   useEffect(() => {
-    if (fontsError) throw fontsError
-  }, [fontsError])
+    console.log('fontsError');
+
+    if (fontsError) throw fontsError;
+  }, [fontsError]);
 
   useEffect(() => {
+    console.log('fontsLoaded');
+
     if (fontsLoaded && !appLoaded) {
-      SplashScreen.hideAsync()
-      setAppLoaded(true)
+      setAppLoaded(true);
+      SplashScreen.hideAsync();
     }
-  }, [fontsLoaded])
+  }, [fontsLoaded]);
 
-  return appLoaded
+  return appLoaded;
 }

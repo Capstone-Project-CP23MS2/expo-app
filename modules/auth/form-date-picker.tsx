@@ -11,35 +11,23 @@ type Props = {
 }
 
 const FormDatetimePicker = ({ value, onChangeDatetime }: Props) => {
-  const [mode, setMode] = useState<'date' | 'time'>('date')
   const [show, setShow] = useState(false)
 
   const onChange = (event: any, selectedDate: Date | any) => {
     const currentDate = selectedDate || new Date(value)
     setShow(false)
-
-    onChangeDatetime(currentDate.toISOString())
-
-    // show time picker when date is selected
-    if (mode === 'date' && event.type === 'set') {
-      showMode('time')
-    }
-  }
-
-  const showMode = (currentMode: 'date' | 'time') => {
-    setMode(currentMode)
-    setShow(true)
+    onChangeDatetime(currentDate.toISOString().slice(0, -14))
   }
 
   const showDateTimePicker = () => {
-    showMode('date')
+    setShow(true)
   }
 
   return (
     <>
       <Pressable onPress={showDateTimePicker}>
         <AppTextInput
-          value={value?.toLocaleString() || 'Select Date and Time'}
+          value={value?.toLocaleString() || 'Select Date'}
           icon={<MaterialIcons name="calendar-today" size={24} color="black" />}
           iconName="calendar-today"
           disabled
@@ -49,8 +37,7 @@ const FormDatetimePicker = ({ value, onChangeDatetime }: Props) => {
         <DateTimePicker
           testID="dateTimePicker"
           value={value ? new Date(value) : new Date()}
-          mode={mode}
-          is24Hour={true}
+          mode="date"
           display="default"
           onChange={onChange}
         />
