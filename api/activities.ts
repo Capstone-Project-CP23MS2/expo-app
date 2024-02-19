@@ -113,3 +113,41 @@ export const createParticipant = async (participant: FormData): Promise<Particip
     });
     return data;
 };
+
+// export const UseCreateParticipant = () => {
+//     return useMutation({
+//         mutationKey: ['createParticipant'],
+//         mutationFn: createParticipant,
+//         onSuccess: () => {
+
+//         },
+//         onError: () => {
+
+//         }
+//     });
+// };
+
+// export const updateParticipant = async (id: string, participant: ParticipantRequestBody): Promise<Participant> => {
+//     const { data } = await axios.put(`${API_URL}/participants/${id}`, participant);
+//     return data;
+// };  
+
+// export const UseUpdateParticipant = () => {
+//     return useMutation({
+//         mutationKey: ['updateParticipant'],
+//         mutationFn: updateParticipant,
+//         onSuccess: () => {
+
+//         },
+//         onError: () => {
+
+//         }
+//     });
+// };
+
+export const deleteParticipant = async (params: any): Promise<any> => {
+    const { activityId, userId } = params;
+    // const { data } = await axios.delete(`${API_URL}/participants`, { params });
+    const { data } = await axios.delete(`${API_URL}/participants/${activityId}_${userId}`,);
+    return data;
+};
