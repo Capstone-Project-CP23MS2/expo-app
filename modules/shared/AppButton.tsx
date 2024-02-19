@@ -4,7 +4,7 @@ import { BaseButton } from 'react-native-gesture-handler'
 import { COLORS, FONT, SIZES } from '@/constants'
 
 type Props = {
-  variant: 'primary' | 'secondary' | 'tertiary'
+  variant: 'primary' | 'secondary' | 'tertiary' | 'danger'
   label: string
   onPress: () => void
   fullWidth?: true

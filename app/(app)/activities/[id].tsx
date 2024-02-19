@@ -21,12 +21,15 @@ import { Button, Chip, Modal, Portal, PaperProvider, Icon, Card } from 'react-na
 import { UseGetActivity, UseGetActivityParticipants, getActivity } from '@/api/activities'
 import { useQuery } from '@tanstack/react-query'
 import { UseGetCategory, getCategory } from '@/api/category'
+import { useAuth } from '@/context/auth'
+import AppButton from '@/modules/shared/AppButton'
 type Props = {}
 const apiUrl: string = process.env.EXPO_PUBLIC_BASE_URL_API!
 
 const Page = (props: Props) => {
   const router = useRouter()
   const { id } = useLocalSearchParams()
+  const { user } = useAuth()
 
   const { data: activity, isLoading, isError, error, refetch } = UseGetActivity(id)
 
@@ -165,7 +168,15 @@ const Page = (props: Props) => {
                       style={{ flex: 1, flexDirection: 'row', gap: 5, alignItems: 'center' }}
                     >
                       <MaterialIcons name="account-circle" size={24} color="gray" />
-                      <Text style={{ color: COLORS.gray }}>{participant.username}</Text>
+                      <Text
+                        style={[
+                          user?.userId === activity?.hostUserId
+                            ? { color: COLORS.primary }
+                            : { color: COLORS.gray },
+                        ]}
+                      >
+                        {participant.username}
+                      </Text>
                     </View>
                   ))}
                 </View>
@@ -181,12 +192,6 @@ const Page = (props: Props) => {
                 >
                   <Text style={[defaultStyles.btnText, { color: 'black' }]}>Edit</Text>
                 </BaseButton> */}
-                <BaseButton
-                  style={[defaultStyles.btn, { backgroundColor: 'gray' }, { borderRadius: 30 }]}
-                  onPress={showModal}
-                >
-                  <Text style={{ color: COLORS.white, fontFamily: FONT.bold }}>Delete</Text>
-                </BaseButton>
               </View>
             </View>
             {/* <View style={styles.hostView}>
@@ -225,7 +230,19 @@ const Page = (props: Props) => {
         </View>
       </View> */}
       </View>
-      <ActivityFooter />
+      {/* <ActivityFooter /> */}
+      <View style={styles.footerContainer}>
+        {user?.userId === activity?.hostUserId ? (
+          <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
+        ) : (
+          <AppButton
+            variant="primary"
+            label="Join Activity"
+            onPress={() => console.log(`Join activity`)}
+            fullWidth
+          />
+        )}
+      </View>
     </PaperProvider>
   )
 }
@@ -345,6 +362,16 @@ const styles = StyleSheet.create({
     shadowRadius: 2.62,
 
     elevation: 4,
+  },
+  footerContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: SIZES.large,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
   },
 })
 

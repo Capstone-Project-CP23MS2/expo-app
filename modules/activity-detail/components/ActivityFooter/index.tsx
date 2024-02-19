@@ -10,7 +10,7 @@ type Props = {}
 
 const index = (props: Props) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.footerContainer}>
       {/* <BaseButton style={styles.likeBtn}>
         <Image source={icons.heartOutline} resizeMode="contain" style={styles.likeBtnImage} />
         <MaterialIcons name="favorite-outline" size={36} color="black" />
@@ -32,7 +32,7 @@ const index = (props: Props) => {
 export default index
 
 const styles = StyleSheet.create({
-  container: {
+  footerContainer: {
     position: 'absolute',
     bottom: 0,
     left: 0,
