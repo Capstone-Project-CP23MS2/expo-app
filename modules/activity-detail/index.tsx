@@ -1,5 +1,5 @@
 import { View, Pressable, Text, StyleSheet } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import Animated, {
   SlideInDown,
@@ -14,7 +14,12 @@ import Colors from '@/constants/Colors'
 import useFetch from '@/hooks/useFetch'
 import dayjs from 'dayjs'
 import { defaultStyles } from '@/constants/Styles'
-import { TouchableOpacity, BaseButton } from 'react-native-gesture-handler'
+import {
+  TouchableOpacity,
+  BaseButton,
+  ScrollView,
+  RefreshControl,
+} from 'react-native-gesture-handler'
 import ActivityFooter from '@/modules/activity-detail/components/ActivityFooter'
 import axios from 'axios'
 import { Button, Chip, Modal, Portal, PaperProvider, Icon, Card } from 'react-native-paper'
@@ -37,9 +42,9 @@ const Page = (props: Props) => {
   const { id } = useLocalSearchParams()
   const { user } = useAuth()
 
-  const { data: activity, isLoading, isError, error, refetch } = UseGetActivity(id)
+  const { data: activity, isLoading, isError, error, refetch: activityRefetch } = UseGetActivity(id)
 
-  const { data: participantsData } = UseGetActivityParticipants(id)
+  const { data: participantsData, refetch: participantsRefetch } = UseGetActivityParticipants(id)
   const { content: participants } = participantsData || {}
 
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
@@ -80,14 +85,24 @@ const Page = (props: Props) => {
   }
 
   const isParticipant = participants?.some(participant => participant.userId === user?.userId)
+  const [refreshing, setRefreshing] = useState(false)
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true)
+    await activityRefetch()
+    await participantsRefetch()
+    setRefreshing(false)
+  }, [])
 
   return (
     <PaperProvider>
       <View style={styles.container}>
-        <Animated.ScrollView
+        {/* <Animated.ScrollView */}
+        <ScrollView
           contentContainerStyle={{ paddingBottom: 100 }}
-          ref={scrollRef}
+          // ref={scrollRef}
           scrollEventThrottle={16}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
           {/* <Animated.Image
           source={{ uri: listing.xl_picture_url }}
@@ -214,7 +229,7 @@ const Page = (props: Props) => {
 
             {/* <View style={styles.divider} /> */}
           </View>
-        </Animated.ScrollView>
+        </ScrollView>
 
         {/* <View style={defaultStyles.footer}>
         <View
