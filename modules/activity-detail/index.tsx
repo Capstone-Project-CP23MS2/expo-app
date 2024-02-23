@@ -21,21 +21,12 @@ import {
   RefreshControl,
 } from 'react-native-gesture-handler'
 import ActivityFooter from '@/modules/activity-detail/components/ActivityFooter'
-import axios from 'axios'
 import { Button, Chip, Modal, Portal, PaperProvider, Icon, Card } from 'react-native-paper'
-import {
-  UseGetActivity,
-  UseGetActivityParticipants,
-  deleteActivity,
-  getActivity,
-} from '@/api/activities'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { UseGetCategory, getCategory } from '@/api/category'
+import { UseDeleteActivity, UseGetActivity, UseGetActivityParticipants } from '@/hooks/useAPI'
 import { useAuth } from '@/context/auth'
 import AppButton from '@/modules/shared/AppButton'
 import JoinButton from './components/JoinButton'
 type Props = {}
-const apiUrl: string = process.env.EXPO_PUBLIC_BASE_URL_API!
 
 const Page = (props: Props) => {
   const router = useRouter()
@@ -49,28 +40,15 @@ const Page = (props: Props) => {
 
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
 
-  const onDeleteActivitiy = async () => {
-    try {
-      const response = await axios.delete(`${apiUrl}/activities/${id}`, {})
-      router.push('/(app)/(tabs)/activities')
-    } catch (error) {
-      console.error('Error fetching categories:', error)
-    } finally {
-      // setLoading(false);
-    }
-  }
+  const deleteMutation = UseDeleteActivity()
 
-  const queryClient = useQueryClient()
-  const { mutateAsync: deleteActivityMutation } = useMutation({
-    mutationFn: deleteActivity,
-    onSuccess: (data, vaiables) => {
-      queryClient.invalidateQueries({ queryKey: ['activities'] })
-      router.push('/(app)/(tabs)/activities')
-    },
-    onError: error => {
-      console.log(error)
-    },
-  })
+  const onDelete = () => {
+    deleteMutation.mutate(String(id), {
+      onSuccess() {
+        router.push('/(app)/(tabs)/activities')
+      },
+    })
+  }
 
   const [visible, setVisible] = React.useState(false)
 
@@ -130,7 +108,7 @@ const Page = (props: Props) => {
                   </BaseButton>
                   <BaseButton
                     style={[defaultStyles.btn, { backgroundColor: 'red' }]}
-                    onPress={() => deleteActivityMutation(String(id))}
+                    onPress={onDelete}
                   >
                     <Text style={[defaultStyles.btnText, { color: 'white' }]}>Confirm</Text>
                   </BaseButton>

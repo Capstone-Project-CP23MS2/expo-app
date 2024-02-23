@@ -9,19 +9,19 @@ import { objToFormData } from '@/utils'
 import AppButton from '@/modules/shared/AppButton'
 import { ScrollView } from 'react-native-gesture-handler'
 import FormDatetimePicker from '@/modules/auth/form-date-picker'
-import { UseGetUserByEmail, postUser } from '@/api/users'
+import { UseCreateUser, UseGetUserByEmail } from '@/hooks/useAPI'
 import { Redirect, useLocalSearchParams, useRouter } from 'expo-router'
-import { set } from 'zod'
 import { useAuth } from '@/context/auth'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 type Props = {}
 
 const createUser = (props: Props) => {
   const { user, setUser } = useAuth()
   const { email } = useLocalSearchParams()
-  console.log('email', email)
+
   const router = useRouter()
+
+  const createUserMutation = UseCreateUser()
 
   const {
     formState: { isValid, isSubmitting, errors, isDirty },
@@ -34,11 +34,25 @@ const createUser = (props: Props) => {
     resolver: zodResolver(NewUserInfoSchema),
   })
 
+  //TODO: เปลี่ยนวิธี set ข้อมูล
   const onSummit = handleSubmit(async newUserData => {
-    const formData = objToFormData(newUserData)
+    createUserMutation
+      .mutateAsync(objToFormData(newUserData), {
+        onSuccess: data => {
+          console.log(data)
+
+          router.push('/(app)/(tabs)/activities')
+        },
+        onError: error => {
+          console.log(error)
+        },
+      })
+      .then(data => {
+        // Do something with the updated data
+        console.log(data)
+      })
     // register(formData)
     try {
-      mutateAsync(formData)
       const { data, isLoading, isError, isSuccess } = UseGetUserByEmail(email)
       setUser({
         userId: data?.content[0].userId,
@@ -58,23 +72,6 @@ const createUser = (props: Props) => {
     setValue('role', 'user')
   }, [])
 
-  const queryClient = useQueryClient()
-  const { mutateAsync } = useMutation({
-    mutationFn: postUser,
-    onSuccess: data => {
-      queryClient.invalidateQueries({ queryKey: ['users'] })
-      setUser({
-        userId: data?.userId,
-        userName: data?.username,
-        email: data?.email,
-        ...user,
-      })
-      router.push('/(app)/(tabs)/activities')
-    },
-    onError: error => {
-      console.log(error)
-    },
-  })
   if (isLoading) {
     return <LoaderScreen />
   }
@@ -85,9 +82,6 @@ const createUser = (props: Props) => {
       userName: data?.content[0].username,
       email: data?.content[0].email,
     })
-    console.log('hi')
-
-    console.log(data?.content[0].username)
 
     return <Redirect href="/(app)/(tabs)/activities" />
   }
@@ -135,7 +129,7 @@ const createUser = (props: Props) => {
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        <AppButton variant="primary" label="Add" onPress={onSummit} fullWidth />
+        <AppButton variant="primary" label="Add" onPress={() => onSummit()} fullWidth />
       </View>
     </SafeAreaView>
   )

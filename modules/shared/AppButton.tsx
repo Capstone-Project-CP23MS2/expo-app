@@ -4,16 +4,10 @@ import { COLORS, FONT, SIZES } from '@/constants'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { BaseButton, BaseButtonProps } from 'react-native-gesture-handler'
 
-enum Color {
-  primary = 'primary',
-  secondary = 'secondary',
-  tertiary = 'tertiary',
-  danger = 'danger',
-  disable = 'disable',
-}
+export type Color = 'primary' | 'secondary' | 'tertiary' | 'danger' | 'disable'
 
 type Props = BaseButtonProps & {
-  variant?: Color
+  variant: Color
   label: string
   fullWidth?: boolean
   round?: boolean

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { User, UsersResponse } from "./type";
 
@@ -9,24 +9,12 @@ export const getUsers = async (): Promise<UsersResponse> => {
     return data;
 };
 
-export const UseGetUsers = () => {
-    return useQuery({
-        queryKey: ['users'],
-        queryFn: getUsers,
-    });
-};
 
 export const getUser = async (id: string): Promise<UsersResponse> => {
     const { data } = await axios.get(`${API_URL}/users/${id}`);
     return data;
 };
 
-export const UseGetUser = (userId: any) => {
-    return useQuery({
-        queryKey: ['user', userId],
-        queryFn: () => getUser(userId),
-    });
-};
 
 export const getUserByEmail = async (email: any): Promise<UsersResponse> => {
     const { data } = await axios.get(`${API_URL}/users`, { params: { email } });
@@ -37,14 +25,9 @@ export const getUserByEmail = async (email: any): Promise<UsersResponse> => {
 //     const { data } = await axios.get(`${API_URL}/users/getByEmail/${email}`);
 //     return data;
 // };
-export const UseGetUserByEmail = (email: any) => {
-    return useQuery({
-        queryKey: ['user', email],
-        queryFn: () => getUserByEmail(email),
-    });
-};
 
-export const postUser = async (users: FormData): Promise<any> => {
+
+export const createUser = async (users: FormData): Promise<any> => {
     const { data } = await axios.post(`${API_URL}/users`, users, {
         headers: {
             'Content-Type': 'multipart/form-data',
@@ -52,17 +35,4 @@ export const postUser = async (users: FormData): Promise<any> => {
         },
     });
     return data;
-};
-
-export const UseCreateUser = () => {
-    return useMutation({
-        mutationKey: ['createUser'],
-        mutationFn: postUser,
-        onSuccess: () => {
-
-        },
-        onError: () => {
-
-        }
-    });
 };

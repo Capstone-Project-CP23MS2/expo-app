@@ -29,9 +29,9 @@ import { TouchableOpacity, BaseButton, ScrollView } from 'react-native-gesture-h
 import ActivityFooter from '@/modules/activity-detail/components/ActivityFooter'
 import axios from 'axios'
 
-import { UseGetActivity, UseGetActivityParticipants, getActivity } from '@/api/activities'
+import { UseGetActivity, UseGetActivityParticipants } from '@/hooks/useAPI'
 import { useQuery } from '@tanstack/react-query'
-import { UseGetCategory, getCategory } from '@/api/category'
+import { UseGetCategory } from '@/hooks/useAPI'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import ActivityInfo from './components/ActivityInfo'
 type Props = {}

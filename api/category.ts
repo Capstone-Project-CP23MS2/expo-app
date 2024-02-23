@@ -9,21 +9,7 @@ export const getCategories = async (): Promise<CategoriesResponse> => {
     return data;
 };
 
-export const UseGetCategories = () => {
-    return useQuery({
-        queryKey: ['categories'],
-        queryFn: getCategories,
-    });
-};
-
 export const getCategory = async (id: string | number | string[] | undefined): Promise<Category> => {
     const { data } = await axios.get(`${API_URL}/categories/${id}`);
     return data;
-};
-
-export const UseGetCategory = (id: string | number | string[] | undefined) => {
-    return useQuery({
-        queryKey: ['category', id],
-        queryFn: () => getCategory(id),
-    });
 };

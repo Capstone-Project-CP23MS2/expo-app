@@ -8,16 +8,14 @@ import { MaterialIcons } from '@expo/vector-icons'
 
 import { useRouter } from 'expo-router'
 import { TextField } from 'react-native-ui-lib'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createActivity } from '@/api/activities'
+import { UseCreateActivity } from '@/hooks/useAPI'
 import FormDatetimePicker from './components/form-datetime-picker'
 
 import { objToFormData } from '@/utils'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper'
 import AppWrapper from '../shared/AppWrapper'
-import { UseGetCategories } from '@/api/category'
-import { UseGetUsers } from '@/api/users'
+import { UseGetCategories, UseGetUsers } from '@/hooks/useAPI'
 
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -69,22 +67,20 @@ const CreateActivity = (props: Props) => {
   const handleInputChange = (name: string, value: string) => {
     // formData.set(name, value);
   }
-  const queryClient = useQueryClient()
-  const { mutateAsync: addActivityMutation } = useMutation({
-    mutationFn: createActivity,
-    onSuccess: data => {
-      queryClient.invalidateQueries({ queryKey: ['activities'] })
-      router.push('/(app)/(tabs)/activities')
-    },
-    onError: error => {
-      console.log(error)
-    },
-  })
+  const createMutation = UseCreateActivity()
 
   // ฟังก์ชั่นเมื่อกดปุ่ม "เพิ่มกิจกรรม"
   const onSummit = handleSubmit(async activityData => {
-    const formData = objToFormData(activityData)
-    addActivityMutation(formData)
+    createMutation.mutate(objToFormData(activityData), {
+      onSuccess: () => {
+        console.log('onSuccess in CreateActivityPage')
+        router.push('/(app)/(tabs)/activities')
+      },
+      onError: error => {
+        console.log('error')
+        console.log(error)
+      },
+    })
   })
 
   const usePreset = () => {

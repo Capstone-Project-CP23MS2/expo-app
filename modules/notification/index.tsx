@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { Picker } from '@react-native-picker/picker'
 import { Link } from 'expo-router'
-import { UseGetUserByEmail, UseGetUsers } from '@/api/users'
+import { UseGetUserByEmail, UseGetUsers } from '@/hooks/useAPI'
 
 type Props = {}
 

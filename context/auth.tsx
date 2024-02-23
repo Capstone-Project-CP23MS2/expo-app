@@ -3,8 +3,6 @@ import { useRouter, useSegments } from 'expo-router'
 
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
 import { set } from 'zod'
-import { UseGetActivities } from '@/api/activities'
-import { UseGetUserByEmail, postUser } from '@/api/users'
 import axios from 'axios'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 type UserType = {
