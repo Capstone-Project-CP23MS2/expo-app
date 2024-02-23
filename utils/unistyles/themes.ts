@@ -1,10 +1,16 @@
 const sharedTheme = {
-    margins: {
+
+    spacings: {
+        xxs: 2,
         xs: 4,
         sm: 8,
-        md: 16,
-        lg: 24,
-        xl: 32,
+        md: 12,
+        lg: 16,
+        xl: 24,
+        xxl: 32,
+        xxxl: 48,
+        // xxxxl: 72,
+        page: 20,
     },
     typography: {
         h1: {
@@ -44,10 +50,27 @@ const sharedTheme = {
             fontFamily: 'NotoSansThaiRegular'
         },
     },
+    component: {
+        button: {
+            contained: {
+                // borderRadius: 20,
+                // padding: 16,
+                paddingVertical: 12,
+                paddingHorizontal: 16,
+            },
+            outlined: {
+                borderRadius: 8,
+                paddingVertical: 12,
+                paddingHorizontal: 16,
+                borderWidth: 1,
+            }
+        },
+        utils: {
 
+        }
+
+    }
 };
-
-
 
 export const lightTheme = {
     ...sharedTheme,
@@ -68,5 +91,3 @@ export const darkTheme = {
         background: '#000000'
     },
 } as const;
-
-  // define other themes
