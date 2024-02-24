@@ -1,22 +1,28 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { BaseButton } from 'react-native-gesture-handler'
 import { COLORS, FONT, SIZES } from '@/constants'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { BaseButton, BaseButtonProps } from 'react-native-gesture-handler'
 
-type Props = {
-  variant: 'primary' | 'secondary' | 'tertiary'
+export type Color = 'primary' | 'secondary' | 'tertiary' | 'danger' | 'disable'
+
+type Props = BaseButtonProps & {
+  variant: Color
   label: string
-  onPress: () => void
-  fullWidth?: true
-  round?: true
+  fullWidth?: boolean
+  round?: boolean
+  // onPress: () => void
+  // enabled?: boolean
 }
 
-const AppButton = ({ variant, label, onPress, fullWidth }: Props) => {
+const AppButton = ({ variant, label, fullWidth, ...otherProps }: Props) => {
+  const { styles, breakpoint, theme } = useStyles(stylesheet, {
+    color: variant,
+    fullWidth: fullWidth,
+  })
+
   return (
-    <BaseButton
-      onPress={onPress}
-      style={[styles.button, { backgroundColor: COLORS[variant] }, fullWidth && { flex: 1 }]}
-    >
+    <BaseButton style={styles.container} {...otherProps}>
       <Text style={styles.label}>{label}</Text>
     </BaseButton>
   )
@@ -24,18 +30,49 @@ const AppButton = ({ variant, label, onPress, fullWidth }: Props) => {
 
 export default AppButton
 
-const styles = StyleSheet.create({
-  button: {
-    // backgroundColor: COLORS.tertiary,
+const stylesheet = createStyleSheet(theme => ({
+  container: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 9999,
-    padding: 14,
+    borderRadius: 20,
+    padding: 12,
+    // ...theme.component.button.contained,
+    // height: 48,
+    variants: {
+      color: {
+        default: {
+          backgroundColor: theme.colors.primary,
+        },
+        primary: {
+          backgroundColor: theme.colors.primary,
+        },
+        secondary: {
+          backgroundColor: theme.colors.secondary,
+        },
+        tertiary: {
+          backgroundColor: theme.colors.primary,
+        },
+        danger: {
+          backgroundColor: theme.colors.primary,
+        },
+        disable: {
+          backgroundColor: theme.colors.primary,
+        },
+      },
+      type: {
+        outlined: {},
+        contained: {},
+      },
+      fullWidth: {
+        true: {
+          flex: 1,
+        },
+      },
+    },
   },
-
   label: {
     fontSize: SIZES.medium,
     color: COLORS.white,
     fontFamily: FONT.bold,
   },
-})
+}))

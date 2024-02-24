@@ -11,14 +11,12 @@ import { Picker } from '@react-native-picker/picker'
 import { useRouter } from 'expo-router'
 import { TextField } from 'react-native-ui-lib'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createActivity } from '@/api/activities'
 import FormDatetimePicker from './components/form-datetime-picker-old'
 import { objToFormData } from '@/utils'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper'
 import AppWrapper from '../shared/AppWrapper'
-import { UseGetCategories } from '@/api/category'
-import { UseGetUsers } from '@/api/users'
+import { UseGetCategories, UseGetUsers } from '@/hooks/useAPI'
 import Colors from '@/constants/Colors'
 type Props = {}
 type ActivityData = {
@@ -76,16 +74,6 @@ const CreateActivity = (props: Props) => {
     // formData.set(name, value);
   }
   const queryClient = useQueryClient()
-  const { mutateAsync: addActivityMutation } = useMutation({
-    mutationFn: createActivity,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['activities'] })
-      router.push('/(app)/(tabs)/activities')
-    },
-    onError: error => {
-      console.log(error)
-    },
-  })
 
   // ฟังก์ชั่นเมื่อกดปุ่ม "เพิ่มกิจกรรม"
   const onSummit = async () => {

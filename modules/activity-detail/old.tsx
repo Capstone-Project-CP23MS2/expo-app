@@ -18,9 +18,9 @@ import { TouchableOpacity, BaseButton } from 'react-native-gesture-handler'
 import ActivityFooter from '@/modules/activity-detail/components/ActivityFooter'
 import axios from 'axios'
 import { Button, Chip, Modal, Portal, PaperProvider } from 'react-native-paper'
-import { UseGetActivity, UseGetActivityParticipants, getActivity } from '@/api/activities'
+import { UseGetActivity, UseGetActivityParticipants, getActivity } from '@/hooks/useAPI'
 import { useQuery } from '@tanstack/react-query'
-import { UseGetCategory, getCategory } from '@/api/category'
+import { UseGetCategory } from '@/hooks/useAPI'
 type Props = {}
 const apiUrl: string = process.env.EXPO_PUBLIC_BASE_URL_API!
 

@@ -21,7 +21,7 @@ import Auth from '@/modules/auth/Auth'
 import { AuthProvider } from '@/context/auth'
 import { DesignSystem } from '@/utils/design-system'
 
-// import 'utils/unistyles';
+import 'utils/unistyles'
 
 // Create a client
 const queryClient = new QueryClient({

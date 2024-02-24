@@ -8,16 +8,14 @@ import { MaterialIcons } from '@expo/vector-icons'
 
 import { useRouter } from 'expo-router'
 import { TextField } from 'react-native-ui-lib'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createActivity } from '@/api/activities'
+import { UseCreateActivity } from '@/hooks/useAPI'
 import FormDatetimePicker from './components/form-datetime-picker'
 
 import { objToFormData } from '@/utils'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper'
 import AppWrapper from '../shared/AppWrapper'
-import { UseGetCategories } from '@/api/category'
-import { UseGetUsers } from '@/api/users'
+import { UseGetCategories, UseGetUsers } from '@/hooks/useAPI'
 
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -27,6 +25,7 @@ import { Colors, Picker } from 'react-native-ui-lib'
 import errorMap from 'zod/lib/locales/en'
 import { TextInput as TextInputPaper } from 'react-native-paper'
 import AppButton from '../shared/AppButton'
+import { useAuth } from '@/context/auth'
 
 type Props = {}
 type ActivityData = {
@@ -42,6 +41,7 @@ type ActivityData = {
 }
 
 const CreateActivity = (props: Props) => {
+  const { user } = useAuth()
   const router = useRouter()
 
   const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories()
@@ -59,32 +59,32 @@ const CreateActivity = (props: Props) => {
     getFieldState,
   } = useForm<ActivityInfo>({
     resolver: zodResolver(ActivityInfoSchema),
+    defaultValues: {
+      hostUserId: user?.userId,
+    },
   })
   // const test: FieldErrors = null
   const handleInputChange = (name: string, value: string) => {
     // formData.set(name, value);
   }
-  const queryClient = useQueryClient()
-  const { mutateAsync: addActivityMutation } = useMutation({
-    mutationFn: createActivity,
-    onSuccess: data => {
-      queryClient.invalidateQueries({ queryKey: ['activities'] })
-      router.push('/(app)/(tabs)/activities')
-    },
-    onError: error => {
-      console.log(error)
-    },
-  })
+  const createMutation = UseCreateActivity()
 
   // ฟังก์ชั่นเมื่อกดปุ่ม "เพิ่มกิจกรรม"
   const onSummit = handleSubmit(async activityData => {
-    const formData = objToFormData(activityData)
-    addActivityMutation(formData)
+    createMutation.mutate(objToFormData(activityData), {
+      onSuccess: () => {
+        console.log('onSuccess in CreateActivityPage')
+        router.push('/(app)/(tabs)/activities')
+      },
+      onError: error => {
+        console.log('error')
+        console.log(error)
+      },
+    })
   })
 
   const usePreset = () => {
     setValue('categoryId', 1)
-    setValue('hostUserId', 1)
     setValue('title', 'test_title-' + Math.random().toString())
     setValue('description', 'test_description')
     setValue('place', 'test_place')
@@ -100,13 +100,14 @@ const CreateActivity = (props: Props) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.container}>
+          <Text>กิจกรรม</Text>
           <Controller
             control={control}
             name="categoryId"
             render={({ field: { onChange, onBlur, value } }) => (
               <Picker
-                placeholder={'Category'}
-                floatingPlaceholder
+                placeholder={'เลือกประเภทกิจกรรม'}
+                // floatingPlaceholder
                 value={value}
                 enableModalBlur={false}
                 onChange={onChange}
@@ -129,7 +130,7 @@ const CreateActivity = (props: Props) => {
               </Picker>
             )}
           />
-          <Controller
+          {/* <Controller
             control={control}
             name="hostUserId"
             render={({ field: { onChange, onBlur, value } }) => (
@@ -153,8 +154,7 @@ const CreateActivity = (props: Props) => {
                 ))}
               </Picker>
             )}
-          />
-
+          /> */}
           <Controller
             control={control}
             name="title"
@@ -164,7 +164,7 @@ const CreateActivity = (props: Props) => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 error={error}
-                placeholder="Title"
+                placeholder="ชื่อกิจกรรม"
                 showCharCounter
                 maxLength={30}
                 // icon={<MaterialIcons name="title" size={24} color="black" />}
@@ -196,7 +196,6 @@ const CreateActivity = (props: Props) => {
               />
             )}
           /> */}
-
           <Controller
             control={control}
             name="place"
@@ -206,7 +205,7 @@ const CreateActivity = (props: Props) => {
                 onBlur={onBlur}
                 onChangeText={onChange}
                 error={error}
-                placeholder="Place"
+                placeholder="สถานที่"
                 showCharCounter
                 maxLength={30}
                 icon={<MaterialIcons name="place" size={24} color="black" />}
@@ -214,7 +213,6 @@ const CreateActivity = (props: Props) => {
               />
             )}
           />
-
           <Controller
             control={control}
             name="dateTime"
@@ -235,13 +233,12 @@ const CreateActivity = (props: Props) => {
                 onBlur={onBlur}
                 onChangeText={text => onChange(parseInt(text, 10))}
                 error={error}
-                placeholder="Duration"
+                placeholder="ระยะเวลา"
                 icon={<MaterialIcons name="schedule" size={24} color="black" />}
                 iconName="schedule"
               />
             )}
           />
-
           <Controller
             control={control}
             name="noOfMembers"
@@ -252,13 +249,12 @@ const CreateActivity = (props: Props) => {
                 onBlur={onBlur}
                 onChangeText={text => onChange(parseInt(text, 10))}
                 error={error}
-                placeholder="Max Participants"
+                placeholder="จำนวนคน"
                 icon={<MaterialIcons name="people" size={24} color="black" />}
                 iconName="people"
               />
             )}
           />
-
           <Controller
             control={control}
             name="description"
@@ -267,7 +263,7 @@ const CreateActivity = (props: Props) => {
                 value={value}
                 onBlur={onBlur}
                 onChangeText={onChange}
-                placeholder="Description"
+                placeholder="รายละเอียดกิจกรรม"
                 error={error}
                 showCharCounter
                 maxLength={500}
@@ -276,7 +272,7 @@ const CreateActivity = (props: Props) => {
               />
             )}
           />
-
+          {/* test button */}
           <View style={{ flex: 1, gap: 6 }}>
             <Button title="Submit" onPress={onSummit} />
             {Boolean(0) && <Button title="Get Value" onPress={() => console.log(getValues())} />}
@@ -294,7 +290,7 @@ const CreateActivity = (props: Props) => {
               <Button
                 title="Test"
                 onPress={() => {
-                  console.log(users)
+                  console.log(getValues())
                 }}
               />
             )}
@@ -303,8 +299,8 @@ const CreateActivity = (props: Props) => {
       </ScrollView>
 
       <View style={styles.footer}>
-        <AppButton variant="secondary" label="preset" onPress={usePreset} />
-        <AppButton variant="primary" label="Add" onPress={onSummit} fullWidth />
+        <AppButton variant="secondary" label="🔮 preset (test)" onPress={usePreset} />
+        <AppButton variant="primary" label="🎉 เพิ่มกิจกรรม" onPress={onSummit} fullWidth />
       </View>
     </KeyboardAvoidingWrapper>
   )

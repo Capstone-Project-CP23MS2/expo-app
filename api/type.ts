@@ -31,6 +31,7 @@ export type Activity = {
     createdAt: string;
     updatedAt: string;
     noOfMembers: number;
+    categoryName?: string;
 };
 
 export type Participant = {
