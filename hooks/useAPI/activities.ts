@@ -55,6 +55,7 @@ export function UseCreateParticipant() {
     // mutationKey: ['activityParticipants'],
     mutationFn: createParticipant,
     onSuccess: async (data) => {
+
       await queryClient.invalidateQueries({ queryKey: ['activityParticipants', String(data.activityId)] });
     },
   });

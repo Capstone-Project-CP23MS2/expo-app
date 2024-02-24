@@ -30,12 +30,19 @@ type Props = {}
 
 const Page = (props: Props) => {
   const router = useRouter()
-  const { id } = useLocalSearchParams()
+  const { id: activityId } = useLocalSearchParams<{ id: string }>()
   const { user } = useAuth()
 
-  const { data: activity, isLoading, isError, error, refetch: activityRefetch } = UseGetActivity(id)
+  const {
+    data: activity,
+    isLoading,
+    isError,
+    error,
+    refetch: activityRefetch,
+  } = UseGetActivity(activityId)
 
-  const { data: participantsData, refetch: participantsRefetch } = UseGetActivityParticipants(id)
+  const { data: participantsData, refetch: participantsRefetch } =
+    UseGetActivityParticipants(activityId)
   const { content: participants } = participantsData || {}
 
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
@@ -43,7 +50,7 @@ const Page = (props: Props) => {
   const deleteMutation = UseDeleteActivity()
 
   const onDelete = () => {
-    deleteMutation.mutate(String(id), {
+    deleteMutation.mutate(activityId, {
       onSuccess() {
         router.push('/(app)/(tabs)/activities')
       },
@@ -232,7 +239,7 @@ const Page = (props: Props) => {
         {user?.userId === activity?.hostUserId ? (
           <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
         ) : (
-          <JoinButton userId={user?.userId} activityId={String(id)} isParticipant={isParticipant} />
+          <JoinButton userId={user?.userId} activityId={activityId} isParticipant={isParticipant} />
         )}
       </View>
     </PaperProvider>

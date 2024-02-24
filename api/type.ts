@@ -1,4 +1,4 @@
-export type ApiPaginationResponse<Data extends object> = {
+export type APIPaginationResponse<Data extends object> = {
     content: Data[];
     number: number;
     size: number;
@@ -19,7 +19,7 @@ export type requestParams = {
 } | {};
 
 // Activity
-export type Activity = {
+export type ActivityResponse = {
     activityId: number;
     hostUserId: number;
     categoryId: number;
@@ -33,31 +33,29 @@ export type Activity = {
     noOfMembers: number;
     categoryName?: string;
 };
+export type ActivitiesResponse = APIPaginationResponse<ActivityResponse>;
 
-export type Participant = {
+export type ParticipantResponse = {
     userId: number;
     username: string;
     activityId: number;
     status: string;
     joinedAt: string;
 };
-
-export type ActivitiesResponse = ApiPaginationResponse<Activity>;
-export type ParticipantsResponse = ApiPaginationResponse<Participant>;
+export type ParticipantsResponse = APIPaginationResponse<ParticipantResponse>;
 
 // Category
-export type Category = {
+export type CategoryResponse = {
     categoryId: number;
     name: string;
     description: string;
 };
 
-export type CategoriesResponse = ApiPaginationResponse<Category>;
+export type CategoriesResponse = APIPaginationResponse<CategoryResponse>;
 
 // User
 export type Gender = "Male" | "Female" | "Other" | "NotApplicable" | "Unknown";
-
-export type User = {
+export type UserResponse = {
     userId: number,
     username: string,
     email: string,
@@ -82,4 +80,4 @@ export type NewUser = {
 
 // export type UserResponse = User & { registrationDate: string; };
 
-export type UsersResponse = ApiPaginationResponse<User>;
+export type UsersResponse = APIPaginationResponse<UserResponse>;
