@@ -1,28 +1,28 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createUser, getUser, getUserByEmail, getUsers } from '@/api/users';
 
-export const UseGetUsers = () => {
+export function UseGetUsers() {
     return useQuery({
         queryKey: ['users'],
         queryFn: getUsers,
     });
 };
 
-export const UseGetUser = (userId: any) => {
+export function UseGetUser(userId: any) {
     return useQuery({
         queryKey: ['user', userId],
         queryFn: () => getUser(userId),
     });
 };
 
-export const UseGetUserByEmail = (email: any) => {
+export function UseGetUserByEmail(email: any) {
     return useQuery({
         queryKey: ['user', email],
         queryFn: () => getUserByEmail(email),
     });
 };
 
-export const UseCreateUser = () => {
+export function UseCreateUser() {
     const queryClient = useQueryClient();
 
     return useMutation({

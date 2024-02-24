@@ -3,7 +3,7 @@ import { requestParams } from "@/api/type";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const UseGetActivities = (params: requestParams) => {
+export function UseGetActivities(params: requestParams) {
   return useQuery({
     queryKey: ['activities'],
     queryFn: () => getActivities(params),
@@ -11,16 +11,14 @@ export const UseGetActivities = (params: requestParams) => {
   });
 };
 
-export const UseGetActivity = (activityId: string | string[]) => {
+export function UseGetActivity(activityId: string | string[]) {
   return useQuery({
     queryKey: ['activity', activityId],
     queryFn: () => getActivity(activityId),
-    // queryFn: ({ queryKey }) => getActivity(queryKey[1]),
   });
-
 };
 
-export const UseCreateActivity = () => {
+export function UseCreateActivity() {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -43,14 +41,14 @@ export function UseDeleteActivity() {
   });
 }
 
-export const UseGetActivityParticipants = (activityId: string | string[]) => {
+export function UseGetActivityParticipants(activityId: string | string[]) {
   return useQuery({
     queryKey: ['activityParticipants', activityId],
     queryFn: () => getActivityParticipants(activityId),
   });
 };
 
-export const UseCreateParticipant = () => {
+export function UseCreateParticipant() {
   const queryClient = useQueryClient();
 
   return useMutation({
