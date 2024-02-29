@@ -1,5 +1,3 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
 import { requestParams, ActivityResponse, ActivitiesResponse, ParticipantResponse, ParticipantsResponse } from './type';
 import apiClient from "./apiClient";
 const API_URL: string = process.env.EXPO_PUBLIC_BASE_URL_API!;
@@ -52,12 +50,12 @@ export async function createActivity(activity: FormData) {
 
 export async function deleteActivity(activityId: string | number): Promise<any> {
   const url = `${API_URL}/activities/${activityId}`;
-  await axios.delete(url);
+  await apiClient.delete(url);
 };
 
 export async function getActivityParticipants(activityId: string | string[]) {
   const url = `${API_URL}/participants`;
-  const { data } = await axios.get<ParticipantsResponse>(
+  const { data } = await apiClient.get<ParticipantsResponse>(
     url,
     { params: { activityId: activityId } }
   );
@@ -72,7 +70,7 @@ type ParticipantRequestBody = {
 };
 export async function createParticipant(participant: FormData) {
   const url = `${API_URL}/participants`;
-  const { data } = await axios.post<ParticipantResponse>(
+  const { data } = await apiClient.post<ParticipantResponse>(
     url, participant,
     {
       headers: {
@@ -92,6 +90,6 @@ export async function deleteParticipant(params: any): Promise<any> {
   const { activityId, userId } = params;
   const url = `${API_URL}/participants/${activityId}_${userId}`;
   // const { data } = await axios.delete(`${API_URL}/participants`, { params });
-  const { data } = await axios.delete(url);
+  const { data } = await apiClient.delete(url);
   return data;
 };
