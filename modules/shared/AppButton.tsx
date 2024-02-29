@@ -15,14 +15,14 @@ type Props = BaseButtonProps & {
   // enabled?: boolean
 }
 
-const AppButton = ({ variant, label, fullWidth, ...otherProps }: Props) => {
+const AppButton = ({ variant, label, fullWidth, enabled, ...otherProps }: Props) => {
   const { styles, breakpoint, theme } = useStyles(stylesheet, {
     color: variant,
     fullWidth: fullWidth,
   })
 
   return (
-    <BaseButton style={styles.container} {...otherProps}>
+    <BaseButton style={styles.container} enabled={enabled} {...otherProps}>
       <Text style={styles.label}>{label}</Text>
     </BaseButton>
   )

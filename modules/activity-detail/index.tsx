@@ -23,15 +23,16 @@ import {
 import ActivityFooter from '@/modules/activity-detail/components/ActivityFooter'
 import { Button, Chip, Modal, Portal, PaperProvider, Icon, Card } from 'react-native-paper'
 import { UseDeleteActivity, UseGetActivity, UseGetActivityParticipants } from '@/hooks/useAPI'
-import { useAuth } from '@/context/auth'
+
 import AppButton from '@/modules/shared/AppButton'
 import JoinButton from './components/JoinButton'
+import { useAuth } from '@/context/authContext'
 type Props = {}
 
 const Page = (props: Props) => {
   const router = useRouter()
   const { id: activityId } = useLocalSearchParams<{ id: string }>()
-  const { user } = useAuth()
+  const { currentUser } = useAuth()
 
   const {
     data: activity,
@@ -69,7 +70,9 @@ const Page = (props: Props) => {
     gap: 5,
   }
 
-  const isParticipant = participants?.some(participant => participant.userId === user?.userId)
+  const isParticipant = participants?.some(
+    participant => participant.userId === currentUser?.userId,
+  )
   const [refreshing, setRefreshing] = useState(false)
 
   const onRefresh = useCallback(async () => {
@@ -174,7 +177,7 @@ const Page = (props: Props) => {
                       <MaterialIcons name="account-circle" size={24} color="gray" />
                       <Text
                         style={[
-                          user?.userId === activity?.hostUserId
+                          currentUser?.userId === activity?.hostUserId
                             ? { color: COLORS.primary }
                             : { color: COLORS.gray },
                         ]}
@@ -236,10 +239,14 @@ const Page = (props: Props) => {
       </View>
       {/* <ActivityFooter /> */}
       <View style={styles.footerContainer}>
-        {user?.userId === activity?.hostUserId ? (
+        {currentUser?.userId === activity?.hostUserId ? (
           <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
         ) : (
-          <JoinButton userId={user?.userId} activityId={activityId} isParticipant={isParticipant} />
+          <JoinButton
+            userId={currentUser?.userId}
+            activityId={activityId}
+            isParticipant={isParticipant}
+          />
         )}
       </View>
     </PaperProvider>

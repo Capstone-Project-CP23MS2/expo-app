@@ -11,12 +11,12 @@ import { ScrollView } from 'react-native-gesture-handler'
 import FormDatetimePicker from '@/modules/auth/form-date-picker'
 import { UseCreateUser, UseGetUserByEmail } from '@/hooks/useAPI'
 import { Redirect, useLocalSearchParams, useRouter } from 'expo-router'
-import { useAuth } from '@/context/auth'
+// import { useAuth } from '@/context/auth'
 
 type Props = {}
 
 const createUser = (props: Props) => {
-  const { user, setUser } = useAuth()
+  const { currentUser, setUser } = useAuth()
   const { email } = useLocalSearchParams()
 
   const router = useRouter()
@@ -58,7 +58,7 @@ const createUser = (props: Props) => {
         userId: data?.content[0].userId,
         userName: data?.content[0].username,
         email: data?.content[0].email,
-        ...user,
+        ...currentUser,
       })
     } catch (e) {
       console.log(e)
@@ -77,7 +77,7 @@ const createUser = (props: Props) => {
   }
   if (isSuccess) {
     setUser({
-      ...user,
+      ...currentUser,
       userId: data?.content[0].userId,
       userName: data?.content[0].username,
       email: data?.content[0].email,

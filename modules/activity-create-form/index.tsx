@@ -25,7 +25,7 @@ import { Colors, Picker } from 'react-native-ui-lib'
 import errorMap from 'zod/lib/locales/en'
 import { TextInput as TextInputPaper } from 'react-native-paper'
 import AppButton from '../shared/AppButton'
-import { useAuth } from '@/context/auth'
+import { useAuth } from '@/context/authContext'
 
 type Props = {}
 type ActivityData = {
@@ -41,7 +41,7 @@ type ActivityData = {
 }
 
 const CreateActivity = (props: Props) => {
-  const { user } = useAuth()
+  const { currentUser } = useAuth()
   const router = useRouter()
 
   const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories()
@@ -60,7 +60,7 @@ const CreateActivity = (props: Props) => {
   } = useForm<ActivityInfo>({
     resolver: zodResolver(ActivityInfoSchema),
     defaultValues: {
-      hostUserId: user?.userId,
+      hostUserId: currentUser?.userId,
     },
   })
   // const test: FieldErrors = null
@@ -149,8 +149,8 @@ const CreateActivity = (props: Props) => {
                   placeholderTextColor: Colors.grey50,
                 }}
               >
-                {users?.map(user => (
-                  <Picker.Item key={user.userId} value={user.userId} label={user.username} />
+                {users?.map(currentUser => (
+                  <Picker.Item key={currentUser.userId} value={currentUser.userId} label={currentUser.username} />
                 ))}
               </Picker>
             )}
@@ -300,7 +300,7 @@ const CreateActivity = (props: Props) => {
 
       <View style={styles.footer}>
         <AppButton variant="secondary" label="🔮 preset (test)" onPress={usePreset} />
-        <AppButton variant="primary" label="🎉 เพิ่มกิจกรรม" onPress={onSummit} fullWidth />
+        <AppButton variant="primary" label="🎉 เพิ่มกิจกรรม" onPress={() => onSummit()} fullWidth />
       </View>
     </KeyboardAvoidingWrapper>
   )
