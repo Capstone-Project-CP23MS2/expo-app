@@ -1,5 +1,4 @@
 import { COLORS, FONT, SIZES } from '@/constants'
-import useFetch from '@/hooks/useFetch'
 import { Link, Stack, useRouter } from 'expo-router'
 import { View, Text, StyleSheet, Pressable, ActivityIndicator, Button } from 'react-native'
 

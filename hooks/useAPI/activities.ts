@@ -1,4 +1,4 @@
-import { createActivity, createParticipant, deleteActivity, deleteParticipant, getActivities, getActivity, getActivityParticipants } from "@/api/activities";
+import activitiesApi from "@/api/activities";
 import { requestParams } from "@/api/type";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 export function UseGetActivities(params: requestParams) {
   return useQuery({
     queryKey: ['activities'],
-    queryFn: () => getActivities(params),
+    queryFn: () => activitiesApi.getActivities(params),
     // refetchInterval: 1000, // 1 second
   });
 };
@@ -14,7 +14,7 @@ export function UseGetActivities(params: requestParams) {
 export function UseGetActivity(activityId: string | string[]) {
   return useQuery({
     queryKey: ['activity', activityId],
-    queryFn: () => getActivity(activityId),
+    queryFn: () => activitiesApi.getActivityById(activityId),
   });
 };
 
@@ -23,7 +23,7 @@ export function UseCreateActivity() {
 
   return useMutation({
     mutationKey: ['activities'],
-    mutationFn: createActivity,
+    mutationFn: activitiesApi.createActivity,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["activities"] });
     },
@@ -34,7 +34,7 @@ export function UseDeleteActivity() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: deleteActivity,
+    mutationFn: activitiesApi.deleteActivity,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["activities"] });
     },
@@ -44,7 +44,7 @@ export function UseDeleteActivity() {
 export function UseGetActivityParticipants(activityId: string | string[]) {
   return useQuery({
     queryKey: ['activityParticipants', activityId],
-    queryFn: () => getActivityParticipants(activityId),
+    queryFn: () => activitiesApi.getActivityParticipants(activityId),
   });
 };
 
@@ -53,7 +53,7 @@ export function UseCreateParticipant() {
 
   return useMutation({
     // mutationKey: ['activityParticipants'],
-    mutationFn: createParticipant,
+    mutationFn: activitiesApi.createActivityParticipant,
     onSuccess: async (data) => {
 
       await queryClient.invalidateQueries({ queryKey: ['activityParticipants', String(data.activityId)] });
@@ -65,7 +65,7 @@ export function UseDeleteParticipant() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: deleteParticipant,
+    mutationFn: activitiesApi.deleteActivityParticipant,
     onSuccess: async (data, variables) => {
       await queryClient.invalidateQueries({ queryKey: ['activityParticipants', String(variables.activityId)] });
     },

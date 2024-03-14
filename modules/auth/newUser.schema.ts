@@ -7,6 +7,7 @@ export const NewUserInfoSchema = z.object({
     gender: z.string(),
     dateOfBirth: z.string(),
     phoneNumber: z.string(),
+    locationId: z.string(),
 });
 
 // extract the inferred type

@@ -1,21 +1,23 @@
 import { View, Text } from 'react-native'
-import React from 'react'
-import { Redirect, Stack } from 'expo-router'
+import React, { useEffect } from 'react'
+import { Redirect, Stack, useRouter } from 'expo-router'
+import { UseGetMyUserInfo } from '@/hooks/useAPI'
+import { useAuth } from '@/context/authContext'
+import { LoaderScreen } from 'react-native-ui-lib'
 
 type Props = {}
 
 const AppEntry = (props: Props) => {
-  // if (isLoading) {
-  //   return <Text>Loading...</Text>
-  // }
-  // if (!session) {
-  //   // On web, static rendering will stop here as the user is not authenticated
-  //   // in the headless Node process that the pages are rendered in.
-  //   console.log('((app)_layout.tsx)Redirecting to login')
+  const router = useRouter()
+  const { data: userInfo, isLoading: isUserInfoLoading } = UseGetMyUserInfo()
+  const { authState, isLoading } = useAuth()
 
-  //   return <Redirect href="/(auth)/login" />
-  // }
-
+  if (isLoading || isUserInfoLoading) {
+    return <LoaderScreen />
+  }
+  // useEffect(() => {
+  //   console.log('🚀 ~ authState:', authState)
+  // }, [authState, isLoading, router])
   return (
     <Stack>
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

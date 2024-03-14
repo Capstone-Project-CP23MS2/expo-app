@@ -40,6 +40,7 @@ export default function Register(props: Props) {
       email: email,
       gender: 'Unknown',
       role: 'user',
+      locationId: '1',
     },
   })
 
@@ -48,7 +49,7 @@ export default function Register(props: Props) {
     createUserMutation
       .mutateAsync(objToFormData(newUserData), {
         onSuccess: data => {
-          onRegister!(data)
+          // onRegister!(data)
         },
         onError: error => {
           console.log(error)
@@ -68,6 +69,9 @@ export default function Register(props: Props) {
         <View style={styles.container}>
           <Text style={styles.title}>register</Text>
           <Text style={styles.email}>อีเมล: {email}</Text>
+          <Text style={styles.email}>isValid: {isValid ? 't' : 'f'}</Text>
+          <Text style={styles.email}>isDirty: {isDirty ? 't' : 'f'}</Text>
+          <Text style={styles.email}>isSubmitting: {isSubmitting ? 't' : 'f'}</Text>
           <View>
             <Controller
               control={control}
@@ -103,6 +107,7 @@ export default function Register(props: Props) {
               )}
             />
           </View>
+          <AppButton label="submit" onPress={() => console.log(getValues())} />
         </View>
       </ScrollView>
       <RegisterFooter

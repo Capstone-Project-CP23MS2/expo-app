@@ -19,7 +19,7 @@ const TabsLayout = (props: Props) => {
       }}
     >
       <Tabs.Screen
-        name="activities"
+        name="index"
         options={{
           tabBarLabel: 'Activities',
           headerShown: false,
