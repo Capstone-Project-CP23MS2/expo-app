@@ -12,6 +12,7 @@ import FormDatetimePicker from '@/modules/auth/form-date-picker'
 import { UseCreateUser, UseGetUserByEmail } from '@/hooks/useAPI'
 import { Redirect, useLocalSearchParams, useRouter } from 'expo-router'
 import { useAuth } from '@/context/auth'
+import { FONT, SIZES } from '@/constants'
 
 type Props = {}
 
@@ -87,49 +88,68 @@ const createUser = (props: Props) => {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={styles.container}>
-          <Text>{data?.content[0].email}</Text>
-          <Text h3>Create User</Text>
-          <Text sm>ชื่อผู้ใช้</Text>
-          <Controller
-            control={control}
-            name="username"
-            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
-              <TextField
-                placeholder="Username"
-                onChangeText={onChange}
-                value={value}
-                onBlur={onBlur}
-              />
-            )}
-          />
-          <Text sm>วันเกิด</Text>
-          <Controller
-            control={control}
-            name="dateOfBirth"
-            render={({ field: { onChange, onBlur, value } }) => {
-              return <FormDatetimePicker value={value} onChangeDatetime={onChange} />
+        <View>
+          {/* <Text>{data?.content[0].email}</Text> */}
+          <View style={{ gap: 2 }}>
+            <Text style={{ fontSize: SIZES.xLarge, fontWeight: 'bold' }}>New User</Text>
+            <Text style={{ color: 'gray' }}>Create Sport Connect Account</Text>
+          </View>
+          <View
+            style={{
+              borderBottomColor: 'gray',
+              borderBottomWidth: StyleSheet.hairlineWidth,
+              marginTop: 5,
+              marginBottom: 5,
             }}
           />
-          <Text sm>เบอร์โทรศัพท์</Text>
-          <Controller
-            control={control}
-            name="phoneNumber"
-            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
-              <TextField
-                placeholder="Phone Number"
-                onChangeText={onChange}
-                value={value}
-                onBlur={onBlur}
+          <View style={{ paddingTop: 10, gap: 5 }}>
+            <View>
+              <Text style={{ fontWeight: 'bold' }}>Username</Text>
+              <Controller
+                control={control}
+                name="username"
+                render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+                  <TextField
+                    placeholder="enter your username"
+                    onChangeText={onChange}
+                    value={value}
+                    onBlur={onBlur}
+                  />
+                )}
               />
-            )}
-          />
+            </View>
+            <View>
+              <Text style={{ fontWeight: 'bold' }}>Date Of Birth</Text>
+              <Controller
+                control={control}
+                name="dateOfBirth"
+                render={({ field: { onChange, onBlur, value } }) => {
+                  return <FormDatetimePicker value={value} onChangeDatetime={onChange} />
+                }}
+              />
+            </View>
+            <View>
+              <Text style={{ fontWeight: 'bold' }}>Phone Number</Text>
+              <Controller
+                control={control}
+                name="phoneNumber"
+                render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+                  <TextField
+                    placeholder="enter your phone number"
+                    onChangeText={onChange}
+                    value={value}
+                    onBlur={onBlur}
+                  />
+                )}
+              />
+            </View>
+          </View>
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        <AppButton variant="primary" label="Add" onPress={() => onSummit()} fullWidth />
+        <AppButton variant="primary" label="Create New User" onPress={() => onSummit()} fullWidth />
       </View>
     </SafeAreaView>
   )
@@ -143,11 +163,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   footer: {
-    backgroundColor: '#fff',
     paddingVertical: 10,
-    paddingHorizontal: 10,
-
     flexDirection: 'row',
-    gap: 10,
   },
 })
