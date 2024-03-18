@@ -1,10 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper'
 import { ScrollView } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import RegisterForm from './components/RegisterForm'
 import AppButton from '../shared/AppButton'
 import RegisterFooter from './components/RegisterFooter'
 import { useForm, Controller, UseFormReturn } from 'react-hook-form'
@@ -22,7 +21,7 @@ export default function Register(props: Props) {
   const router = useRouter()
   const { styles, breakpoint } = useStyles(stylesheet)
   const { email } = useLocalSearchParams<{ email: string }>()
-  const { currentUser, onRegister } = useAuth()
+  const { user, onRegister, onLogout, onLogin } = useAuth()
 
   const createUserMutation = UseCreateUser()
 
@@ -48,8 +47,8 @@ export default function Register(props: Props) {
     console.log('🚀 ~ onSubmit ~ newUserData:', newUserData)
     createUserMutation
       .mutateAsync(objToFormData(newUserData), {
-        onSuccess: data => {
-          // onRegister!(data)
+        onSuccess: async user => {
+          onRegister!(user)
         },
         onError: error => {
           console.log(error)
@@ -69,9 +68,7 @@ export default function Register(props: Props) {
         <View style={styles.container}>
           <Text style={styles.title}>register</Text>
           <Text style={styles.email}>อีเมล: {email}</Text>
-          <Text style={styles.email}>isValid: {isValid ? 't' : 'f'}</Text>
-          <Text style={styles.email}>isDirty: {isDirty ? 't' : 'f'}</Text>
-          <Text style={styles.email}>isSubmitting: {isSubmitting ? 't' : 'f'}</Text>
+
           <View>
             <Controller
               control={control}

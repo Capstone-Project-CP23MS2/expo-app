@@ -7,23 +7,16 @@ import { Button, Text } from 'react-native-ui-lib'
 type Props = {}
 
 const Page = (props: Props) => {
-  const { currentUser, onLogout } = useAuth()
+  const { user, onLogout } = useAuth()
   const router = useRouter()
   const deleteMutation = UseDeleteUser()
-  const onTestDetele = async () => {
-    deleteMutation.mutate(6, {
-      onSuccess() {
-        console.log('🚮 Delete Test User Success')
-        router.push('/(auth)/login')
-      },
-    })
-  }
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text md>userId: {currentUser?.userId}</Text>
-      <Text md>username: {currentUser?.username}</Text>
-      <Text md>email: {currentUser?.email}</Text>
-      <Text md>dob: {currentUser?.dateOfBirth}</Text>
+      <Text md>userId: {user?.userId}</Text>
+      <Text md>username: {user?.username}</Text>
+      <Text md>email: {user?.email}</Text>
+      <Text md>dob: {user?.dateOfBirth}</Text>
 
       {/* <View style={styles.header}>
         <Text style={styles.headerText}>Tasks</Text>
@@ -40,7 +33,6 @@ const Page = (props: Props) => {
         </View>
       </Modal> */}
       <Button label="Sign Out" onPress={onLogout} />
-      <Button label="Delete" onPress={onTestDetele} />
     </SafeAreaView>
   )
 }

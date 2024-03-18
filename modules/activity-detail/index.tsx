@@ -31,7 +31,7 @@ type Props = {}
 const Page = (props: Props) => {
   const router = useRouter()
   const { id: activityId } = useLocalSearchParams<{ id: string }>()
-  const { currentUser } = useAuth()
+  const { user } = useAuth()
 
   const {
     data: activity,
@@ -70,7 +70,7 @@ const Page = (props: Props) => {
   }
 
   const isParticipant = participants?.some(
-    participant => participant.userId === currentUser?.userId,
+    participant => participant.userId === user?.userId,
   )
   const [refreshing, setRefreshing] = useState(false)
 
@@ -176,7 +176,7 @@ const Page = (props: Props) => {
                       <MaterialIcons name="account-circle" size={24} color="gray" />
                       <Text
                         style={[
-                          currentUser?.userId === activity?.hostUserId
+                          user?.userId === activity?.hostUserId
                             ? { color: COLORS.primary }
                             : { color: COLORS.gray },
                         ]}
@@ -238,11 +238,11 @@ const Page = (props: Props) => {
       </View>
       {/* <ActivityFooter /> */}
       <View style={styles.footerContainer}>
-        {currentUser?.userId === activity?.hostUserId ? (
+        {user?.userId === activity?.hostUserId ? (
           <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
         ) : (
           <JoinButton
-            userId={currentUser?.userId}
+            userId={user?.userId}
             activityId={activityId}
             isParticipant={isParticipant}
           />

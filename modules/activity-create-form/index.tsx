@@ -41,7 +41,7 @@ type ActivityData = {
 }
 
 const CreateActivity = (props: Props) => {
-  const { currentUser } = useAuth()
+  const { user } = useAuth()
   const router = useRouter()
 
   const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories()
@@ -60,7 +60,7 @@ const CreateActivity = (props: Props) => {
   } = useForm<ActivityInfo>({
     resolver: zodResolver(ActivityInfoSchema),
     defaultValues: {
-      hostUserId: currentUser?.userId,
+      hostUserId: user?.userId,
     },
   })
   // const test: FieldErrors = null
@@ -149,8 +149,8 @@ const CreateActivity = (props: Props) => {
                   placeholderTextColor: Colors.grey50,
                 }}
               >
-                {users?.map(currentUser => (
-                  <Picker.Item key={currentUser.userId} value={currentUser.userId} label={currentUser.username} />
+                {users?.map(user => (
+                  <Picker.Item key={user.userId} value={user.userId} label={user.username} />
                 ))}
               </Picker>
             )}

@@ -7,13 +7,13 @@ import { useRouter } from 'expo-router'
 
 export default function dev() {
   const router = useRouter()
-  const { currentUser, onLogout } = useAuth()
+  const { user, onLogout } = useAuth()
   const deleteUserMutation = UseDeleteUser()
   const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories()
   const { content: categories } = categoriesData || {}
 
   const onDeleteUser = async () => {
-    deleteUserMutation.mutate(currentUser?.userId!, {
+    deleteUserMutation.mutate(user?.userId!, {
       onSuccess() {
         console.log('🚮 Delete Test User Success')
         onLogout()

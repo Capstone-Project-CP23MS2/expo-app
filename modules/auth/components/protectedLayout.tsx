@@ -5,7 +5,7 @@ import { useAuth } from '@/context/auth_old'
 
 export default function protectedLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter()
-  const { currentUser } = useAuth()
+  const { user } = useAuth()
   useEffect(() => {}, [])
   return children
 }

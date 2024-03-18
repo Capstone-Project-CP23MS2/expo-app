@@ -51,3 +51,14 @@ export function UseDeleteUser() {
         },
     });
 }
+
+// export function UseSignInUser(userId: any) {
+//     const queryClient = useQueryClient();
+
+//     return useMutation({
+//         mutationFn: usersApi.createUser,
+//         onSuccess: async () => {
+//             await queryClient.invalidateQueries({ queryKey: ["user-info"], type: 'all' });
+//         },
+//     });
+// };

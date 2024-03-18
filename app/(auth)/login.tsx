@@ -5,21 +5,31 @@ import { useAuth } from '@/context/authContext'
 import AppButton from '@/modules/shared/AppButton'
 import { UseDeleteUser } from '@/hooks/useAPI'
 import { LoaderScreen } from 'react-native-ui-lib'
+import {
+  GoogleSignin,
+  User as GoogleUserInfo,
+  statusCodes,
+} from '@react-native-google-signin/google-signin'
 
 export default function login() {
   const router = useRouter()
 
-  const { currentUser, authState, onLogin, onRegister, onLogout, test, isLoading } = useAuth()
+  const { user, session, onLogin, onRegister, onLogout, isLoading } = useAuth()
 
-  const onGoogleSignIn = async () => {
-    const result = await onLogin!()
+  useEffect(() => {
+    console.log('🍟 login')
 
-    // if (result.error && result.error.status === 404) {
-    //   console.log('🌟', result.error.status)
+    const configureGoogleSignIn = async () => {
+      GoogleSignin.configure({
+        scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
+        webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID, // client ID of type WEB for your server. Required to get the idToken on the user object, and for offline access.
+        iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
+      })
+      console.log('📐 ~ configureGoogleSignIn')
+    }
+    configureGoogleSignIn()
+  }, [])
 
-    //   router.push({ pathname: '/(auth)/register', params: { email: result.email } })
-    // }
-  }
   const deleteMutation = UseDeleteUser()
   const onTestDetele = async () => {
     deleteMutation.mutate('6', {
@@ -29,29 +39,13 @@ export default function login() {
       },
     })
   }
+  const onGoogleSignIn = async () => {
+    await onLogin()
+  }
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      {/* <Button title="ลงชื่อเข้าใช้ด้วย Google" onPress={signIn} /> */}
-      <Text>authenticated: {authState?.authenticated ? 'true' : 'false'}</Text>
-      <Text>authorized: {authState?.authorized ? 'true' : 'false'}</Text>
       <AppButton variant="primary" label="ลงชื่อเข้าใช้ด้วย Google" onPress={onGoogleSignIn} />
-      <AppButton variant="secondary" label="Test" onPress={onGoogleSignIn} />
-      <AppButton variant="secondary" label="Logout" onPress={onLogout} />
-      <AppButton variant="secondary" label="Delete" onPress={onTestDetele} />
-      <AppButton variant="secondary" label="test" onPress={test} />
-
-      {authState?.authenticated && (
-        <View>
-          <Text>Current User</Text>
-          <Text>username: {currentUser?.username}</Text>
-          <Text>email: {currentUser?.email}</Text>
-          <Text>dateOfBirth: {currentUser?.dateOfBirth}</Text>
-          <Text>Auth State</Text>
-          <Text>token: {String(authState?.token).substring(0, 3)}</Text>
-          <Text>authenticated: {authState?.authenticated ? 'true' : 'false'}</Text>
-        </View>
-      )}
     </View>
   )
 }

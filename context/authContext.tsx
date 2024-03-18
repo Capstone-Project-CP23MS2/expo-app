@@ -7,28 +7,144 @@ import {
 } from '@react-native-google-signin/google-signin'
 import { UserResponse } from '@/api/type'
 import { useRouter, useSegments } from 'expo-router'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import usersApi from '@/api/users'
+import { AxiosError, AxiosResponse, isAxiosError } from 'axios'
+import { set } from 'zod'
+
+const TOKEN_KEY = 'my-jwt'
 
 interface AuthProps {
-  currentUser?: UserResponse | null
-  authState?: {
-    token: string | null | undefined
+  user?: UserResponse | null
+  session?: {
+    idToken: string | null | undefined
     authenticated: boolean | null
-    authorized?: boolean | null
-    email?: string | any
   }
-  onRegister?: (newUser: UserResponse) => Promise<any>
-  onLogin?: () => Promise<any>
+  onRegister?: (newUser: UserResponse) => void
+  onLogin?: (args?: { redirectToRegister?: boolean }) => Promise<any>
   onLogout?: () => Promise<any>
   isLoading?: boolean
 }
 
-const TOKEN_KEY = 'my-jwt'
-
 export const AuthContext = createContext<AuthProps>({})
 
 export const useAuth = () => useContext(AuthContext)
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [session, setSession] = useState<{
+    idToken: string | null | undefined
+    authenticated: boolean | null
+  }>({ idToken: null, authenticated: null })
+  const [user, setUser] = useState<UserResponse | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isSignedIn, setIsSignedIn] = useState<boolean>(false)
+
+  const router = useRouter()
+  const rootSegment = useSegments()[0]
+  const queryClient = useQueryClient()
+
+  useEffect(() => {
+    const init = async () => {
+      const isSignedInWithGoogle = await GoogleSignin.isSignedIn()
+      if (!isSignedInWithGoogle) return setIsLoading(false)
+
+      console.log(`😀 You are already logged in with Google.`)
+
+      const { email, idToken } = await googleAuthentication()
+      setSession({
+        authenticated: true,
+        idToken: idToken,
+      })
+      setIsLoading(true)
+      await SecureStore.setItemAsync(TOKEN_KEY, idToken!)
+      console.log('🔐 Authentication with Google success')
+      loginMutation.mutate(undefined, {
+        onSettled: async () => {
+          setIsLoading(false)
+        },
+      })
+    }
+    configureGoogleSignIn()
+
+    init()
+  }, [])
+
+  // useEffect(() => {
+  //   if (!user && rootSegment !== '(auth)') return router.replace('/(auth)/login')
+  //   if (user && rootSegment !== '(app)') return router.replace('/(app)/(tabs)')
+  // }, [user, rootSegment])
+
+  const register = async (newUser: UserResponse) => {
+    setUser(newUser)
+    router.push('/(app)/(tabs)')
+  }
+
+  const loginMutation = useMutation({
+    mutationFn: usersApi.getMyUserInfo,
+    onSuccess: async user => {
+      await queryClient.invalidateQueries({ queryKey: ['user-info'] })
+      setUser(user)
+      router.replace('/(app)/(tabs)/')
+    },
+  })
+
+  const login = async ({ redirectToRegister = true } = {}) => {
+    const isSignedInWithGoogle = await GoogleSignin.isSignedIn()
+    if (isSignedInWithGoogle) logout()
+
+    const { email, idToken } = await googleAuthentication()
+    setSession({
+      authenticated: true,
+      idToken: idToken,
+    })
+
+    setIsLoading(true)
+    await SecureStore.setItemAsync(TOKEN_KEY, idToken!)
+    console.log('🔐 Authentication with Google success')
+    loginMutation.mutate(undefined, {
+      onError: async (error: Error | AxiosError) => {
+        if (!isAxiosError(error)) return
+        if (error.response?.status === 404) {
+          router.push({
+            pathname: '/(auth)/register',
+            params: { email },
+          })
+        }
+      },
+      onSettled: async () => {
+        setIsLoading(false)
+      },
+    })
+  }
+
+  const logout = async () => {
+    setIsLoading(true)
+    console.log('🔓 Logout')
+
+    setSession({
+      idToken: null,
+      authenticated: false,
+    })
+    setUser(null)
+    GoogleSignin.revokeAccess()
+    GoogleSignin.signOut()
+    await SecureStore.deleteItemAsync(TOKEN_KEY)
+    queryClient.removeQueries({ queryKey: ['user-info'] })
+
+    setIsLoading(false)
+  }
+
+  const value = {
+    user,
+    onRegister: register,
+    onLogin: login,
+    onLogout: logout,
+    session,
+    isLoading: isLoading,
+  }
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
 
 const configureGoogleSignIn = async () => {
   GoogleSignin.configure({
@@ -36,149 +152,41 @@ const configureGoogleSignIn = async () => {
     webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID, // client ID of type WEB for your server. Required to get the idToken on the user object, and for offline access.
     iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
   })
-  console.log('📐 ~ configureGoogleSignIn')
 }
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [authState, setAuthState] = useState<{
-    token: string | null | undefined
-    authenticated: boolean | null
-    authorized?: boolean | null
-    email?: string | any
-  }>({ token: null, authenticated: null })
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const router = useRouter()
-  const rootSegment = useSegments()[0]
-  const queryClient = useQueryClient()
-  const {
-    data: currentUser,
-    isLoading: isUserInfoLoading,
-    error,
-    refetch,
-  } = useQuery<UserResponse>({
-    queryKey: ['user-info'],
-    queryFn: usersApi.getMyUserInfo,
-    enabled: !!authState.token,
-    retry: 0,
-  })
 
-  // useEffect(() => {
-  //   if (error?.message === 'Request failed with status code 404') {
-  //     return router.push('/(auth)/register')
-  //   }
-  // }, [error])
+const googleAuthentication = async () => {
+  try {
+    await GoogleSignin.hasPlayServices()
 
-  useEffect(() => {
-    async function init() {
-      const isSignedInWithGoogle = await GoogleSignin.isSignedIn()
-      console.log(`😀 You are already logged in with Google.`)
-      if (!isSignedInWithGoogle) return
-      await login()
-    }
-    configureGoogleSignIn()
-    init()
-    setIsLoading(false)
-  }, [])
+    const isSignedInWithGoogle = await GoogleSignin.isSignedIn()
+    let signInFuction = isSignedInWithGoogle ? GoogleSignin.signInSilently : GoogleSignin.signIn
 
-  useEffect(() => {
-    if (!currentUser && rootSegment !== '(auth)') return router.replace('/(auth)/login')
-    if (currentUser && rootSegment !== '(app)') return router.replace('/(app)/(tabs)')
-  }, [currentUser, rootSegment])
+    const {
+      idToken,
+      user: { email },
+    }: GoogleUserInfo = await signInFuction()
 
-  const googleAuthentication = async ({ mode = 'normal' }: { mode: 'normal' | 'silently' }) => {
-    try {
-      await GoogleSignin.hasPlayServices()
-      let token, userEmail
-      if (mode === 'normal') {
-        const {
-          idToken,
-          user: { email },
-        }: GoogleUserInfo = await GoogleSignin.signIn()
-        token = idToken
-        userEmail = email
-      }
+    await SecureStore.setItemAsync(TOKEN_KEY, idToken!)
+    console.log('🔐 Authentication with Google success')
 
-      const {
-        idToken,
-        user: { email },
-      }: GoogleUserInfo = await GoogleSignin.signInSilently()
-      token = idToken
-      userEmail = email
-      setAuthState({
-        ...authState,
-        authenticated: true,
-        token: token,
-        email: userEmail,
-      })
-
-      await SecureStore.setItemAsync(TOKEN_KEY, idToken!)
-      console.log('🔐 Authentication with Google success')
-    } catch (error: any) {
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // user cancelled the login flow
-        console.log('🚨 ~ googleSignIn ~ user cancelled the login flow')
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation (e.g. sign in) is in progress already
-        console.log('🚨 ~ googleSignIn ~ operation (e.g. sign in) is in progress already')
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        // play services not available or outdated
-        console.log('🚨 ~ googleSignIn ~ play services not available or outdated')
-      } else if (error.code === statusCodes.SIGN_IN_REQUIRED) {
-        console.log(
-          '🚨 ~ googleSignIn ~ Useful for use with signInSilently() - no user has signed in yet',
-        )
-      } else {
-        // some other error happened
-        console.log('🚨 ~ googleSignIn ~ some other error happened')
-      }
+    return { email, idToken }
+  } catch (error: any) {
+    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+      // user cancelled the login flow
+      console.log('🚨 ~ googleSignIn ~ user cancelled the login flow')
+    } else if (error.code === statusCodes.IN_PROGRESS) {
+      // operation (e.g. sign in) is in progress already
+      console.log('🚨 ~ googleSignIn ~ operation (e.g. sign in) is in progress already')
+    } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+      // play services not available or outdated
+      console.log('🚨 ~ googleSignIn ~ play services not available or outdated')
+    } else if (error.code === statusCodes.SIGN_IN_REQUIRED) {
+      console.log(
+        '🚨 ~ googleSignIn ~ Useful for use with signInSilently() - no user has signed in yet',
+      )
+    } else {
+      // some other error happened
+      console.log('🚨 ~ googleSignIn ~ some other error happened')
     }
   }
-
-  const register = async (newUser: UserResponse) => {
-    // setUser(newUser)
-    setAuthState({
-      ...authState,
-      authenticated: true,
-    })
-    router.push('/(app)/(tabs)/activities')
-  }
-
-  const login = async () => {
-    try {
-      setIsLoading(true)
-      await googleAuthentication({ mode: 'normal' })
-      const { error: loginError, isError: isLoginError } = await refetch()
-      if (loginError && loginError.response.status === 502) throw new Error('User not found')
-    } catch (e: Error | any) {
-      if (e.message === 'User not found') {
-        console.log('🚨 ~ login ~ user not found ')
-        return router.push({ pathname: '/(auth)/register', params: { email: authState.email } })
-      }
-      console.log(e)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const logout = async () => {
-    // Call your API
-    setAuthState({
-      token: null,
-      authenticated: false,
-    })
-    GoogleSignin.revokeAccess()
-    GoogleSignin.signOut()
-    await SecureStore.deleteItemAsync(TOKEN_KEY)
-    queryClient.removeQueries({ queryKey: ['user-info'] })
-  }
-
-  const value = {
-    currentUser,
-    onRegister: register,
-    onLogin: login,
-    onLogout: logout,
-    authState,
-    isLoading: isLoading || isUserInfoLoading,
-  }
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

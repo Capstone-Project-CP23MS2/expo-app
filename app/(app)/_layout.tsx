@@ -9,11 +9,14 @@ type Props = {}
 
 const AppEntry = (props: Props) => {
   const router = useRouter()
-  const { data: userInfo, isLoading: isUserInfoLoading } = UseGetMyUserInfo()
-  const { authState, isLoading } = useAuth()
+  // const { data: userInfo, isLoading: isUserInfoLoading } = UseGetMyUserInfo()
+  const { user, isLoading } = useAuth()
 
-  if (isLoading || isUserInfoLoading) {
+  if (isLoading) {
     return <LoaderScreen />
+  }
+  if (!user) {
+    return <Redirect href="/(auth)/login" />
   }
   // useEffect(() => {
   //   console.log('🚀 ~ authState:', authState)

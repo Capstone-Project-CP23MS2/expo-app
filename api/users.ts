@@ -65,14 +65,14 @@ class UsersApi {
     }
 
     async createUser(users: FormData) {
-        const { data } = await apiClient.post<UserResponse>('/users', users, {
+        const { data: user } = await apiClient.post<UserResponse>('/users', users, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 // "Content-Type": "application/json"
                 // requiresToken: false
             },
         });
-        return data;
+        return user;
     }
     async deleteUser(id: string | number) {
         await apiClient.delete(`/users/${id}`);
