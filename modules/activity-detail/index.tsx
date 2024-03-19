@@ -11,7 +11,6 @@ import Animated, {
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { COLORS, FONT, SIZES } from '@/constants'
 import Colors from '@/constants/Colors'
-import useFetch from '@/hooks/useFetch'
 import dayjs from 'dayjs'
 import { defaultStyles } from '@/constants/Styles'
 import {
@@ -23,9 +22,10 @@ import {
 import ActivityFooter from '@/modules/activity-detail/components/ActivityFooter'
 import { Button, Chip, Modal, Portal, PaperProvider, Icon, Card } from 'react-native-paper'
 import { UseDeleteActivity, UseGetActivity, UseGetActivityParticipants } from '@/hooks/useAPI'
-import { useAuth } from '@/context/auth'
+
 import AppButton from '@/modules/shared/AppButton'
 import JoinButton from './components/JoinButton'
+import { useAuth } from '@/context/authContext'
 type Props = {}
 
 const Page = (props: Props) => {
@@ -69,7 +69,9 @@ const Page = (props: Props) => {
     gap: 5,
   }
 
-  const isParticipant = participants?.some(participant => participant.userId === user?.userId)
+  const isParticipant = participants?.some(
+    participant => participant.userId === user?.userId,
+  )
   const [refreshing, setRefreshing] = useState(false)
 
   const onRefresh = useCallback(async () => {
@@ -239,7 +241,11 @@ const Page = (props: Props) => {
         {user?.userId === activity?.hostUserId ? (
           <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
         ) : (
-          <JoinButton userId={user?.userId} activityId={activityId} isParticipant={isParticipant} />
+          <JoinButton
+            userId={user?.userId}
+            activityId={activityId}
+            isParticipant={isParticipant}
+          />
         )}
       </View>
     </PaperProvider>

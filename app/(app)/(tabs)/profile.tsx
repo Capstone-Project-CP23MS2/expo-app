@@ -1,4 +1,5 @@
-import { useAuth } from '@/context/auth'
+import { useAuth } from '@/context/authContext'
+import { UseDeleteUser } from '@/hooks/useAPI'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import { SafeAreaView, Modal, StyleSheet, View } from 'react-native'
@@ -6,13 +7,16 @@ import { Button, Text } from 'react-native-ui-lib'
 type Props = {}
 
 const Page = (props: Props) => {
-  const { user, signIn, signOut, email } = useAuth()
+  const { user, onLogout } = useAuth()
   const router = useRouter()
+  const deleteMutation = UseDeleteUser()
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text md>userId: {user?.userId!}</Text>
-      <Text md>username: {user?.userName!}</Text>
-      <Text md>email: {user?.email!}</Text>
+      <Text md>userId: {user?.userId}</Text>
+      <Text md>username: {user?.username}</Text>
+      <Text md>email: {user?.email}</Text>
+      <Text md>dob: {user?.dateOfBirth}</Text>
 
       {/* <View style={styles.header}>
         <Text style={styles.headerText}>Tasks</Text>
@@ -28,7 +32,7 @@ const Page = (props: Props) => {
           <AddTaskForm onAddTask={handleAddTask} />
         </View>
       </Modal> */}
-      <Button label="Sign Out" onPress={signOut} />
+      <Button label="Sign Out" onPress={onLogout} />
     </SafeAreaView>
   )
 }

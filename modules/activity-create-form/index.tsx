@@ -25,7 +25,7 @@ import { Colors, Picker } from 'react-native-ui-lib'
 import errorMap from 'zod/lib/locales/en'
 import { TextInput as TextInputPaper } from 'react-native-paper'
 import AppButton from '../shared/AppButton'
-import { useAuth } from '@/context/auth'
+import { useAuth } from '@/context/authContext'
 
 type Props = {}
 type ActivityData = {
@@ -300,7 +300,7 @@ const CreateActivity = (props: Props) => {
 
       <View style={styles.footer}>
         <AppButton variant="secondary" label="🔮 preset (test)" onPress={usePreset} />
-        <AppButton variant="primary" label="🎉 เพิ่มกิจกรรม" onPress={onSummit} fullWidth />
+        <AppButton variant="primary" label="🎉 เพิ่มกิจกรรม" onPress={() => onSummit()} fullWidth />
       </View>
     </KeyboardAvoidingWrapper>
   )

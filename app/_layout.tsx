@@ -18,10 +18,10 @@ import useAppLoading from '@/hooks/useAppLoading'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { StatusBar } from 'expo-status-bar'
 import Auth from '@/modules/auth/Auth'
-import { AuthProvider } from '@/context/auth'
 import { DesignSystem } from '@/utils/design-system'
 
 import 'utils/unistyles'
+import { AuthProvider } from '@/context/authContext'
 
 // Create a client
 const queryClient = new QueryClient({

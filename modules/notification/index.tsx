@@ -3,20 +3,36 @@ import React, { useState } from 'react'
 import { Picker } from '@react-native-picker/picker'
 import { Link } from 'expo-router'
 import { UseGetUserByEmail, UseGetUsers } from '@/hooks/useAPI'
+import useAsyncStorage from '@/hooks/useAsyncStorage'
+import AppButton from '../shared/AppButton'
+import { useAsyncStorage3 } from '@/hooks/useAsyncStorage3'
+import { set } from 'zod'
 
 type Props = {}
 
 const Page = (props: Props) => {
   const [selectedLanguage, setSelectedLanguage] = useState()
-  const { data: usersData, isLoading: isLoadingUsers } = UseGetUsers()
-  const { content: users } = usersData || {}
-  console.log(users)
+  // const { value, getStorageItem, setStorageItem } = useAsyncStorage('@myData', 'defaultValue')
+  const { data, setNewData } = useAsyncStorage3({ key: '@myData', initialValue: 'defaultValue' })
+
+  console.log(data)
+
+  // setStore('test2')
+  // const { data: usersData, isLoading: isLoadingUsers } = UseGetUsers()
+  // const { content: users } = usersData || {}
+  // console.log(users)
 
   return (
     <View>
       {/* TODO */}
       <Text>Noti Page</Text>
-
+      <Text>{data}</Text>
+      {/* <Text>{storeValue}</Text> */}
+      <AppButton
+        label="setStorageItem"
+        variant="primary"
+        onPress={() => console.log(setNewData('changed'))}
+      />
       <Picker
         selectedValue={selectedLanguage}
         onValueChange={(itemValue, itemIndex) => setSelectedLanguage(itemValue)}

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createUser, getUser, getUserByEmail, getUsers } from '@/api/users';
+import usersApi, { createUser, deleteUser, getUser, getUserByEmail, getUsers } from '@/api/users';
 
 export function UseGetUsers() {
     return useQuery({
@@ -22,14 +22,43 @@ export function UseGetUserByEmail(email: any) {
     });
 };
 
+export function UseGetMyUserInfo() {
+    return useQuery({
+        queryKey: ['user-info'],
+        queryFn: () => usersApi.getMyUserInfo(),
+    });
+};
+
+
 export function UseCreateUser() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationKey: ['users'],
-        mutationFn: createUser,
+        mutationFn: usersApi.createUser,
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: ["user-info"], type: 'all' });
+        },
+    });
+};
+
+export function UseDeleteUser() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: deleteUser,
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ["users"] });
         },
     });
-};
+}
+
+// export function UseSignInUser(userId: any) {
+//     const queryClient = useQueryClient();
+
+//     return useMutation({
+//         mutationFn: usersApi.createUser,
+//         onSuccess: async () => {
+//             await queryClient.invalidateQueries({ queryKey: ["user-info"], type: 'all' });
+//         },
+//     });
+// };

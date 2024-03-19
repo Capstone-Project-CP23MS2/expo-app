@@ -1,11 +1,10 @@
 import { COLORS, FONT, SIZES } from '@/constants'
-import useFetch from '@/hooks/useFetch'
 import { Link, Stack, useRouter } from 'expo-router'
 import { View, Text, StyleSheet, Pressable, ActivityIndicator, Button } from 'react-native'
 
-import { BaseButton, ScrollView, TextInput } from 'react-native-gesture-handler'
+import { BaseButton, RefreshControl, ScrollView, TextInput } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import axios, { AxiosResponse } from 'axios'
 
@@ -28,6 +27,14 @@ const index = (props: Props) => {
   // console.log(activities);
   const { data, isLoading, isError, error, refetch } = UseGetActivities({})
   const { content: activities, first, totalPages } = data || {}
+
+  const [refreshing, setRefreshing] = useState(false)
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true)
+    refetch()
+    setRefreshing(false)
+  }, [])
 
   function ActivityTitle() {
     return (
@@ -63,7 +70,10 @@ const index = (props: Props) => {
           // ),
         }}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
         <View style={styles.container}>
           <View style={styles.cardsContainer}>
             {isLoading ? (

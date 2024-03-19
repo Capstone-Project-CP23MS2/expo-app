@@ -19,7 +19,7 @@ const TabsLayout = (props: Props) => {
       }}
     >
       <Tabs.Screen
-        name="activities"
+        name="index"
         options={{
           tabBarLabel: 'Activities',
           headerShown: false,
@@ -59,6 +59,16 @@ const TabsLayout = (props: Props) => {
         name="profile"
         options={{
           tabBarLabel: 'Profile',
+          // headerShown: false, // Hide the header
+          tabBarIcon: ({ size, color }) => (
+            <MaterialIcons name="account-circle" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="dev"
+        options={{
+          tabBarLabel: 'Dev',
           // headerShown: false, // Hide the header
           tabBarIcon: ({ size, color }) => (
             <MaterialIcons name="account-circle" size={size} color={color} />

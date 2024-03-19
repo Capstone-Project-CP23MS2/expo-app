@@ -11,7 +11,6 @@ import Animated, {
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { COLORS, FONT } from '@/constants'
 import Colors from '@/constants/Colors'
-import useFetch from '@/hooks/useFetch'
 import dayjs from 'dayjs'
 import { defaultStyles } from '@/constants/Styles'
 import { TouchableOpacity, BaseButton } from 'react-native-gesture-handler'
