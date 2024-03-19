@@ -10,69 +10,43 @@ const TabsLayout = (props: Props) => {
   return (
     <Tabs
       screenOptions={{
+        tabBarShowLabel: false,
         tabBarActiveTintColor: COLORS.black,
-        // tabBarLabelStyle: {
-        // fontFamily: FONT.semiBold,
-        // },
-        tabBarLabelStyle: styles.tabBar,
-        // tabBarShowLabel: false,
+        tabBarHideOnKeyboard: true,
+        tabBarStyle: {
+          bottom: 0,
+          right: 0,
+          left: 0,
+          elevation: 0,
+          height: 60,
+          backgroundColor: COLORS.white,
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          tabBarLabel: 'Activities',
           headerShown: false,
           tabBarIcon: ({ size, color }) => (
-            <MaterialIcons name="directions-run" size={size} color={color} />
+            <MaterialIcons name="view-list" size={size} color={color} />
           ),
         }}
       />
-      {/* <Tabs.Screen
-        name="demo"
-        options={{
-          tabBarLabel: 'Explore',
-          tabBarIcon: ({ size, color }) => (
-            <MaterialIcons name="search" size={size} color={color} />
-          ),
-        }}
-      /> */}
-      <Tabs.Screen
-        name="whishlists"
-        options={{
-          tabBarLabel: 'Wishlists',
-          tabBarIcon: ({ size, color }) => (
-            <MaterialIcons name="inventory" size={size} color={color} />
-          ),
-        }}
-      />
-      {/* <Tabs.Screen
-        name="notification"
-        options={{
-          tabBarLabel: 'Inbox',
-          headerShown: true,
-          tabBarIcon: ({ size, color }) => (
-            <MaterialIcons name="forward-to-inbox" size={size} color={color} />
-          ),
-        }}
-      /> */}
-      {/* <Tabs.Screen
-        name="profile"
-        options={{
-          tabBarLabel: 'Profile',
-          // headerShown: false, // Hide the header
-          tabBarIcon: ({ size, color }) => (
-            <MaterialIcons name="account-circle" size={size} color={color} />
-          ),
-        }}
-      /> */}
+
       <Tabs.Screen
         name="dev"
         options={{
-          tabBarLabel: 'Dev',
-          // headerShown: false, // Hide the header
           tabBarIcon: ({ size, color }) => (
             <MaterialIcons name="account-circle" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name="whishlists"
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <MaterialIcons name="inventory" size={size} color={color} />
           ),
         }}
       />

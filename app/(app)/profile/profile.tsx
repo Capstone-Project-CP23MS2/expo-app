@@ -4,6 +4,9 @@ import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import { SafeAreaView, Modal, StyleSheet, View } from 'react-native'
 import { Button, Text } from 'react-native-ui-lib'
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
+import { SIZES } from '@/constants'
+
 type Props = {}
 
 const Page = (props: Props) => {
@@ -13,32 +16,24 @@ const Page = (props: Props) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text md>userId: {user?.userId}</Text>
-      <Text md>username: {user?.username}</Text>
-      <Text md>email: {user?.email}</Text>
-      <Text md>dob: {user?.dateOfBirth}</Text>
-
-      {/* <View style={styles.header}>
-        <Text style={styles.headerText}>Tasks</Text>
-        <Button title="Add Task" onPress={() => setModalVisible(true)} />
-      </View>
-      <TaskList tasks={tasks} />
-      <Modal
-        animationType="slide"
-        transparent={false}
-        visible={isModalVisible}
-        onRequestClose={() => setModalVisible(false)}>
-        <View style={styles.modalContainer}>
-          <AddTaskForm onAddTask={handleAddTask} />
+      <View style={styles.content}>
+        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+          <MaterialIcons name="account-circle" size={100} color={'black'} />
+          <Text style={{ fontWeight: 'bold', fontSize: SIZES.large }}>{user?.username}</Text>
+          <Text md>{user?.email}</Text>
         </View>
-      </Modal> */}
-      <Button label="Sign Out" onPress={onLogout} />
+        <Button label="Sign Out" onPress={onLogout} />
+      </View>
     </SafeAreaView>
   )
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  content: {
+    padding: 20,
+    gap: 5,
   },
   header: {
     flexDirection: 'row',
@@ -54,6 +49,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     padding: 16,
+  },
+  text: {
+    width: '100%',
+    height: 48,
+    borderColor: 'gray',
+    borderWidth: 1,
+    borderRadius: 5,
+    justifyContent: 'center',
+    paddingLeft: 15,
   },
 })
 
