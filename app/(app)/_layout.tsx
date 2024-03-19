@@ -26,7 +26,7 @@ const AppEntry = (props: Props) => {
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       {/* <Stack.Screen name="(tabs)/activities" options={{ headerShown: false }} /> */}
       <Stack.Screen name="activities/[id]" options={{ headerTitle: 'Activities' }} />
-      <Stack.Screen name="activities/create-form" options={{ headerTitle: 'Activities' }} />
+      <Stack.Screen name="activities/create-form" options={{ headerTitle: 'Create Activity' }} />
     </Stack>
   )
 }

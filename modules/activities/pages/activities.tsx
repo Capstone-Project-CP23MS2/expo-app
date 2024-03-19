@@ -69,6 +69,7 @@ const index = (props: Props) => {
       />
       <ScrollView
         showsVerticalScrollIndicator={false}
+        style={{ backgroundColor: 'white' }}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         <View style={styles.container}>
@@ -113,7 +114,7 @@ export default index
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: COLORS.lightWhite,
+    backgroundColor: 'white',
     elevation: 4,
     shadowColor: '#000',
     shadowOffset: {

@@ -19,7 +19,10 @@ const TabsLayout = (props: Props) => {
           left: 0,
           elevation: 0,
           height: 60,
-          backgroundColor: COLORS.white,
+          backgroundColor: 'white',
+          shadowOffset: { width: 5, height: 5 },
+          shadowColor: 'gray',
+          shadowRadius: 1,
         },
       }}
     >
