@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Button, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Button, Pressable, Platform, StatusBar } from 'react-native'
 import { useEffect, useState } from 'react'
 import { BaseButton, ScrollView, TextInput } from 'react-native-gesture-handler'
 import { COLORS, FONT, SIZES } from '@/constants'
@@ -26,6 +26,9 @@ import errorMap from 'zod/lib/locales/en'
 import { TextInput as TextInputPaper } from 'react-native-paper'
 import AppButton from '../shared/AppButton'
 import { useAuth } from '@/context/authContext'
+import { white } from 'react-native-paper/lib/typescript/styles/themes/v2/colors'
+
+const dropdownIcon = <MaterialIcons name="arrow-drop-down" size={30} color="black" />
 
 type Props = {}
 type ActivityData = {
@@ -74,7 +77,7 @@ const CreateActivity = (props: Props) => {
     createMutation.mutate(objToFormData(activityData), {
       onSuccess: () => {
         console.log('onSuccess in CreateActivityPage')
-        router.push('/(app)/(tabs)/activities')
+        router.push('/(app)/(tabs)/')
       },
       onError: error => {
         console.log('error')
@@ -95,212 +98,135 @@ const CreateActivity = (props: Props) => {
 
   return (
     <KeyboardAvoidingWrapper>
-      <ScrollView
-        // contentContainerStyle={{ flex: 1 }}
-        showsVerticalScrollIndicator={false}
-      >
+      <ScrollView style={{ backgroundColor: 'white' }} showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <Text>กิจกรรม</Text>
-          <Controller
-            control={control}
-            name="categoryId"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Picker
-                placeholder={'เลือกประเภทกิจกรรม'}
-                // floatingPlaceholder
-                value={value}
-                enableModalBlur={false}
-                onChange={onChange}
-                onBlur={onBlur}
-                topBarProps={{ title: 'Categories' }}
-                showSearch
-                searchPlaceholder={'Search a category'}
-                searchStyle={{
-                  color: Colors.blue30,
-                  placeholderTextColor: Colors.grey50,
-                }}
-              >
-                {categories?.map(category => (
-                  <Picker.Item
-                    key={category.categoryId}
-                    value={category.categoryId}
-                    label={category.name}
-                  />
-                ))}
-              </Picker>
-            )}
-          />
-          {/* <Controller
-            control={control}
-            name="hostUserId"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Picker
-                placeholder={'Host User (only sprint 1)'}
-                floatingPlaceholder
-                value={value}
-                enableModalBlur={false}
-                onChange={onChange}
-                onBlur={onBlur}
-                topBarProps={{ title: 'Users' }}
-                showSearch
-                searchPlaceholder={'Search a user'}
-                searchStyle={{
-                  color: Colors.blue30,
-                  placeholderTextColor: Colors.grey50,
-                }}
-              >
-                {users?.map(user => (
-                  <Picker.Item key={user.userId} value={user.userId} label={user.username} />
-                ))}
-              </Picker>
-            )}
-          /> */}
-          <Controller
-            control={control}
-            name="title"
-            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
-              <AppTextInput
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                error={error}
-                placeholder="ชื่อกิจกรรม"
-                showCharCounter
-                maxLength={30}
-                // icon={<MaterialIcons name="title" size={24} color="black" />}
-                iconName="title"
+          <View style={{ gap: 5, marginBottom: 10 }}>
+            <Text>Activity Title</Text>
+            <Controller
+              control={control}
+              name="title"
+              render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+                <AppTextInput
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  error={error}
+                  placeholder="eg. KMUTT Basketball"
+                />
+              )}
+            />
+          </View>
+          <View style={{ gap: 5, marginBottom: 10 }}>
+            <Text>Category</Text>
+            <View style={styles.textinput}>
+              <Controller
+                control={control}
+                name="categoryId"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Picker
+                    placeholder={'select your category'}
+                    value={value}
+                    enableModalBlur={false}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    topBarProps={{ title: 'Categories' }}
+                    searchPlaceholder={'Search a category'}
+                    searchStyle={{ color: Colors.blue30, placeholderTextColor: Colors.grey50 }}
+                    trailingAccessory={dropdownIcon}
+                  >
+                    {categories?.map(category => (
+                      <Picker.Item
+                        key={category.categoryId}
+                        value={category.categoryId}
+                        label={category.name}
+                      />
+                    ))}
+                  </Picker>
+                )}
               />
-            )}
-          />
-          {/* <TextInputPaper
-            mode="outlined"
-            dense
-            placeholder="Dense outlined input without label"
-            // label="Password"
-            // secureTextEntry
-            left={<TextInputPaper.Icon icon="eye" />}
-          /> */}
-          {/* <Controller
-            control={control}
-            name="title"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextField
-                placeholder={'Placeholder'}
-                floatingPlaceholder
-                onChangeText={onChange}
-                value={value}
-                enableErrors
-                validationMessage={'Field is required'}
-                showCharCounter
-                maxLength={30}
-              />
-            )}
-          /> */}
-          <Controller
-            control={control}
-            name="place"
-            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
-              <AppTextInput
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                error={error}
-                placeholder="สถานที่"
-                showCharCounter
-                maxLength={30}
-                icon={<MaterialIcons name="place" size={24} color="black" />}
-                iconName="place"
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="dateTime"
-            render={({ field: { onChange, onBlur, value } }) => {
-              // console.log(value);
-              // console.log(typeof value);
-
-              return <FormDatetimePicker value={value} onChangeDatetime={onChange} />
-            }}
-          />
-          <Controller
-            control={control}
-            name="duration"
-            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
-              <AppTextInput
-                keyboardType="numeric"
-                value={value || value === 0 ? value.toString() : ''}
-                onBlur={onBlur}
-                onChangeText={text => onChange(parseInt(text, 10))}
-                error={error}
-                placeholder="ระยะเวลา"
-                icon={<MaterialIcons name="schedule" size={24} color="black" />}
-                iconName="schedule"
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="noOfMembers"
-            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
-              <AppTextInput
-                keyboardType="numeric"
-                value={value || value === 0 ? value.toString() : ''}
-                onBlur={onBlur}
-                onChangeText={text => onChange(parseInt(text, 10))}
-                error={error}
-                placeholder="จำนวนคน"
-                icon={<MaterialIcons name="people" size={24} color="black" />}
-                iconName="people"
-              />
-            )}
-          />
-          <Controller
-            control={control}
-            name="description"
-            render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
-              <AppTextInput
-                value={value}
-                onBlur={onBlur}
-                onChangeText={onChange}
-                placeholder="รายละเอียดกิจกรรม"
-                error={error}
-                showCharCounter
-                maxLength={500}
-                icon={<MaterialIcons name="note" size={24} color="black" />}
-                iconName="note"
-              />
-            )}
-          />
-          {/* test button */}
-          <View style={{ flex: 1, gap: 6 }}>
-            <Button title="Submit" onPress={onSummit} />
-            {Boolean(0) && <Button title="Get Value" onPress={() => console.log(getValues())} />}
-            {Boolean(0) && (
-              <Button
-                title="Get Status"
-                onPress={() => console.log({ isValid, isSubmitting, isDirty })}
-              />
-            )}
-            {Boolean(1) && <Button title="Get Errors" onPress={() => console.log(errors)} />}
-            {Boolean(0) && (
-              <Button title="Field Status" onPress={() => console.log(getFieldState('title'))} />
-            )}
-            {Boolean(1) && (
-              <Button
-                title="Test"
-                onPress={() => {
-                  console.log(getValues())
-                }}
-              />
-            )}
+            </View>
+          </View>
+          <View style={{ gap: 5, marginBottom: 10 }}>
+            <Text>Location</Text>
+            <Controller
+              control={control}
+              name="place"
+              render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+                <AppTextInput
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  error={error}
+                  placeholder="eg. KMUTT Sport Center"
+                />
+              )}
+            />
+          </View>
+          <View style={{ gap: 5, marginBottom: 10 }}>
+            <Text>Date Time</Text>
+            <Controller
+              control={control}
+              name="dateTime"
+              render={({ field: { onChange, onBlur, value } }) => {
+                return <FormDatetimePicker value={value} onChangeDatetime={onChange} />
+              }}
+            />
+          </View>
+          <View style={{ gap: 5, marginBottom: 10 }}>
+            <Text>Duration (Minutes)</Text>
+            <Controller
+              control={control}
+              name="duration"
+              render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+                <AppTextInput
+                  keyboardType="numeric"
+                  value={value || value === 0 ? value.toString() : ''}
+                  onBlur={onBlur}
+                  onChangeText={text => onChange(parseInt(text, 10))}
+                  error={error}
+                  placeholder="eg. 20"
+                />
+              )}
+            />
+          </View>
+          <View style={{ gap: 5, marginBottom: 10 }}>
+            <Text>Total Member</Text>
+            <Controller
+              control={control}
+              name="noOfMembers"
+              render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+                <AppTextInput
+                  keyboardType="numeric"
+                  value={value || value === 0 ? value.toString() : ''}
+                  onBlur={onBlur}
+                  onChangeText={text => onChange(parseInt(text, 10))}
+                  error={error}
+                  placeholder="eg. 2"
+                  iconName="people"
+                />
+              )}
+            />
+          </View>
+          <View style={{ gap: 5, marginBottom: 10 }}>
+            <Text>Description</Text>
+            <Controller
+              control={control}
+              name="description"
+              render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
+                <AppTextInput
+                  value={value}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  placeholder="eg. anyone can join our activity !"
+                />
+              )}
+            />
           </View>
         </View>
       </ScrollView>
-
       <View style={styles.footer}>
-        <AppButton variant="secondary" label="🔮 preset (test)" onPress={usePreset} />
-        <AppButton variant="primary" label="🎉 เพิ่มกิจกรรม" onPress={() => onSummit()} fullWidth />
+        {/* <AppButton variant="primary" label="Preset" onPress={usePreset} /> */}
+        <AppButton variant="primary" label="Create Activity" onPress={() => onSummit()} fullWidth />
       </View>
     </KeyboardAvoidingWrapper>
   )
@@ -312,10 +238,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: 'white',
   },
   label: {
     fontSize: 18,
-    // marginVertical: 8,
   },
   input: {
     borderWidth: 1,
@@ -328,11 +254,8 @@ const styles = StyleSheet.create({
   addBtn: {
     flex: 1,
     backgroundColor: COLORS.primary,
-    // height: '100%',
-
     justifyContent: 'center',
     alignItems: 'center',
-    // // marginLeft: SIZES.medium,
     borderRadius: SIZES.medium,
     padding: 12,
   },
@@ -354,14 +277,20 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-    // height: 60,
-    backgroundColor: '#fff',
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    // borderTopColor: Colors.grey,
-    // borderTopWidth: StyleSheet.hairlineWidth,
-    // flex: 1,
+    position: 'absolute',
+    bottom: 0,
+    paddingVertical: 20,
+    paddingHorizontal: 20,
     flexDirection: 'row',
     gap: 10,
+  },
+  textinput: {
+    width: '100%',
+    height: 48,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    justifyContent: 'center',
+    paddingLeft: 15,
   },
 })

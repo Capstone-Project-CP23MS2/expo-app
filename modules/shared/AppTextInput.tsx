@@ -42,22 +42,8 @@ const Input = ({
   return (
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
-      <View
-        style={[
-          styles.inputContainer,
-          // {
-          //   borderColor: error ? COLORS.red : isFocused ? COLORS.darkBlue : COLORS.light,
-          // },
-        ]}
-      >
-        {/* <Icon name={iconName} style={{ color: COLORS.darkBlue, fontSize: 22, marginRight: 10 }} /> */}
-        <MaterialIcons
-          name={iconName}
-          style={styles.icon}
-          // size={size}
-          // color={color}
-        />
-        {/* {icon && <View style={{ marginRight: 10 }}>{icon}</View>} */}
+      <View style={styles.inputContainer}>
+        {icon && <MaterialIcons name={iconName} style={[styles.icon]} />}
         <TextInput
           style={styles.input}
           onChangeText={onChangeText}
@@ -65,6 +51,7 @@ const Input = ({
           autoCorrect={false}
           secureTextEntry={hidePassword}
           editable={!disabled}
+          placeholderTextColor="#c0c0c0"
           {...props}
         />
         {password && (
@@ -72,54 +59,44 @@ const Input = ({
             onPress={() => setHidePassword(!hidePassword)}
             name={hidePassword ? 'visibility' : 'visibility-off'}
             style={{ color: COLORS.darkBlue, fontSize: 22, marginRight: 10 }}
-            // size={size}
-            // color={color}
           />
         )}
       </View>
 
-      <View style={styles.helpersWrapper}>
-        <Text style={styles.helper}>{error?.message}</Text>
-        {showCharCounter && (
+      {showCharCounter && (
+        <View style={styles.helpersWrapper}>
+          <Text style={styles.helper}>{error?.message}</Text>
           <Text style={styles.counterHelper}>
             {value?.length || 0} / {maxLength}
           </Text>
-        )}
-      </View>
+        </View>
+      )}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 6,
+    // marginBottom: 6,
   },
-
   label: {
-    // marginVertical: 5,
     fontSize: 14,
-    // color: COLORS.grey,
   },
   inputContainer: {
     height: 48,
-    // backgroundColor: COLORS.light,
     alignItems: 'center',
     flexDirection: 'row',
     paddingHorizontal: 15,
     borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 12,
+    borderColor: '#c0c0c0',
+    borderRadius: 5,
   },
   input: {
     flex: 1,
     height: 48,
-    fontSize: 16,
-    // color: COLORS.darkBlue,
-    // outlineStyle: 'none',
+    fontSize: 14,
   },
-
   icon: {
-    // color: COLORS.darkBlue,
     fontSize: 22,
     marginRight: 10,
   },
@@ -130,13 +107,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   helper: {
-    // flexShrink: 1,
     color: COLORS.red,
   },
   counterHelper: {
     textAlign: 'right',
     flexGrow: 1,
-    // alignItems: 'flex-end',
   },
 })
 
