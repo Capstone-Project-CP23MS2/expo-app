@@ -1,24 +1,24 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import usersApi, { createUser, deleteUser, getUser, getUserByEmail, getUsers } from '@/api/users';
+import usersApi from '@/api/users';
 
 export function UseGetUsers() {
     return useQuery({
         queryKey: ['users'],
-        queryFn: getUsers,
+        queryFn: usersApi.getUsers,
     });
 };
 
 export function UseGetUser(userId: any) {
     return useQuery({
         queryKey: ['user', userId],
-        queryFn: () => getUser(userId),
+        queryFn: () => usersApi.getUserById(userId),
     });
 };
 
 export function UseGetUserByEmail(email: any) {
     return useQuery({
         queryKey: ['user', email],
-        queryFn: () => getUserByEmail(email),
+        queryFn: () => usersApi.getUserByEmail(email),
     });
 };
 
@@ -45,7 +45,7 @@ export function UseDeleteUser() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: deleteUser,
+        mutationFn: usersApi.deleteUser,
         onSuccess: async () => {
             await queryClient.invalidateQueries({ queryKey: ["users"] });
         },
