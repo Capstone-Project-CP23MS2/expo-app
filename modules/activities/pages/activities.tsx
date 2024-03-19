@@ -8,12 +8,12 @@ import { useCallback, useEffect, useState } from 'react'
 
 import axios, { AxiosResponse } from 'axios'
 
-import { MaterialIcons } from '@expo/vector-icons'
+import { FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons'
 import FloatingActionButton from '@/modules/activities/components/FloatingActionButton'
 import { useNavigation } from '@react-navigation/native'
 import { UseGetActivities } from '@/hooks/useAPI'
-import { FAB, Icon } from 'react-native-paper'
-import { FloatingButton, TouchableOpacity } from 'react-native-ui-lib'
+import { FAB, Icon, AnimatedFAB } from 'react-native-paper'
+import { FloatingButton, TouchableOpacity, SegmentedControl } from 'react-native-ui-lib'
 import ActivityCard from '../components/Card/'
 
 type Props = {}
@@ -29,6 +29,7 @@ const index = (props: Props) => {
   const { content: activities, first, totalPages } = data || {}
 
   const [refreshing, setRefreshing] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState(0)
 
   const onRefresh = useCallback(() => {
     setRefreshing(true)
@@ -40,15 +41,15 @@ const index = (props: Props) => {
     return (
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.headerArea}>
-          <Pressable onPress={() => router.push('/(app)/profile/profile')}>
+          <TouchableOpacity onPress={() => router.push('/(app)/profile/profile')}>
             <MaterialIcons name="account-circle" size={50} color={'black'} />
-          </Pressable>
+          </TouchableOpacity>
 
           <View>
-            <Text style={styles.headerTitle}>Available Activities</Text>
+            <Text style={styles.headerTitle}>Activities</Text>
           </View>
           <TouchableOpacity onPress={() => router.push('/(app)/notification/notification')}>
-            <MaterialIcons name="circle-notifications" size={38} color="black" />
+            <Ionicons name="notifications-circle-outline" size={38} color="black" />
           </TouchableOpacity>
           {/* <Pressable onPress={() => refetch()}>
               <Text style={styles.headerBtn}>Refresh</Text>
@@ -57,6 +58,11 @@ const index = (props: Props) => {
       </SafeAreaView>
     )
   }
+
+  const onChangeIndex = useCallback((index: number) => {
+    console.log('Index ' + index + ' of the second segmentedControl was pressed')
+    setSelectedIndex(index)
+  }, [])
 
   return (
     <View style={{ flex: 1, marginTop: 0 }}>
@@ -73,24 +79,46 @@ const index = (props: Props) => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         <View style={styles.container}>
-          <View style={styles.cardsContainer}>
-            <Text style={styles.subHeader}>found {activities?.length} activites</Text>
-            {isLoading ? (
-              <ActivityIndicator size="large" color={COLORS.gray} />
-            ) : isError ? (
-              <Text>Error! {error.message}</Text>
-            ) : activities?.length ? (
-              activities?.map(activity => (
-                <ActivityCard
-                  key={`activity-${activity.activityId}`}
-                  activity={activity}
-                  handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
-                />
-              ))
-            ) : (
-              <Text>no activity</Text>
-            )}
-          </View>
+          <SegmentedControl
+            onChangeIndex={onChangeIndex}
+            segments={[{ label: 'Available Activities' }, { label: 'Your Activity' }]}
+            style={{ marginVertical: 20 }}
+          />
+
+          {selectedIndex === 0 ? (
+            <View style={styles.cardsContainer}>
+              <View style={{ gap: 2 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Available Activities</Text>
+                <Text style={styles.subHeader}>
+                  We found {activities?.length} activites. feel free to join !
+                </Text>
+              </View>
+              {isLoading ? (
+                <ActivityIndicator size="large" color={COLORS.gray} />
+              ) : isError ? (
+                <Text>Error! {error.message}</Text>
+              ) : activities?.length ? (
+                activities?.map(activity => (
+                  <ActivityCard
+                    key={`activity-${activity.activityId}`}
+                    activity={activity}
+                    handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                  />
+                ))
+              ) : (
+                <Text>no activity</Text>
+              )}
+            </View>
+          ) : (
+            <View style={styles.cardsContainer}>
+              <View style={{ gap: 2 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Your Activities</Text>
+                <Text style={styles.subHeader}>
+                  We found {activities?.length} activites. feel free to join !
+                </Text>
+              </View>
+            </View>
+          )}
         </View>
       </ScrollView>
       <View
@@ -103,7 +131,7 @@ const index = (props: Props) => {
         }}
       >
         <TouchableOpacity onPress={() => router.push('/activities/create-form')}>
-          <MaterialIcons name="control-point" size={38} color="black" />
+          <AntDesign name="pluscircle" size={38} color={COLORS.primary} />
         </TouchableOpacity>
       </View>
     </View>
@@ -143,7 +171,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   subHeader: {
-    color: COLORS.gray,
+    color: COLORS.black,
+    fontWeight: 'normal',
   },
   headerTitle: {
     fontSize: SIZES.large,
@@ -157,7 +186,11 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
   },
   cardsContainer: {
-    marginTop: SIZES.medium,
     gap: SIZES.small,
+  },
+  fabStyle: {
+    bottom: 16,
+    right: 16,
+    position: 'absolute',
   },
 })
