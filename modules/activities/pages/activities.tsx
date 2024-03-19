@@ -40,13 +40,16 @@ const index = (props: Props) => {
     return (
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.headerArea}>
+          <Pressable onPress={() => router.push('/(app)/profile/profile')}>
+            <MaterialIcons name="account-circle" size={50} color={'black'} />
+          </Pressable>
+
           <View>
             <Text style={styles.headerTitle}>Available Activities</Text>
-            <Text style={styles.subHeader}>found {activities?.length} activites</Text>
           </View>
-          <Pressable onPress={() => router.push('/activities/create-form')}>
-            <MaterialIcons name="control-point" size={38} color="black" />
-          </Pressable>
+          <TouchableOpacity onPress={() => router.push('/(app)/notification/notification')}>
+            <MaterialIcons name="circle-notifications" size={38} color="black" />
+          </TouchableOpacity>
           {/* <Pressable onPress={() => refetch()}>
               <Text style={styles.headerBtn}>Refresh</Text>
             </Pressable> */}
@@ -62,12 +65,6 @@ const index = (props: Props) => {
           header: () => <ActivityTitle />,
           headerShadowVisible: true,
           headerShown: true,
-          // headerLeft: () => (
-          //   <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
-          // ),
-          // headerRight: () => (
-          //   <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />
-          // ),
         }}
       />
       <ScrollView
@@ -76,6 +73,7 @@ const index = (props: Props) => {
       >
         <View style={styles.container}>
           <View style={styles.cardsContainer}>
+            <Text style={styles.subHeader}>found {activities?.length} activites</Text>
             {isLoading ? (
               <ActivityIndicator size="large" color={COLORS.gray} />
             ) : isError ? (
@@ -94,11 +92,19 @@ const index = (props: Props) => {
           </View>
         </View>
       </ScrollView>
-      {/* <FloatingButton
-        visible={true}
-        hideBackgroundOverlay
-        button={{ label: 'Approve', onPress: () => console.log('approved') }}
-      /> */}
+      <View
+        style={{
+          width: '100%',
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
+          bottom: 20,
+        }}
+      >
+        <TouchableOpacity onPress={() => router.push('/activities/create-form')}>
+          <MaterialIcons name="control-point" size={38} color="black" />
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }

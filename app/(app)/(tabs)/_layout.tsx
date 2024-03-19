@@ -46,16 +46,17 @@ const TabsLayout = (props: Props) => {
           ),
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="notification"
         options={{
           tabBarLabel: 'Inbox',
+          headerShown: true,
           tabBarIcon: ({ size, color }) => (
             <MaterialIcons name="forward-to-inbox" size={size} color={color} />
           ),
         }}
-      />
-      <Tabs.Screen
+      /> */}
+      {/* <Tabs.Screen
         name="profile"
         options={{
           tabBarLabel: 'Profile',
@@ -64,7 +65,7 @@ const TabsLayout = (props: Props) => {
             <MaterialIcons name="account-circle" size={size} color={color} />
           ),
         }}
-      />
+      /> */}
       <Tabs.Screen
         name="dev"
         options={{

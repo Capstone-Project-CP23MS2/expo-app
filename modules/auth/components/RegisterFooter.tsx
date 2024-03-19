@@ -14,7 +14,7 @@ export default function RegisterFooter({ onCreateAccount, isCompleted }: Prop) {
   return (
     <View style={styles.container}>
       <AppButton
-        label="Create Account"
+        label="Create User"
         variant="primary"
         onPress={onCreateAccount}
         enabled={isCompleted}
@@ -30,7 +30,7 @@ const stylesheet = createStyleSheet(theme => ({
     left: 0,
     right: 0,
     padding: 20,
-    backgroundColor: theme.colors.background,
+    // backgroundColor: theme.colors.background,
     justifyContent: 'space-between',
     // alignItems: 'center',
     // flexDirection: 'row',

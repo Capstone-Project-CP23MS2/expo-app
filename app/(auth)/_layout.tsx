@@ -14,7 +14,7 @@ const StackLayout = (props: Props) => {
   return (
     <Stack>
       <Stack.Screen name="login" options={{ headerShown: false }} />
-      <Stack.Screen name="register" options={{ headerShown: true, headerTitle: 'Register' }} />
+      <Stack.Screen name="register" options={{ headerShown: false, headerTitle: 'New User' }} />
     </Stack>
   )
 }

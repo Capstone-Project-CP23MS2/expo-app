@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Pressable } from 'react-native'
+import { StyleSheet, Text, View, Pressable, TextInput } from 'react-native'
 import { useState } from 'react'
 import { MaterialIcons } from '@expo/vector-icons'
 import DateTimePicker from '@react-native-community/datetimepicker'
@@ -26,11 +26,17 @@ const FormDatetimePicker = ({ value, onChangeDatetime }: Props) => {
   return (
     <>
       <Pressable onPress={showDateTimePicker}>
-        <AppTextInput
+        {/* <AppTextInput
           value={value?.toLocaleString() || 'Select Date'}
-          icon={<MaterialIcons name="calendar-today" size={24} color="black" />}
+          icon={<MaterialIcons name="calendar-today" size={24} color="gray" />}
           iconName="calendar-today"
           disabled
+        /> */}
+        <TextInput
+          style={{ color: 'gray' }}
+          value={value?.toLocaleString() || 'Select Date'}
+          placeholder="Enter your phone number"
+          editable={false}
         />
       </Pressable>
       {show && (
