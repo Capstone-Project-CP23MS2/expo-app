@@ -52,7 +52,7 @@ const Page = (props: Props) => {
   const onDelete = () => {
     deleteMutation.mutate(activityId, {
       onSuccess() {
-        router.push('/(app)/(tabs)/activities')
+        router.push('/(app)/(tabs)/')
       },
     })
   }
@@ -69,9 +69,7 @@ const Page = (props: Props) => {
     gap: 5,
   }
 
-  const isParticipant = participants?.some(
-    participant => participant.userId === user?.userId,
-  )
+  const isParticipant = participants?.some(participant => participant.userId === user?.userId)
   const [refreshing, setRefreshing] = useState(false)
 
   const onRefresh = useCallback(async () => {
@@ -241,11 +239,7 @@ const Page = (props: Props) => {
         {user?.userId === activity?.hostUserId ? (
           <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
         ) : (
-          <JoinButton
-            userId={user?.userId}
-            activityId={activityId}
-            isParticipant={isParticipant}
-          />
+          <JoinButton userId={user?.userId} activityId={activityId} isParticipant={isParticipant} />
         )}
       </View>
     </PaperProvider>

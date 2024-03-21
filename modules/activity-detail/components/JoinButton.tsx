@@ -32,7 +32,7 @@ export default function JoinButton({ userId, activityId, isParticipant }: Props)
       { activityId, userId },
       {
         onSuccess: () => {
-          router.push('/(app)/(tabs)/activities')
+          router.push('/(app)/(tabs)/')
         },
         onError: error => {
           console.log(error)
@@ -43,11 +43,11 @@ export default function JoinButton({ userId, activityId, isParticipant }: Props)
 
   if (isParticipant) {
     return (
-      <AppButton variant="tertiary" label="ออกจากกิจกรรม" onPress={onLeaveActivity} fullWidth />
+      <AppButton variant="tertiary" label="Leave Activity" onPress={onLeaveActivity} fullWidth />
     )
   }
 
-  return <AppButton variant="primary" label="เข้าร่วมกิจกรรม" onPress={onJoinActivity} fullWidth />
+  return <AppButton variant="primary" label="Join Activity" onPress={onJoinActivity} fullWidth />
 }
 
 const styles = StyleSheet.create({})
