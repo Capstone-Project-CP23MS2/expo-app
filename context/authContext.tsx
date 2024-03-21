@@ -57,6 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       })
       setIsLoading(true)
       await SecureStore.setItemAsync(TOKEN_KEY, idToken!)
+      console.log(idToken)
       console.log('🔐 Authentication with Google success')
       loginMutation.mutate(undefined, {
         onSettled: async () => {

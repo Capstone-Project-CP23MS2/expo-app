@@ -11,7 +11,7 @@ import axios, { AxiosResponse } from 'axios'
 import { FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons'
 import FloatingActionButton from '@/modules/activities/components/FloatingActionButton'
 import { useNavigation } from '@react-navigation/native'
-import { UseGetActivities } from '@/hooks/useAPI'
+import { UseGetActivities, UseGetCategories, UseGetMyUserInfo } from '@/hooks/useAPI'
 import { FAB, Icon, AnimatedFAB } from 'react-native-paper'
 import { FloatingButton, TouchableOpacity, SegmentedControl } from 'react-native-ui-lib'
 import ActivityCard from '../components/Card/'
@@ -28,6 +28,8 @@ const index = (props: Props) => {
   const { data, isLoading, isError, error, refetch } = UseGetActivities({})
   const { content: activities, first, totalPages } = data || {}
 
+  const { data: userInfoData } = UseGetMyUserInfo()
+
   const [refreshing, setRefreshing] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
 
@@ -42,7 +44,7 @@ const index = (props: Props) => {
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.headerArea}>
           <TouchableOpacity onPress={() => router.push('/(app)/profile/profile')}>
-            <MaterialIcons name="account-circle" size={50} color={'black'} />
+            <MaterialIcons name="account-circle" size={48} color={'black'} />
           </TouchableOpacity>
 
           <View>
@@ -82,7 +84,7 @@ const index = (props: Props) => {
           <SegmentedControl
             onChangeIndex={onChangeIndex}
             segments={[{ label: 'Available Activities' }, { label: 'Your Activity' }]}
-            style={{ marginVertical: 20 }}
+            style={{ marginVertical: 15, marginTop: 20 }}
           />
 
           {selectedIndex === 0 ? (
@@ -112,26 +114,62 @@ const index = (props: Props) => {
           ) : (
             <View style={styles.cardsContainer}>
               <View style={{ gap: 2 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Your Activities</Text>
+                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Joined Activities</Text>
                 <Text style={styles.subHeader}>
                   We found {activities?.length} activites. feel free to join !
                 </Text>
               </View>
+              {isLoading ? (
+                <ActivityIndicator size="large" color={COLORS.gray} />
+              ) : isError ? (
+                <Text>Error! {error.message}</Text>
+              ) : activities?.length ? (
+                activities
+                  ?.filter(activity =>
+                    activity.users.some(user => user.userId === userInfoData?.userId),
+                  )
+                  .map(activity => (
+                    <ActivityCard
+                      key={`activity-${activity.activityId}`}
+                      activity={activity}
+                      handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                    />
+                  ))
+              ) : (
+                <Text>no activity</Text>
+              )}
+              <View style={{ gap: 2 }}>
+                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Host Activities</Text>
+                <Text style={styles.subHeader}>
+                  We found {activities?.length} activites. feel free to join !
+                </Text>
+              </View>
+              {isLoading ? (
+                <ActivityIndicator size="large" color={COLORS.gray} />
+              ) : isError ? (
+                <Text>Error! {error.message}</Text>
+              ) : activities?.length ? (
+                activities
+                  ?.filter(activity =>
+                    activity.users.some(user => user.userId === userInfoData?.userId),
+                  )
+                  .map(activity => (
+                    <ActivityCard
+                      key={`activity-${activity.activityId}`}
+                      activity={activity}
+                      handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                    />
+                  ))
+              ) : (
+                <Text>no activity</Text>
+              )}
             </View>
           )}
         </View>
       </ScrollView>
-      <View
-        style={{
-          width: '100%',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'absolute',
-          bottom: 20,
-        }}
-      >
+      <View style={styles.addButton}>
         <TouchableOpacity onPress={() => router.push('/activities/create-form')}>
-          <AntDesign name="pluscircle" size={38} color={COLORS.primary} />
+          <AntDesign name="pluscircle" size={48} color={COLORS.black} />
         </TouchableOpacity>
       </View>
     </View>
@@ -188,9 +226,9 @@ const styles = StyleSheet.create({
   cardsContainer: {
     gap: SIZES.small,
   },
-  fabStyle: {
-    bottom: 16,
-    right: 16,
+  addButton: {
     position: 'absolute',
+    bottom: 20,
+    right: 20,
   },
 })
