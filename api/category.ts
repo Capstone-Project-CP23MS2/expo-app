@@ -3,8 +3,8 @@ import { CategoryResponse, CategoriesResponse, requestParams } from "./type";
 import apiClient from "./apiClient";
 class CategoriesApi {
 
-  async getCategories(params: requestParams) {
-    const { data } = await apiClient.get<CategoriesResponse>('/categories', { params });
+  async getCategories() {
+    const { data } = await apiClient.get<CategoriesResponse>('/categories');
     return data;
   }
 
