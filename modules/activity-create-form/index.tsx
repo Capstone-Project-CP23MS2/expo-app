@@ -1,32 +1,22 @@
 import { StyleSheet, Text, View, Button, Pressable, Platform, StatusBar } from 'react-native'
-import { useEffect, useState } from 'react'
 import { BaseButton, ScrollView, TextInput } from 'react-native-gesture-handler'
 import { COLORS, FONT, SIZES } from '@/constants'
-import DateTimePicker from '@react-native-community/datetimepicker'
 import AppTextInput from '@/modules/shared/AppTextInput'
 import { MaterialIcons } from '@expo/vector-icons'
 
 import { useRouter } from 'expo-router'
-import { TextField } from 'react-native-ui-lib'
-import { UseCreateActivity } from '@/hooks/useAPI'
+import { UseCreateActivity, UseGetCategories, UseGetUsers } from '@/hooks/useAPI'
 import FormDatetimePicker from './components/form-datetime-picker'
 
 import { objToFormData } from '@/utils'
-import { SafeAreaView } from 'react-native-safe-area-context'
 import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper'
-import AppWrapper from '../shared/AppWrapper'
-import { UseGetCategories, UseGetUsers } from '@/hooks/useAPI'
-
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ActivityInfoSchema, ActivityInfo } from './activity.schema'
 
 import { Colors, Picker } from 'react-native-ui-lib'
-import errorMap from 'zod/lib/locales/en'
-import { TextInput as TextInputPaper } from 'react-native-paper'
 import AppButton from '../shared/AppButton'
 import { useAuth } from '@/context/authContext'
-import { white } from 'react-native-paper/lib/typescript/styles/themes/v2/colors'
 
 const dropdownIcon = <MaterialIcons name="arrow-drop-down" size={30} color="black" />
 
@@ -49,6 +39,7 @@ const CreateActivity = (props: Props) => {
 
   const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories()
   const { content: categories } = categoriesData || {}
+  console.log(categories)
 
   const { data: usersData, isLoading: isLoadingUsers } = UseGetUsers()
   const { content: users } = usersData || {}
