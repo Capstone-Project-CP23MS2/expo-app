@@ -21,12 +21,29 @@ class ActivitiesApi {
     return data;
   }
 
+
+  // Example: /activities/search?categoryId=9395&locationId=1908612&sort=1&date=2024-01-05
+  // async getActivitiesBySearch(params: requestParams) {
+  //   const { data } = await apiClient.get<ActivitiesResponse>('/activities/search', { params });
+  //   return data;
+  // }
+
   async createActivity(activity: FormData) {
     const headers = {
       'Content-Type': 'multipart/form-data',
     };
     const { data } = await apiClient.post<ActivityResponse>(
       'activities', activity, { headers }
+    );
+    return data;
+  }
+
+  async updateActivity(activityId: number, updateRequest: FormData) {
+    const headers = {
+      'Content-Type': 'multipart/form-data',
+    };
+    const { data } = await apiClient.put<ActivityResponse>(
+      `activities/${activityId}`, updateRequest, { headers }
     );
     return data;
   }

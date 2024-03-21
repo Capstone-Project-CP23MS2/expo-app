@@ -22,13 +22,30 @@ export function UseCreateActivity() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['activities'],
+    mutationKey: ['createActivity'],
     mutationFn: activitiesApi.createActivity,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["activities"] });
     },
   });
 };
+
+export function UseUpdateActivity() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['updateActivity'],
+    mutationFn: ({
+      activityId, updateRequest
+    }: {
+      activityId: number, updateRequest: FormData;
+    }) => activitiesApi.updateActivity(activityId, updateRequest),
+
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["activities"] });
+    },
+  });
+}
 
 export function UseDeleteActivity() {
   const queryClient = useQueryClient();
@@ -52,7 +69,7 @@ export function UseCreateParticipant() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    // mutationKey: ['activityParticipants'],
+    mutationKey: ['createActivityParticipants'],
     mutationFn: activitiesApi.createActivityParticipant,
     onSuccess: async (data) => {
 
