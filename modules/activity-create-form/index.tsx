@@ -217,6 +217,7 @@ const CreateActivity = (props: Props) => {
       </ScrollView>
       <View style={styles.footer}>
         {/* <AppButton variant="primary" label="Preset" onPress={usePreset} /> */}
+        <AppButton variant="secondary" label="🔮 preset (test)" onPress={usePreset} />
         <AppButton variant="primary" label="Create Activity" onPress={() => onSummit()} fullWidth />
       </View>
     </KeyboardAvoidingWrapper>
@@ -268,11 +269,12 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-    position: 'absolute',
-    bottom: 0,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
+    backgroundColor: '#fff',
+    paddingVertical: 16,
+    paddingHorizontal: 16,
     flexDirection: 'row',
+    // borderTopColor: Colors.grey,
+    // borderTopWidth: StyleSheet.hairlineWidth,
     gap: 10,
   },
   textinput: {

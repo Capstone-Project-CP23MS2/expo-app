@@ -6,6 +6,7 @@ export const ActivityInfoSchema = z.object({
     title: z.string({ required_error: 'Required' }).min(3).max(100),
     description: z.string().max(500).optional(),
     place: z.string().min(3).max(100),
+    locationId: z.number(),
     dateTime: z.string().datetime(),
     duration: z.number().min(1),
     noOfMembers: z.number(),
