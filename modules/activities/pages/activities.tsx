@@ -46,16 +46,12 @@ const index = (props: Props) => {
           <TouchableOpacity onPress={() => router.push('/(app)/profile/profile')}>
             <MaterialIcons name="account-circle" size={48} color={'black'} />
           </TouchableOpacity>
-
           <View>
             <Text style={styles.headerTitle}>Activities</Text>
           </View>
           <TouchableOpacity onPress={() => router.push('/(app)/notification/notification')}>
             <Ionicons name="notifications-circle-outline" size={38} color="black" />
           </TouchableOpacity>
-          {/* <Pressable onPress={() => refetch()}>
-              <Text style={styles.headerBtn}>Refresh</Text>
-            </Pressable> */}
         </View>
       </SafeAreaView>
     )
@@ -64,13 +60,28 @@ const index = (props: Props) => {
   const onChangeIndex = useCallback((index: number) => {
     console.log('Index ' + index + ' of the second segmentedControl was pressed')
     setSelectedIndex(index)
+    onRefresh()
   }, [])
 
   return (
     <View style={{ flex: 1, marginTop: 0 }}>
       <Stack.Screen
         options={{
-          header: () => <ActivityTitle />,
+          header: () => (
+            <SafeAreaView style={styles.safeArea}>
+              <View style={styles.headerArea}>
+                <TouchableOpacity onPress={() => router.push('/(app)/profile/profile')}>
+                  <MaterialIcons name="account-circle" size={48} color={'black'} />
+                </TouchableOpacity>
+                <View>
+                  <Text style={styles.headerTitle}>Activities</Text>
+                </View>
+                <TouchableOpacity onPress={() => router.push('/(app)/notification/notification')}>
+                  <Ionicons name="notifications-circle-outline" size={38} color="black" />
+                </TouchableOpacity>
+              </View>
+            </SafeAreaView>
+          ),
           headerShadowVisible: true,
           headerShown: true,
         }}

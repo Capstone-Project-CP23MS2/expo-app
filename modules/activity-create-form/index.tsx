@@ -17,6 +17,7 @@ import { ActivityInfoSchema, ActivityInfo } from './activity.schema'
 import { Colors, Picker } from 'react-native-ui-lib'
 import AppButton from '../shared/AppButton'
 import { useAuth } from '@/context/authContext'
+import { white } from 'react-native-paper/lib/typescript/styles/themes/v2/colors'
 
 const dropdownIcon = <MaterialIcons name="arrow-drop-down" size={30} color="black" />
 
@@ -268,12 +269,13 @@ const styles = StyleSheet.create({
   },
 
   footer: {
-    position: 'absolute',
-    bottom: 0,
+    // position: 'absolute',
+    // bottom: 0,
     paddingVertical: 20,
     paddingHorizontal: 20,
     flexDirection: 'row',
     gap: 10,
+    backgroundColor: 'white',
   },
   textinput: {
     width: '100%',
