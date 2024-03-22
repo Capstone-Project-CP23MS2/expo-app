@@ -22,22 +22,9 @@ type ActivityCardProps = {
 
 const index = ({ activity, handleNavigate }: ActivityCardProps) => {
   const { title, dateTime, duration, place, currentParticipants, maxParticipants } = activity
-  // console.log(activity);
   const array = [1, 2]
   return (
     <Pressable style={styles.container} onPress={handleNavigate}>
-      {/* <Pressable style={styles.logoContainer}>
-        <Image
-          source={{
-            uri: checkImageURL(job.employer_logo)
-              ? job.employer_logo
-              : 'https://t4.ftcdn.net/jpg/05/05/61/73/360_F_505617309_NN1CW7diNmGXJfMicpY9eXHKV4sqzO5H.jpg',
-          }}
-          resizeMode="contain"
-          style={styles.logoImage}
-        />
-      </Pressable> */}
-
       <View style={styles.textContainer}>
         <Text style={styles.title} numberOfLines={1}>
           {title}
@@ -115,7 +102,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
-
     elevation: 4,
   },
   logoContainer: {
@@ -132,7 +118,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    marginHorizontal: SIZES.medium,
+    marginHorizontal: SIZES.small,
   },
 })
 
