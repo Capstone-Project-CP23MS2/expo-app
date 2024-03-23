@@ -22,8 +22,8 @@ const COLORS = {
   darkBlue: '#7978B5',
   red: 'red',
   danger: 'red',
-  disable: '#BABBC3'
-};
+  disable: '#BABBC3',
+}
 //gradients
 // const gradients = {
 //   blueLight: {start: '#5A71FA', end: colors.blue3}, // buttons
@@ -36,14 +36,14 @@ const FONT = {
   //   medium: 'DMMedium',
   // semiBold: 'DMMedium',
   //   bold: 'DMBold',
-  regular: 'NunitoRegular',
-  medium: 'NunitoMedium',
-  semiBold: 'NunitoSemiBold',
-  bold: 'NunitoBold',
+  regular: 'NotoSansThaiRegular',
+  medium: 'NotoSansThaiMedium',
+  semiBold: 'NotoSansThaiSemiBold',
+  bold: 'NotoSansThaiBold',
   md: 'NunitoMedium',
   sb: 'NunitoSemiBold',
   b: 'NunitoBold',
-};
+}
 
 const SIZES = {
   xSmall: 10,
@@ -52,7 +52,7 @@ const SIZES = {
   large: 20,
   xLarge: 24,
   xxLarge: 32,
-};
+}
 
 const SHADOWS = {
   small: {
@@ -75,7 +75,7 @@ const SHADOWS = {
     shadowRadius: 5.84,
     elevation: 5,
   },
-};
+}
 
 const SPACINGS = {
   xs: 4,
@@ -84,6 +84,6 @@ const SPACINGS = {
   lg: 24,
   xl: 40,
   page: 24,
-};
+}
 
-export { COLORS, FONT, SHADOWS, SIZES, SPACINGS };
+export { COLORS, FONT, SHADOWS, SIZES, SPACINGS }

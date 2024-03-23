@@ -29,15 +29,7 @@ const index = ({ activity, handleNavigate }: ActivityCardProps) => {
         <Text style={styles.title} numberOfLines={1}>
           {title}
         </Text>
-        <View
-          style={{
-            borderBottomColor: 'gray',
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            marginTop: 5,
-            marginBottom: 5,
-            opacity: 0.3,
-          }}
-        />
+
         <View style={styles.infoContainer}>
           <View style={styles.infoSubContainer}>
             <Icon source={'calendar'} color={COLORS.gray} size={18}></Icon>
