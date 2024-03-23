@@ -59,7 +59,7 @@ export default function login() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ flex: 1, alignItems: 'center', paddingTop: 60 }}>
+      <View style={{ flex: 1, alignItems: 'center', paddingTop: 80 }}>
         <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'white' }}>SPORT CONNECT</Text>
       </View>
       <View
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.primary,
-    marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    // marginTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   image: {
     height: 350,
