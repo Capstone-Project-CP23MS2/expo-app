@@ -1,5 +1,6 @@
-import { requestParams, ActivityResponse, ActivitiesResponse, ParticipantResponse, ParticipantsResponse } from './type';
+import { requestParams, ActivityResponse, ActivitiesResponse, ParticipantResponse, ParticipantsResponse, ActivityUpdateRequest } from './type';
 import apiClient from "./apiClient";
+import { objToFormData } from '@/utils';
 const API_URL: string = process.env.EXPO_PUBLIC_BASE_URL_API!;
 
 //TODO: ย้าย Formdata มาที่นี่ทั้งหมด
@@ -21,12 +22,29 @@ class ActivitiesApi {
     return data;
   }
 
+
+  // Example: /activities/search?categoryId=9395&locationId=1908612&sort=1&date=2024-01-05
+  // async getActivitiesBySearch(params: requestParams) {
+  //   const { data } = await apiClient.get<ActivitiesResponse>('/activities/search', { params });
+  //   return data;
+  // }
+
   async createActivity(activity: FormData) {
     const headers = {
       'Content-Type': 'multipart/form-data',
     };
     const { data } = await apiClient.post<ActivityResponse>(
       'activities', activity, { headers }
+    );
+    return data;
+  }
+
+  async updateActivity(activityId: number, updateRequest: ActivityUpdateRequest) {
+    const headers = {
+      'Content-Type': 'multipart/form-data',
+    };
+    const { data } = await apiClient.patch<ActivityResponse>(
+      `activities/${activityId}`, objToFormData(updateRequest), { headers }
     );
     return data;
   }

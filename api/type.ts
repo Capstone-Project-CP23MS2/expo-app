@@ -25,7 +25,7 @@ export type ActivityResponse = {
   categoryId: number;
   title: string;
   description: string;
-  place: string;
+  location: Place;
   dateTime: string;
   duration: number;
   createdAt: string;
@@ -33,7 +33,25 @@ export type ActivityResponse = {
   noOfMembers: number;
   categoryName?: string;
 };
+
+type Place = {
+  locationId: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+};
+
 export type ActivitiesResponse = APIPaginationResponse<ActivityResponse>;
+
+export type ActivityUpdateRequest = {
+  categoryId?: number;
+  title?: string;
+  description?: string;
+  place?: string;
+  dateTime?: string;
+  duration?: number;
+  noOfMembers?: number;
+};
 
 export type ParticipantResponse = {
   userId: number;

@@ -32,7 +32,6 @@ const Page = (props: Props) => {
   const router = useRouter()
   const { id: activityId } = useLocalSearchParams<{ id: string }>()
   const { user } = useAuth()
-
   const {
     data: activity,
     isLoading,
@@ -40,6 +39,8 @@ const Page = (props: Props) => {
     error,
     refetch: activityRefetch,
   } = UseGetActivity(activityId)
+
+  const isOwner = user?.userId === activity?.hostUserId
 
   const { data: participantsData, refetch: participantsRefetch } =
     UseGetActivityParticipants(activityId)
@@ -52,7 +53,7 @@ const Page = (props: Props) => {
   const onDelete = () => {
     deleteMutation.mutate(activityId, {
       onSuccess() {
-        router.push('/(app)/(tabs)/')
+        router.push('/(app)/(tabs)')
       },
     })
   }
@@ -78,6 +79,12 @@ const Page = (props: Props) => {
     await participantsRefetch()
     setRefreshing(false)
   }, [])
+
+  const onEdit = () => {
+    console.log(activityId)
+
+    router.push({ pathname: '/(app)/activities/edit', params: { activityId } })
+  }
 
   return (
     <PaperProvider>
@@ -185,6 +192,9 @@ const Page = (props: Props) => {
                   ))}
                 </View>
               </View>
+
+              {isOwner && <AppButton label="Edit" variant="primary" onPress={onEdit} fullWidth />}
+
               <View style={{ flex: 1, flexDirection: 'row', marginTop: 20, gap: 10 }}>
                 {/* <BaseButton
                   onPress={showModal}

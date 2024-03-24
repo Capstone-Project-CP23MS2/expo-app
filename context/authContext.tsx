@@ -51,14 +51,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log(`😀 You are already logged in with Google.`)
 
       const { email, idToken } = await googleAuthentication()
+      if (!email) return logout()
+
       setSession({
         authenticated: true,
         idToken: idToken,
       })
       setIsLoading(true)
       await SecureStore.setItemAsync(TOKEN_KEY, idToken!)
-      console.log(idToken)
-      console.log('🔐 Authentication with Google success')
+
       loginMutation.mutate(undefined, {
         onSettled: async () => {
           setIsLoading(false)
@@ -101,7 +102,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     setIsLoading(true)
     await SecureStore.setItemAsync(TOKEN_KEY, idToken!)
-    console.log('🔐 Authentication with Google success')
+
     loginMutation.mutate(undefined, {
       onError: async (error: Error | AxiosError) => {
         if (!isAxiosError(error)) return
@@ -168,7 +169,7 @@ const googleAuthentication = async () => {
     }: GoogleUserInfo = await signInFuction()
 
     await SecureStore.setItemAsync(TOKEN_KEY, idToken!)
-    console.log('🔐 Authentication with Google success')
+    console.log('🔐 Authentication with Google success:', email)
 
     return { email, idToken }
   } catch (error: any) {

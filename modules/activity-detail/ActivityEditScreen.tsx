@@ -1,91 +1,71 @@
-import { StyleSheet, Text, View, Button, Pressable, Platform, StatusBar } from 'react-native'
-import { BaseButton, ScrollView, TextInput } from 'react-native-gesture-handler'
-import { COLORS, FONT, SIZES } from '@/constants'
-import AppTextInput from '@/modules/shared/AppTextInput'
-import { MaterialIcons } from '@expo/vector-icons'
-
-import { useRouter } from 'expo-router'
-import { UseCreateActivity, UseGetCategories, UseGetUsers } from '@/hooks/useAPI'
-import FormDatetimePicker from './components/form-datetime-picker'
-
-import { objToFormData } from '@/utils'
-import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper'
-import { Controller, useForm } from 'react-hook-form'
+import { StyleSheet, Text, View } from 'react-native'
+import React from 'react'
+import { createStyleSheet, useStyles } from 'react-native-unistyles'
+import { Card, Colors, Picker } from 'react-native-ui-lib'
+import { useLocalSearchParams, useRouter } from 'expo-router'
+import { Controller, FieldValues, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ActivityInfoSchema, ActivityInfo } from './activity.schema'
-
-import { Colors, Picker } from 'react-native-ui-lib'
+import { UpdateActivityInfo, UpdateActivityInfoSchema } from './updateActivity.schema'
+import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper'
+import { ScrollView } from 'react-native-gesture-handler'
+import AppTextInput from '../shared/AppTextInputOld'
+import FormDatetimePicker from '../activity-create-form/components/form-datetime-picker'
 import AppButton from '../shared/AppButton'
+import { UseGetActivity, UseGetCategories, UseUpdateActivity } from '@/hooks/useAPI'
+import { filterChangedFormFields, objToFormData } from '@/utils'
+import { ActivityUpdateRequest } from '@/api/type'
+import { d } from '@tanstack/react-query-devtools/build/legacy/devtools-dKCOqp9Q'
 import { useAuth } from '@/context/authContext'
-import { white } from 'react-native-paper/lib/typescript/styles/themes/v2/colors'
 
-const dropdownIcon = <MaterialIcons name="arrow-drop-down" size={30} color="black" />
-
-type Props = {}
-type ActivityData = {
-  hostUserId: number
-  categoryId: number
-  title: string
-  description: string
-  place: string
-  dateTime: any
-  duration: number
-  noOfMembers: number
-  // maxParticipants: number;
-}
-
-const CreateActivity = (props: Props) => {
-  const { user } = useAuth()
+export default function ActivityEditScreen() {
+  const { styles, breakpoint } = useStyles(stylesheet)
   const router = useRouter()
-
+  const { activityId } = useLocalSearchParams<{ activityId: string }>()
   const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories()
   const { content: categories } = categoriesData || {}
 
-  const { data: usersData, isLoading: isLoadingUsers } = UseGetUsers()
-  const { content: users } = usersData || {}
+  const { user } = useAuth()
+
+  const { data: activity } = UseGetActivity(activityId)
+
+  const updateActivityMutation = UseUpdateActivity()
 
   const {
-    formState: { isValid, isSubmitting, errors, isDirty },
+    formState: { isValid, isSubmitting, errors, isDirty, dirtyFields },
     control,
     handleSubmit,
     getValues,
     setValue,
     getFieldState,
-  } = useForm<ActivityInfo>({
-    resolver: zodResolver(ActivityInfoSchema),
+  } = useForm<UpdateActivityInfo>({
+    resolver: zodResolver(UpdateActivityInfoSchema),
     defaultValues: {
-      hostUserId: user?.userId,
-      locationId: 1,
+      title: activity?.title,
+      dateTime: activity?.dateTime,
+      duration: activity?.duration,
+      noOfMembers: activity?.noOfMembers,
+      description: activity?.description,
+      categoryId: activity?.categoryId,
+      locationId: activity?.location?.locationId,
     },
   })
-  // const test: FieldErrors = null
-  const handleInputChange = (name: string, value: string) => {
-    // formData.set(name, value);
-  }
-  const createMutation = UseCreateActivity()
 
-  // ฟังก์ชั่นเมื่อกดปุ่ม "เพิ่มกิจกรรม"
-  const onSummit = handleSubmit(async activityData => {
-    createMutation.mutate(objToFormData(activityData), {
-      onSuccess: () => {
-        console.log('onSuccess in CreateActivityPage')
-        router.push('/(app)/(tabs)/')
+  const onSummit = handleSubmit(async updateData => {
+    const filterChangedActivity = filterChangedFormFields(updateData, dirtyFields)
+    updateActivityMutation.mutate(
+      { activityId: Number(activityId), updateRequest: filterChangedActivity },
+      {
+        onSuccess: () => {
+          console.log('onSuccess in UpdateActivityPage')
+          router.back()
+        },
+        onError: error => {
+          console.log('error')
+          console.log(error)
+        },
       },
-      onError: error => {
-        console.log('error')
-        console.log(error)
-      },
-    })
+    )
   })
-
-  const usePreset = () => {
-    setValue('categoryId', 1)
-    setValue('title', 'test_title-' + Math.random().toString())
-    setValue('description', 'test_description')
-    setValue('dateTime', '2024-03-10T16:20:44.431667Z')
-    setValue('duration', 30)
-    setValue('noOfMembers', 10)
-  }
 
   return (
     <KeyboardAvoidingWrapper>
@@ -123,7 +103,6 @@ const CreateActivity = (props: Props) => {
                     topBarProps={{ title: 'Categories' }}
                     searchPlaceholder={'Search a category'}
                     searchStyle={{ color: Colors.blue30, placeholderTextColor: Colors.grey50 }}
-                    trailingAccessory={dropdownIcon}
                   >
                     {categories?.map(category => (
                       <Picker.Item
@@ -201,75 +180,32 @@ const CreateActivity = (props: Props) => {
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        {/* <AppButton variant="primary" label="Preset" onPress={usePreset} /> */}
-        <AppButton variant="secondary" label="🔮 preset (test)" onPress={usePreset} />
-        <AppButton variant="primary" label="Create Activity" onPress={() => onSummit()} fullWidth />
+        <AppButton
+          variant="primary"
+          label="Save"
+          enabled={isDirty}
+          onPress={() => onSummit()}
+          fullWidth
+        />
       </View>
     </KeyboardAvoidingWrapper>
   )
 }
 
-export default CreateActivity
-
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet(theme => ({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: 'white',
+    padding: theme.spacings.md,
+    backgroundColor: theme.colors.background,
   },
-  label: {
-    fontSize: 18,
+  text: {
+    ...theme.typography.md,
+    color: theme.colors.typography,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 12,
-    padding: 8,
-    fontSize: 16,
-    flex: 1,
-  },
-  addBtn: {
-    flex: 1,
-    backgroundColor: COLORS.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: SIZES.medium,
-    padding: 12,
-  },
-  addBtnText: {
-    fontSize: SIZES.medium,
-    color: COLORS.white,
-    fontFamily: FONT.bold,
-  },
-  btnContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: SIZES.small,
-    backgroundColor: '#FFF',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-
   footer: {
-    backgroundColor: '#fff',
-    paddingVertical: 16,
-    paddingHorizontal: 16,
     flexDirection: 'row',
-    // borderTopColor: Colors.grey,
-    // borderTopWidth: StyleSheet.hairlineWidth,
-    gap: 10,
-    backgroundColor: 'white',
+    justifyContent: 'space-between',
+    padding: 20,
+    backgroundColor: theme.colors.background,
   },
-  textinput: {
-    width: '100%',
-    height: 48,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    justifyContent: 'center',
-    paddingLeft: 15,
-  },
-})
+}))
