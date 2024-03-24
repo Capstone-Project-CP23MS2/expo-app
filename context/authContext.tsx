@@ -7,10 +7,9 @@ import {
 } from '@react-native-google-signin/google-signin'
 import { UserResponse } from '@/api/type'
 import { useRouter, useSegments } from 'expo-router'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import usersApi from '@/api/users'
-import { AxiosError, AxiosResponse, isAxiosError } from 'axios'
-import { set } from 'zod'
+import { AxiosError, isAxiosError } from 'axios'
 
 const TOKEN_KEY = 'my-jwt'
 
@@ -37,7 +36,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }>({ idToken: null, authenticated: null })
   const [user, setUser] = useState<UserResponse | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [isSignedIn, setIsSignedIn] = useState<boolean>(false)
 
   const router = useRouter()
   const rootSegment = useSegments()[0]
