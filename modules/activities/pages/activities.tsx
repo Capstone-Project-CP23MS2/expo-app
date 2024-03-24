@@ -39,21 +39,78 @@ const index = (props: Props) => {
     setRefreshing(false)
   }, [])
 
-  function ActivityTitle() {
+  function AvailableActivities() {
     return (
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.headerArea}>
-          <TouchableOpacity onPress={() => router.push('/(app)/profile/profile')}>
-            <MaterialIcons name="account-circle" size={48} color={'black'} />
-          </TouchableOpacity>
-          <View>
-            <Text style={styles.headerTitle}>Activities</Text>
-          </View>
-          <TouchableOpacity onPress={() => router.push('/(app)/notification/notification')}>
-            <Ionicons name="notifications-circle-outline" size={38} color="black" />
-          </TouchableOpacity>
+      <View style={styles.cardsContainer}>
+        <View style={{ gap: 2 }}>
+          <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Available Activities</Text>
+          <Text style={styles.subHeader}>
+            We found {activities?.length} activites. feel free to join !
+          </Text>
         </View>
-      </SafeAreaView>
+        {isLoading ? (
+          <ActivityIndicator size="large" color={COLORS.gray} />
+        ) : isError ? (
+          <Text>Error! {error.message}</Text>
+        ) : activities?.length ? (
+          activities?.map(activity => (
+            <ActivityCard
+              key={`activity-${activity.activityId}`}
+              activity={activity}
+              handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+            />
+          ))
+        ) : (
+          <Text>no activity</Text>
+        )}
+      </View>
+    )
+  }
+
+  function YourActivities() {
+    return (
+      <View style={styles.cardsContainer}>
+        <View style={{ gap: 2 }}>
+          <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Joined Activities</Text>
+        </View>
+        {isLoading ? (
+          <ActivityIndicator size="large" color={COLORS.gray} />
+        ) : isError ? (
+          <Text>Error! {error.message}</Text>
+        ) : activities?.length ? (
+          activities
+            ?.filter(activity => activity.users.some(user => user.userId === userInfoData?.userId))
+            .map(activity => (
+              <ActivityCard
+                key={`activity-${activity.activityId}`}
+                activity={activity}
+                handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+              />
+            ))
+        ) : (
+          <Text>no activity</Text>
+        )}
+        <View style={{ gap: 2 }}>
+          <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Host Activities</Text>
+        </View>
+        {isLoading ? (
+          <ActivityIndicator size="large" color={COLORS.gray} />
+        ) : isError ? (
+          <Text>Error! {error.message}</Text>
+        ) : activities?.length ? (
+          activities
+            ?.filter(activity => activity.hostUserId === userInfoData?.userId)
+            .map(activity => (
+              <ActivityCard
+                key={`activity-${activity.activityId}`}
+                activity={activity}
+                handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+              />
+            ))
+        ) : (
+          <Text>no activity</Text>
+        )}
+      </View>
     )
   }
 
@@ -71,13 +128,24 @@ const index = (props: Props) => {
             <SafeAreaView style={styles.safeArea}>
               <View style={styles.headerArea}>
                 <TouchableOpacity onPress={() => router.push('/(app)/profile/profile')}>
-                  <MaterialIcons name="account-circle" size={48} color={'black'} />
+                  <MaterialIcons name="account-circle" size={48} color="black" />
                 </TouchableOpacity>
                 <View>
                   <Text style={styles.headerTitle}>Activities</Text>
                 </View>
-                <TouchableOpacity onPress={() => router.push('/(app)/notification/notification')}>
-                  <Ionicons name="notifications-circle-outline" size={38} color="black" />
+                <TouchableOpacity
+                  style={{
+                    backgroundColor: COLORS.black,
+                    padding: 5,
+                    borderRadius: 50,
+                    width: 40,
+                    height: 40,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                  onPress={() => router.push('/(app)/notification/notification')}
+                >
+                  <Ionicons name="notifications-outline" size={25} color="white" />
                 </TouchableOpacity>
               </View>
             </SafeAreaView>
@@ -98,84 +166,7 @@ const index = (props: Props) => {
             style={{ marginVertical: 15, marginTop: 20 }}
           />
 
-          {selectedIndex === 0 ? (
-            <View style={styles.cardsContainer}>
-              <View style={{ gap: 2 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Available Activities</Text>
-                <Text style={styles.subHeader}>
-                  We found {activities?.length} activites. feel free to join !
-                </Text>
-              </View>
-              {isLoading ? (
-                <ActivityIndicator size="large" color={COLORS.gray} />
-              ) : isError ? (
-                <Text>Error! {error.message}</Text>
-              ) : activities?.length ? (
-                activities?.map(activity => (
-                  <ActivityCard
-                    key={`activity-${activity.activityId}`}
-                    activity={activity}
-                    handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
-                  />
-                ))
-              ) : (
-                <Text>no activity</Text>
-              )}
-            </View>
-          ) : (
-            <View style={styles.cardsContainer}>
-              <View style={{ gap: 2 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Joined Activities</Text>
-                <Text style={styles.subHeader}>
-                  We found {activities?.length} activites. feel free to join !
-                </Text>
-              </View>
-              {isLoading ? (
-                <ActivityIndicator size="large" color={COLORS.gray} />
-              ) : isError ? (
-                <Text>Error! {error.message}</Text>
-              ) : activities?.length ? (
-                activities
-                  ?.filter(activity =>
-                    activity.users.some(user => user.userId === userInfoData?.userId),
-                  )
-                  .map(activity => (
-                    <ActivityCard
-                      key={`activity-${activity.activityId}`}
-                      activity={activity}
-                      handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
-                    />
-                  ))
-              ) : (
-                <Text>no activity</Text>
-              )}
-              <View style={{ gap: 2 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Host Activities</Text>
-                <Text style={styles.subHeader}>
-                  We found {activities?.length} activites. feel free to join !
-                </Text>
-              </View>
-              {isLoading ? (
-                <ActivityIndicator size="large" color={COLORS.gray} />
-              ) : isError ? (
-                <Text>Error! {error.message}</Text>
-              ) : activities?.length ? (
-                activities
-                  ?.filter(activity =>
-                    activity.users.some(user => user.userId === userInfoData?.userId),
-                  )
-                  .map(activity => (
-                    <ActivityCard
-                      key={`activity-${activity.activityId}`}
-                      activity={activity}
-                      handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
-                    />
-                  ))
-              ) : (
-                <Text>no activity</Text>
-              )}
-            </View>
-          )}
+          {selectedIndex === 0 ? <AvailableActivities /> : <YourActivities />}
         </View>
       </ScrollView>
       <View style={styles.addButton}>
