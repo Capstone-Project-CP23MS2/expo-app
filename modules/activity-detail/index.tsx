@@ -32,7 +32,6 @@ const Page = (props: Props) => {
   const router = useRouter()
   const { id: activityId } = useLocalSearchParams<{ id: string }>()
   const { user } = useAuth()
-
   const {
     data: activity,
     isLoading,
@@ -40,6 +39,8 @@ const Page = (props: Props) => {
     error,
     refetch: activityRefetch,
   } = UseGetActivity(activityId)
+
+  const isOwner = user?.userId === activity?.hostUserId
 
   const { data: participantsData, refetch: participantsRefetch } =
     UseGetActivityParticipants(activityId)
@@ -52,7 +53,7 @@ const Page = (props: Props) => {
   const onDelete = () => {
     deleteMutation.mutate(activityId, {
       onSuccess() {
-        router.push('/(app)/(tabs)/activities')
+        router.push('/(app)/(tabs)')
       },
     })
   }
@@ -69,9 +70,7 @@ const Page = (props: Props) => {
     gap: 5,
   }
 
-  const isParticipant = participants?.some(
-    participant => participant.userId === user?.userId,
-  )
+  const isParticipant = participants?.some(participant => participant.userId === user?.userId)
   const [refreshing, setRefreshing] = useState(false)
 
   const onRefresh = useCallback(async () => {
@@ -80,6 +79,12 @@ const Page = (props: Props) => {
     await participantsRefetch()
     setRefreshing(false)
   }, [])
+
+  const onEdit = () => {
+    console.log(activityId)
+
+    router.push({ pathname: '/(app)/activities/edit', params: { activityId } })
+  }
 
   return (
     <PaperProvider>
@@ -187,6 +192,9 @@ const Page = (props: Props) => {
                   ))}
                 </View>
               </View>
+
+              {isOwner && <AppButton label="Edit" variant="primary" onPress={onEdit} fullWidth />}
+
               <View style={{ flex: 1, flexDirection: 'row', marginTop: 20, gap: 10 }}>
                 {/* <BaseButton
                   onPress={showModal}
@@ -241,11 +249,7 @@ const Page = (props: Props) => {
         {user?.userId === activity?.hostUserId ? (
           <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
         ) : (
-          <JoinButton
-            userId={user?.userId}
-            activityId={activityId}
-            isParticipant={isParticipant}
-          />
+          <JoinButton userId={user?.userId} activityId={activityId} isParticipant={isParticipant} />
         )}
       </View>
     </PaperProvider>

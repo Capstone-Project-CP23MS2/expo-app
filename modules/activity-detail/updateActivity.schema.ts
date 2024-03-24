@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
-export const ActivityInfoSchema = z.object({
-    hostUserId: z.number(),
+export const UpdateActivityInfoSchema = z.object({
     categoryId: z.number(),
     title: z.string({ required_error: 'Required' }).min(3).max(100),
     description: z.string().max(500).optional(),
@@ -12,4 +11,4 @@ export const ActivityInfoSchema = z.object({
 });
 
 // extract the inferred type
-export type ActivityInfo = z.infer<typeof ActivityInfoSchema>;
+export type UpdateActivityInfo = z.infer<typeof UpdateActivityInfoSchema>;

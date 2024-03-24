@@ -157,7 +157,9 @@ const index = (props: Props) => {
                     <ActivityCard
                       key={`activity-${activity.activityId}`}
                       activity={activity}
-                      handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                      handleNavigate={() =>
+                        router.push(`/(app)/activities/${activity.activityId}/edit`)
+                      }
                     />
                   ))
               ) : (

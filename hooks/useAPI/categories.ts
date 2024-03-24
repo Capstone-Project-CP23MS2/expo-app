@@ -6,6 +6,8 @@ export function UseGetCategories() {
         queryKey: ['categories'],
         queryFn: categoriesApi.getCategories,
     });
+    // TODO
+    // return { data: categories, paginationInfo: ..., ...otherRes }
 };
 
 export function UseGetCategory(id: string | number | string[] | undefined) {

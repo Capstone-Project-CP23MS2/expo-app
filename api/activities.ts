@@ -1,5 +1,6 @@
-import { requestParams, ActivityResponse, ActivitiesResponse, ParticipantResponse, ParticipantsResponse } from './type';
+import { requestParams, ActivityResponse, ActivitiesResponse, ParticipantResponse, ParticipantsResponse, ActivityUpdateRequest } from './type';
 import apiClient from "./apiClient";
+import { objToFormData } from '@/utils';
 const API_URL: string = process.env.EXPO_PUBLIC_BASE_URL_API!;
 
 //TODO: ย้าย Formdata มาที่นี่ทั้งหมด
@@ -38,12 +39,12 @@ class ActivitiesApi {
     return data;
   }
 
-  async updateActivity(activityId: number, updateRequest: FormData) {
+  async updateActivity(activityId: number, updateRequest: ActivityUpdateRequest) {
     const headers = {
       'Content-Type': 'multipart/form-data',
     };
-    const { data } = await apiClient.put<ActivityResponse>(
-      `activities/${activityId}`, updateRequest, { headers }
+    const { data } = await apiClient.patch<ActivityResponse>(
+      `activities/${activityId}`, objToFormData(updateRequest), { headers }
     );
     return data;
   }
