@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Button, Pressable, Platform, StatusBar } from 'react-native'
-import { BaseButton, ScrollView, TextInput } from 'react-native-gesture-handler'
+import { StyleSheet, Text, View, ToastAndroid } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler'
 import { COLORS, FONT, SIZES } from '@/constants'
 import AppTextInput from '@/modules/shared/AppTextInput'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -17,7 +17,6 @@ import { ActivityInfoSchema, ActivityInfo } from './activity.schema'
 import { Colors, Picker } from 'react-native-ui-lib'
 import AppButton from '../shared/AppButton'
 import { useAuth } from '@/context/authContext'
-import { white } from 'react-native-paper/lib/typescript/styles/themes/v2/colors'
 
 const dropdownIcon = <MaterialIcons name="arrow-drop-down" size={30} color="black" />
 
@@ -69,6 +68,7 @@ const CreateActivity = (props: Props) => {
     createMutation.mutate(objToFormData(activityData), {
       onSuccess: () => {
         console.log('onSuccess in CreateActivityPage')
+        ToastAndroid.show('New activity created', ToastAndroid.SHORT)
         router.push('/(app)/(tabs)/')
       },
       onError: error => {
@@ -252,16 +252,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
-
   footer: {
     backgroundColor: '#fff',
     paddingVertical: 16,
     paddingHorizontal: 16,
     flexDirection: 'row',
-    // borderTopColor: Colors.grey,
-    // borderTopWidth: StyleSheet.hairlineWidth,
     gap: 10,
-    backgroundColor: 'white',
   },
   textinput: {
     width: '100%',

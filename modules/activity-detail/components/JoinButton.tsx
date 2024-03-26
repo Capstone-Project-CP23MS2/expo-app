@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, ToastAndroid } from 'react-native'
 import React from 'react'
 import AppButton from '@/modules/shared/AppButton'
 import { UseCreateParticipant, UseDeleteParticipant } from '@/hooks/useAPI'
@@ -19,6 +19,11 @@ export default function JoinButton({ userId, activityId, isParticipant }: Props)
   const onJoinActivity = async () => {
     createParticipantMutation.mutate(objToFormData({ userId, activityId }), {
       onSuccess: data => {
+        ToastAndroid.showWithGravity(
+          "You've joined Activitiy",
+          ToastAndroid.SHORT,
+          ToastAndroid.TOP,
+        )
         console.log('🚀 ~ createParticipantMutation.mutate ~ data:', data)
       },
       onError: error => {
@@ -32,6 +37,7 @@ export default function JoinButton({ userId, activityId, isParticipant }: Props)
       { activityId, userId },
       {
         onSuccess: () => {
+          ToastAndroid.showWithGravity("You've left Activity", ToastAndroid.SHORT, ToastAndroid.TOP)
           router.push('/(app)/(tabs)/')
         },
         onError: error => {
@@ -42,9 +48,7 @@ export default function JoinButton({ userId, activityId, isParticipant }: Props)
   }
 
   if (isParticipant) {
-    return (
-      <AppButton variant="tertiary" label="Leave Activity" onPress={onLeaveActivity} fullWidth />
-    )
+    return <AppButton variant="danger" label="Leave Activity" onPress={onLeaveActivity} fullWidth />
   }
 
   return <AppButton variant="primary" label="Join Activity" onPress={onJoinActivity} fullWidth />

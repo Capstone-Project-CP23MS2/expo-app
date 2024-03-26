@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, ToastAndroid } from 'react-native'
 import React from 'react'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { Card, Colors, Picker } from 'react-native-ui-lib'
@@ -57,6 +57,7 @@ export default function ActivityEditScreen() {
       {
         onSuccess: () => {
           console.log('onSuccess in UpdateActivityPage')
+          ToastAndroid.show('Activity updated', ToastAndroid.SHORT)
           router.back()
         },
         onError: error => {
