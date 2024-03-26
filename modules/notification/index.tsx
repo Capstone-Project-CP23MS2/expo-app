@@ -1,54 +1,43 @@
 import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native'
-import { RefreshControl, ScrollView } from 'react-native-gesture-handler'
-import React, { useState, useEffect, useCallback } from 'react'
-import { Ionicons } from '@expo/vector-icons' // Import the Ionicons icon set
+import { RefreshControl } from 'react-native-gesture-handler'
+import React, { useState, useCallback } from 'react'
+import { UseDeleteNotification, UseGetMyUserInfo, UseGetNotifications } from '@/hooks/useAPI'
+import { Ionicons } from '@expo/vector-icons'
+import notification from '@/app/(app)/notification/notification'
 import { SIZES } from '@/constants'
 
-type Props = {}
-
-// Replace this with your actual function to fetch notifications from the database
-const fetchNotificationsFromDatabase = async () => {
-  // Simulating fetching notifications from a database
-  return [
-    { id: 1, title: 'New message from John', timestamp: '2023-03-21T10:30:00Z' },
-    { id: 2, title: 'Upcoming event reminder', timestamp: '2023-03-20T16:00:00Z' },
-    { id: 3, title: 'Your order has been shipped', timestamp: '2023-03-19T08:15:00Z' },
-    { id: 4, title: 'Your order has been test', timestamp: '2023-03-19T08:15:00Z' },
-  ]
-}
-
 const NotificationScreen = () => {
-  const [notifications, setNotifications] = useState([])
   const [refreshing, setRefreshing] = useState(false)
+  const { data, isLoading, isError, error, refetch } = UseGetNotifications()
+  const { data: userInfoData } = UseGetMyUserInfo()
+  const { content: notifications } = data || {}
 
+  // Delete Notification
+  const deleteMutation = UseDeleteNotification()
+  const delNotification = (notiId: number) => {
+    deleteMutation.mutate(notiId, {
+      onSuccess() {},
+    })
+  }
+
+  // Refresh
   const onRefresh = useCallback(() => {
     setRefreshing(true)
-    fetchNotificationsFromDatabase()
+    refetch()
     setRefreshing(false)
   }, [])
-
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const fetchedNotifications = await fetchNotificationsFromDatabase()
-      setNotifications(fetchedNotifications)
-    }
-
-    fetchNotifications()
-  }, [])
-
-  const deleteNotification = id => {
-    setNotifications(notifications.filter(notification => notification.id !== id))
-  }
 
   const renderNotification = ({ item }) => (
     <View style={styles.notificationContainer}>
       <View style={styles.notificationContent}>
-        <Text style={styles.notificationTitle}>{item.title}</Text>
+        <Text style={styles.notificationTitle}>{item.message}</Text>
         <Text style={styles.notificationTimestamp}>
-          {new Date(item.timestamp).toLocaleString()}
+          {new Date(item.createdAt).toLocaleString()}
         </Text>
+        <Text>Type: {item.type}</Text>
+        <Text>Unread: {item.unRead ? 'Yes' : 'No'}</Text>
       </View>
-      <TouchableOpacity onPress={() => deleteNotification(item.id)}>
+      <TouchableOpacity onPress={() => delNotification(item.notificationId)}>
         <Ionicons name="close-circle" size={24} color="#666" />
       </TouchableOpacity>
     </View>
@@ -57,13 +46,35 @@ const NotificationScreen = () => {
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.container}>
-        <FlatList
-          data={notifications}
-          renderItem={renderNotification}
-          keyExtractor={item => item.id.toString()}
-          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-          contentContainerStyle={{ padding: 15 }}
-        />
+        {isLoading ? (
+          <Text>Loading...</Text>
+        ) : isError ? (
+          <Text>Error: {error.message}</Text>
+        ) : notifications?.filter(notification => notification.targetId === userInfoData?.userId)
+            .length ? (
+          <FlatList
+            data={notifications?.filter(
+              notification => notification.targetId === userInfoData?.userId,
+            )}
+            renderItem={renderNotification}
+            keyExtractor={item => item.notificationId.toString()}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+            contentContainerStyle={{ padding: 15 }}
+          />
+        ) : (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 1,
+              width: '100%',
+              gap: 5,
+            }}
+          >
+            <Text style={{ fontSize: SIZES.large, fontWeight: 'bold' }}>No notifications.</Text>
+            <Text>You can see a list of notifications here.</Text>
+          </View>
+        )}
       </View>
     </View>
   )

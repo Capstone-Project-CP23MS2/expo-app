@@ -2,7 +2,6 @@ import { View, Pressable, Text, StyleSheet, ToastAndroid } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import Animated, {
-  SlideInDown,
   interpolate,
   useAnimatedRef,
   useAnimatedStyle,
