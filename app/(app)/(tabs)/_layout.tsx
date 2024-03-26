@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Link, Tabs } from 'expo-router'
 import { COLORS, FONT } from '@/constants'
-import { FontAwesome5, MaterialIcons, Octicons, Fontisto } from '@expo/vector-icons'
+import { FontAwesome5, MaterialIcons, Octicons, Fontisto, AntDesign } from '@expo/vector-icons'
 
 type Props = {}
 
@@ -34,6 +34,15 @@ const TabsLayout = (props: Props) => {
       />
 
       <Tabs.Screen
+        name="calendar"
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome5 name="calendar" size={size} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
         name="dev"
         options={{
           tabBarIcon: ({ size, color }) => <FontAwesome5 name="dev" size={size} color={color} />,
@@ -43,7 +52,7 @@ const TabsLayout = (props: Props) => {
       <Tabs.Screen
         name="whishlists"
         options={{
-          tabBarIcon: ({ size, color }) => <Fontisto name="favorite" size={size} color={color} />,
+          tabBarIcon: ({ size, color }) => <AntDesign name="star" size={size} color={color} />,
         }}
       />
     </Tabs>
