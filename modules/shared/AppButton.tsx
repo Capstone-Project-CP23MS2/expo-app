@@ -41,7 +41,7 @@ const stylesheet = createStyleSheet(theme => ({
     variants: {
       color: {
         default: {
-          backgroundColor: theme.colors.primary,
+          backgroundColor: COLORS.primary,
         },
         primary: {
           backgroundColor: theme.colors.primary,
@@ -50,10 +50,10 @@ const stylesheet = createStyleSheet(theme => ({
           backgroundColor: theme.colors.secondary,
         },
         tertiary: {
-          backgroundColor: theme.colors.primary,
+          backgroundColor: COLORS.tertiary,
         },
         danger: {
-          backgroundColor: theme.colors.primary,
+          backgroundColor: COLORS.red,
         },
         disable: {
           backgroundColor: theme.colors.primary,
@@ -73,6 +73,6 @@ const stylesheet = createStyleSheet(theme => ({
   label: {
     fontSize: SIZES.medium,
     color: COLORS.white,
-    fontFamily: FONT.bold,
+    fontFamily: FONT.semiBold,
   },
 }))

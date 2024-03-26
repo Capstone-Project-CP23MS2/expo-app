@@ -1,4 +1,4 @@
-import { View, Pressable, Text, StyleSheet } from 'react-native'
+import { View, Pressable, Text, StyleSheet, ToastAndroid } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import Animated, {
@@ -53,6 +53,7 @@ const Page = (props: Props) => {
   const onDelete = () => {
     deleteMutation.mutate(activityId, {
       onSuccess() {
+        ToastAndroid.show('Activity deleted', ToastAndroid.SHORT)
         router.push('/(app)/(tabs)')
       },
     })
@@ -193,58 +194,15 @@ const Page = (props: Props) => {
                 </View>
               </View>
 
-              {isOwner && <AppButton label="Edit" variant="primary" onPress={onEdit} fullWidth />}
-
-              <View style={{ flex: 1, flexDirection: 'row', marginTop: 20, gap: 10 }}>
-                {/* <BaseButton
-                  onPress={showModal}
-                  style={[
-                    defaultStyles.btn,
-                    { backgroundColor: 'lightskyblue' },
-                    { borderRadius: 30 },
-                  ]}
-                >
-                  <Text style={[defaultStyles.btnText, { color: 'black' }]}>Edit</Text>
-                </BaseButton> */}
-              </View>
+              {isOwner && (
+                <View style={{ marginTop: 10 }}>
+                  <AppButton label="Edit" variant="primary" onPress={onEdit} fullWidth />
+                </View>
+              )}
             </View>
-            {/* <View style={styles.hostView}>
-            <Image
-              source={{ uri: listing.host_picture_url }}
-              style={styles.host}
-            />
-
-            <View>
-              <Text style={{ fontWeight: '500', fontSize: 16 }}>
-                Hosted by {listing.host_name}
-              </Text>
-              <Text>Host since {listing.host_since}</Text>
-            </View>
-          </View> */}
-
-            {/* <View style={styles.divider} /> */}
           </View>
         </ScrollView>
-
-        {/* <View style={defaultStyles.footer}>
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 20,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <BaseButton>
-            <MaterialIcons name="favorite-outline" size={36} color="black" />
-          </BaseButton>
-          <BaseButton
-            style={[defaultStyles.btn, { paddingRight: 20, paddingLeft: 20 }]}>
-            <Text style={defaultStyles.btnText}>👋 Join</Text>
-          </BaseButton>
-        </View>
-      </View> */}
       </View>
-      {/* <ActivityFooter /> */}
       <View style={styles.footerContainer}>
         {user?.userId === activity?.hostUserId ? (
           <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
