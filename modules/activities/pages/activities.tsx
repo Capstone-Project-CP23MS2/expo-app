@@ -79,7 +79,9 @@ const index = (props: Props) => {
           <ActivityIndicator size="large" color={COLORS.gray} />
         ) : isError ? (
           <Text>Error! {error.message}</Text>
-        ) : activities?.length ? (
+        ) : activities?.filter(activity =>
+            activity.users.some(user => user.userId === userInfoData?.userId),
+          ).length ? (
           activities
             ?.filter(activity => activity.users.some(user => user.userId === userInfoData?.userId))
             .map(activity => (
@@ -90,7 +92,27 @@ const index = (props: Props) => {
               />
             ))
         ) : (
-          <Text>no activity</Text>
+          <View
+            style={{
+              flex: 1,
+              width: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#FFF',
+              padding: 20,
+              elevation: 4,
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.23,
+              shadowRadius: 2.62,
+              borderRadius: SIZES.small,
+            }}
+          >
+            <Text>No Join Activity.</Text>
+          </View>
         )}
         <View style={{ gap: 2 }}>
           <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Host Activities</Text>
@@ -99,7 +121,7 @@ const index = (props: Props) => {
           <ActivityIndicator size="large" color={COLORS.gray} />
         ) : isError ? (
           <Text>Error! {error.message}</Text>
-        ) : activities?.length ? (
+        ) : activities?.filter(activity => activity.hostUserId === userInfoData?.userId).length ? (
           activities
             ?.filter(activity => activity.hostUserId === userInfoData?.userId)
             .map(activity => (
@@ -110,7 +132,27 @@ const index = (props: Props) => {
               />
             ))
         ) : (
-          <Text>no activity</Text>
+          <View
+            style={{
+              flex: 1,
+              width: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#FFF',
+              padding: 20,
+              elevation: 4,
+              shadowColor: '#000',
+              shadowOffset: {
+                width: 0,
+                height: 2,
+              },
+              shadowOpacity: 0.23,
+              shadowRadius: 2.62,
+              borderRadius: SIZES.small,
+            }}
+          >
+            <Text>No Host Activity.</Text>
+          </View>
         )}
       </View>
     )
