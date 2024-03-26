@@ -53,13 +53,15 @@ const index = (props: Props) => {
         ) : isError ? (
           <Text>Error! {error.message}</Text>
         ) : activities?.length ? (
-          activities?.map(activity => (
-            <ActivityCard
-              key={`activity-${activity.activityId}`}
-              activity={activity}
-              handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
-            />
-          ))
+          activities
+            ?.filter(activity => !activity.users.some(user => user.userId === userInfoData?.userId))
+            .map(activity => (
+              <ActivityCard
+                key={`activity-${activity.activityId}`}
+                activity={activity}
+                handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+              />
+            ))
         ) : (
           <Text>no activity</Text>
         )}
@@ -115,7 +117,6 @@ const index = (props: Props) => {
   }
 
   const onChangeIndex = useCallback((index: number) => {
-    console.log('Index ' + index + ' of the second segmentedControl was pressed')
     setSelectedIndex(index)
     onRefresh()
   }, [])

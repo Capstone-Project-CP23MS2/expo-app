@@ -35,7 +35,7 @@ export default function login() {
 
     const configureGoogleSignIn = async () => {
       GoogleSignin.configure({
-        scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
+        scopes: ['https://www.googleapis.com/auth/userinfo.email'], // what API you want to access on behalf of the user, default is email and profile
         webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID, // client ID of type WEB for your server. Required to get the idToken on the user object, and for offline access.
         iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
       })
