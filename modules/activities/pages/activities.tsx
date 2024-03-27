@@ -165,7 +165,7 @@ const index = (props: Props) => {
 
   return (
     <View style={{ flex: 1, marginTop: 0 }}>
-      <Stack.Screen
+      {/* <Stack.Screen
         options={{
           header: () => (
             <SafeAreaView style={styles.safeArea}>
@@ -196,7 +196,7 @@ const index = (props: Props) => {
           headerShadowVisible: true,
           headerShown: true,
         }}
-      />
+      /> */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ backgroundColor: 'white' }}

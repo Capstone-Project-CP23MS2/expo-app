@@ -2,7 +2,15 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Link, Tabs } from 'expo-router'
 import { COLORS, FONT } from '@/constants'
-import { FontAwesome5, MaterialIcons, Octicons, Fontisto, AntDesign } from '@expo/vector-icons'
+import {
+  FontAwesome5,
+  MaterialIcons,
+  Octicons,
+  Fontisto,
+  AntDesign,
+  Ionicons,
+  Entypo,
+} from '@expo/vector-icons'
 
 type Props = {}
 
@@ -11,34 +19,18 @@ const TabsLayout = (props: Props) => {
     <Tabs
       screenOptions={{
         tabBarShowLabel: false,
-        tabBarActiveTintColor: COLORS.black,
+        tabBarActiveTintColor: COLORS.primary,
         tabBarHideOnKeyboard: true,
-        tabBarStyle: {
-          bottom: 0,
-          right: 0,
-          left: 0,
-          elevation: 0,
-          height: 60,
-          backgroundColor: 'white',
-        },
+        tabBarStyle: styles.tabBar,
+        headerStyle: styles.header,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          headerShown: false,
-          tabBarIcon: ({ size, color }) => (
-            <Octicons name="list-unordered" size={size} color={color} />
-          ),
-        }}
-      />
-
-      <Tabs.Screen
-        name="calendar"
-        options={{
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome5 name="calendar" size={size} color={color} />
-          ),
+          tabBarIcon: ({ size, color }) => <AntDesign name="profile" size={size} color={color} />,
+          headerTitle: 'Activities',
+          headerTitleAlign: 'center',
         }}
       />
 
@@ -46,6 +38,9 @@ const TabsLayout = (props: Props) => {
         name="dev"
         options={{
           tabBarIcon: ({ size, color }) => <FontAwesome5 name="dev" size={size} color={color} />,
+          headerTitle: 'Development',
+          headerTitleAlign: 'center',
+          headerShadowVisible: true,
         }}
       />
 
@@ -53,6 +48,28 @@ const TabsLayout = (props: Props) => {
         name="whishlists"
         options={{
           tabBarIcon: ({ size, color }) => <AntDesign name="star" size={size} color={color} />,
+          headerTitleAlign: 'center',
+          headerTitle: 'Review',
+        }}
+      />
+
+      <Tabs.Screen
+        name="notification"
+        options={{
+          tabBarIcon: ({ size, color }) => <Entypo name="notification" size={size} color={color} />,
+          headerTitleAlign: 'center',
+          headerTitle: 'Notifications',
+        }}
+      />
+
+      <Tabs.Screen
+        name="profile"
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome5 name="user-alt" size={size} color={color} />
+          ),
+          headerTitleAlign: 'center',
+          headerTitle: 'Profile',
         }}
       />
     </Tabs>
@@ -64,5 +81,10 @@ export default TabsLayout
 const styles = StyleSheet.create({
   tabBar: {
     fontFamily: FONT.semiBold,
+    height: 60,
+    backgroundColor: '#FFF',
+  },
+  header: {
+    shadowColor: '#000',
   },
 })
