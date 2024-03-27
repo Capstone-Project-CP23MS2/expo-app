@@ -15,6 +15,7 @@ import { UseGetActivities, UseGetCategories, UseGetMyUserInfo } from '@/hooks/us
 import { FAB, Icon, AnimatedFAB } from 'react-native-paper'
 import { FloatingButton, TouchableOpacity, SegmentedControl } from 'react-native-ui-lib'
 import ActivityCard from '../components/Card/'
+import AppButton from '@/modules/shared/AppButton'
 
 type Props = {}
 type DataProp = {
@@ -130,6 +131,11 @@ const index = (props: Props) => {
                 <TouchableOpacity onPress={() => router.push('/(app)/profile/profile')}>
                   <MaterialIcons name="account-circle" size={48} color="black" />
                 </TouchableOpacity>
+                <AppButton
+                  label="search"
+                  variant="primary"
+                  onPress={() => router.push('/(app)/activities/search')}
+                />
                 <View>
                   <Text style={styles.headerTitle}>Activities</Text>
                 </View>
