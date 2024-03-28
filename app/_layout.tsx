@@ -1,23 +1,6 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome'
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
-import { useFonts } from 'expo-font'
-import { Stack, useRouter, Slot, SplashScreen } from 'expo-router'
-// import * as SplashScreen from 'expo-splash-screen'
-import { useEffect, useCallback } from 'react'
-import { Pressable, useColorScheme, View, Text } from 'react-native'
-import { MaterialIcons } from '@expo/vector-icons'
-import { COLORS, FONT } from '@/constants'
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query'
+import { Slot, SplashScreen } from 'expo-router'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import useAppLoading from '@/hooks/useAppLoading'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { StatusBar } from 'expo-status-bar'
-import Auth from '@/modules/auth/Auth'
 import { DesignSystem } from '@/utils/design-system'
 
 import 'utils/unistyles'
