@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native
 import { RefreshControl } from 'react-native-gesture-handler'
 import React, { useState, useCallback } from 'react'
 import { UseDeleteNotification, UseGetMyUserInfo, UseGetNotifications } from '@/hooks/useAPI'
-import { Ionicons } from '@expo/vector-icons'
+import { Ionicons, MaterialCommunityIcons, FontAwesome6, FontAwesome5 } from '@expo/vector-icons'
 import notification from '@/app/(app)/notification/notification'
 import { SIZES } from '@/constants'
 
@@ -29,13 +29,30 @@ const NotificationScreen = () => {
 
   const renderNotification = ({ item }) => (
     <View style={styles.notificationContainer}>
+      <View
+        style={{
+          height: 50,
+          width: 50,
+          borderRadius: 50,
+          backgroundColor: 'black',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginRight: 10,
+        }}
+      >
+        {item.type == 'join' ? (
+          <FontAwesome5 name="walking" size={30} color="white" />
+        ) : (
+          <FontAwesome5 name="walking" size={30} color="white" />
+        )}
+      </View>
       <View style={styles.notificationContent}>
         <Text style={styles.notificationTitle}>{item.message}</Text>
         <Text style={styles.notificationTimestamp}>
           {new Date(item.createdAt).toLocaleString()}
         </Text>
-        <Text>Type: {item.type}</Text>
-        <Text>Unread: {item.unRead ? 'Yes' : 'No'}</Text>
+        {/* <Text>Type: {item.type}</Text> */}
+        {/* <Text>Unread: {item.unRead ? 'Yes' : 'No'}</Text> */}
       </View>
       <TouchableOpacity onPress={() => delNotification(item.notificationId)}>
         <Ionicons name="close-circle" size={24} color="#666" />

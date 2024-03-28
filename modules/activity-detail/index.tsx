@@ -206,7 +206,15 @@ const Page = (props: Props) => {
         {user?.userId === activity?.hostUserId ? (
           <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
         ) : (
-          <JoinButton userId={user?.userId} activityId={activityId} isParticipant={isParticipant} />
+          <JoinButton
+            userId={user?.userId}
+            activityId={activityId}
+            isParticipant={isParticipant}
+            targetId={activity?.hostUserId}
+            message={`${user?.username} joined your ${activity?.title}`}
+            unRead={true}
+            type={'join'}
+          />
         )}
       </View>
     </PaperProvider>

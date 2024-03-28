@@ -1,26 +1,48 @@
 import { StyleSheet, Text, View, ToastAndroid } from 'react-native'
 import React from 'react'
 import AppButton from '@/modules/shared/AppButton'
-import { UseCreateParticipant, UseDeleteParticipant } from '@/hooks/useAPI'
+import { UseCreateParticipant, UseDeleteParticipant, UseCreateNotification } from '@/hooks/useAPI'
 import { objToFormData } from '@/utils'
 import { useRouter } from 'expo-router'
+import notification from '@/app/(app)/notification/notification'
 
 type Props = {
   userId: string
   activityId: string
   isParticipant?: boolean
+  targetId: number
+  message: string
+  unRead: boolean
+  type: string
 }
 
-export default function JoinButton({ userId, activityId, isParticipant }: Props) {
+export default function JoinButton({
+  userId,
+  activityId,
+  isParticipant,
+  targetId,
+  message,
+  unRead,
+  type,
+}: Props) {
   const router = useRouter()
   const createParticipantMutation = UseCreateParticipant()
   const deleteParticipantMutation = UseDeleteParticipant()
+  const createNotiMutation = UseCreateNotification()
 
   const onJoinActivity = async () => {
     createParticipantMutation.mutate(objToFormData({ userId, activityId }), {
       onSuccess: data => {
         ToastAndroid.show("You've joined Activitiy", ToastAndroid.SHORT)
         console.log('🚀 ~ createParticipantMutation.mutate ~ data:', data)
+      },
+      onError: error => {
+        console.log(error)
+      },
+    })
+    createNotiMutation.mutate(objToFormData({ targetId, message, unRead, type }), {
+      onSuccess: data => {
+        console.log('🚀 ~ notificationMutation.mutate ~ data:', data)
       },
       onError: error => {
         console.log(error)
