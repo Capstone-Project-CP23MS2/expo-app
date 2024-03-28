@@ -1,11 +1,17 @@
 import notificationsApi from '@/api/notifications'
-import { NotificationUpdateRequest } from '@/api/type'
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query'
 
 export function UseGetNotifications() {
   return useQuery({
     queryKey: ['notifications'],
     queryFn: notificationsApi.getNotifications,
+  })
+}
+
+export function UseGetNotificationById(notiId: any) {
+  return useQuery({
+    queryKey: ['notifications', notiId],
+    queryFn: () => notificationsApi.getNotificationById(notiId),
   })
 }
 

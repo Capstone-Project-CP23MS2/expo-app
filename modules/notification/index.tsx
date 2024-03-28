@@ -3,18 +3,18 @@ import { RefreshControl } from 'react-native-gesture-handler'
 import React, { useState, useCallback } from 'react'
 import {
   UseDeleteNotification,
-  UseGetMyUserInfo,
-  UseGetNotifications,
+  UseGetNotificationById,
   UseUpdateNotification,
 } from '@/hooks/useAPI'
 import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons'
 
 import { COLORS, SIZES } from '@/constants'
+import { useAuth } from '@/context/authContext'
 
 const NotificationScreen = () => {
   const [refreshing, setRefreshing] = useState(false)
-  const { data, isLoading, isError, error, refetch } = UseGetNotifications()
-  const { data: userInfoData } = UseGetMyUserInfo()
+  const { user } = useAuth()
+  const { data, isLoading, isError, error, refetch } = UseGetNotificationById(user?.userId)
   const { content: notifications } = data || {}
 
   // Update Unread
@@ -52,7 +52,7 @@ const NotificationScreen = () => {
     <Pressable
       style={[
         styles.notificationContainer,
-        { backgroundColor: item.unRead ? '#FFF' : COLORS.lightWhite },
+        { backgroundColor: item.unRead ? '#FFF' : COLORS.mediumWhite },
       ]}
       onPress={() => updateNotification(item.notificationId, !item.unRead)}
     >
@@ -92,12 +92,9 @@ const NotificationScreen = () => {
           <Text>Loading...</Text>
         ) : isError ? (
           <Text>Error: {error.message}</Text>
-        ) : notifications?.filter(notification => notification.targetId === userInfoData?.userId)
-            .length ? (
+        ) : notifications?.length ? (
           <FlatList
-            data={notifications?.filter(
-              notification => notification.targetId === userInfoData?.userId,
-            )}
+            data={notifications}
             renderItem={renderNotification}
             keyExtractor={item => item.notificationId.toString()}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}

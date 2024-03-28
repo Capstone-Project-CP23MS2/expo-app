@@ -8,6 +8,11 @@ class NotificationsApi {
     return data
   }
 
+  async getNotificationById(notiId: number) {
+    const { data } = await apiClient.get<NotificationsResponse>(`/notifications?targetId=${notiId}`)
+    return data
+  }
+
   async deleteNotification(notiId: string | number) {
     const url = `${API_URL}/notifications/${notiId}`
     await apiClient.delete(url)
