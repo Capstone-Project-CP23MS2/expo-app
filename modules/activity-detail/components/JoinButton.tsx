@@ -19,11 +19,7 @@ export default function JoinButton({ userId, activityId, isParticipant }: Props)
   const onJoinActivity = async () => {
     createParticipantMutation.mutate(objToFormData({ userId, activityId }), {
       onSuccess: data => {
-        ToastAndroid.showWithGravity(
-          "You've joined Activitiy",
-          ToastAndroid.SHORT,
-          ToastAndroid.TOP,
-        )
+        ToastAndroid.show("You've joined Activitiy", ToastAndroid.SHORT)
         console.log('🚀 ~ createParticipantMutation.mutate ~ data:', data)
       },
       onError: error => {
@@ -37,7 +33,7 @@ export default function JoinButton({ userId, activityId, isParticipant }: Props)
       { activityId, userId },
       {
         onSuccess: () => {
-          ToastAndroid.showWithGravity("You've left Activity", ToastAndroid.SHORT, ToastAndroid.TOP)
+          ToastAndroid.show("You've left Activity", ToastAndroid.SHORT)
           router.push('/(app)/(tabs)/')
         },
         onError: error => {

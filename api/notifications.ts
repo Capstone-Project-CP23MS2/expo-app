@@ -12,6 +12,14 @@ class NotificationsApi {
     const url = `${API_URL}/notifications/${notiId}`
     await apiClient.delete(url)
   }
+
+  async postNotification(targetId: number, message: string) {
+    const { data } = await apiClient.post<NotificationsResponse>('/notifications', {
+      targetId,
+      message,
+    })
+    return data
+  }
 }
 
 const notificationsApi = new NotificationsApi()
