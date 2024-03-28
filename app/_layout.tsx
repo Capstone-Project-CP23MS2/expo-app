@@ -17,11 +17,11 @@ import {
 import useAppLoading from '@/hooks/useAppLoading'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { StatusBar } from 'expo-status-bar'
-import Auth from '@/modules/auth/Auth'
 import { DesignSystem } from '@/utils/design-system'
 
 import 'utils/unistyles'
 import { AuthProvider } from '@/context/authContext'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 // Create a client
 const queryClient = new QueryClient({
@@ -53,7 +53,7 @@ export default function RootLayout() {
   if (!appLoaded) return null
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <StatusBar style="dark" /> */}
+      {/* <StatusBQueryClientProviderar style="dark" /> */}
       <RootLayoutNav />
     </QueryClientProvider>
   )
@@ -62,7 +62,9 @@ export default function RootLayout() {
 function RootLayoutNav() {
   return (
     <AuthProvider>
-      <Slot />
+      <BottomSheetModalProvider>
+        <Slot />
+      </BottomSheetModalProvider>
     </AuthProvider>
   )
 }

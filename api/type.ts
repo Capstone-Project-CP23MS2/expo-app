@@ -18,6 +18,17 @@ export type requestParams = {
   place?: string;
 } | {};
 
+type ActivitiesSortBy = 'activityId' | 'createdAt' | 'dateTime' | 'noOfMembers' | 'title';
+
+export type ActivitiesRequestParams = {
+  page?: number;
+  pageSize?: number;
+  sortBy?: ActivitiesSortBy;
+  categoryIds?: Array<number>;
+  //TODO: change name later
+  title?: string;
+};
+
 // Activity
 export type ActivityResponse = {
   activityId: number;

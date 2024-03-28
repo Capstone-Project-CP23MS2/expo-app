@@ -10,9 +10,11 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 type Props = {
   searchQuery: string
   onSearchChanged: (terms: string) => void
+  onFilterPress: () => void
 }
-export default function SearchHeader({ searchQuery, onSearchChanged }: Props) {
+export default function SearchHeader({ searchQuery, onSearchChanged, onFilterPress }: Props) {
   const { styles } = useStyles(stylesheet)
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ flex: 1, gap: 8 }}>
@@ -32,12 +34,9 @@ export default function SearchHeader({ searchQuery, onSearchChanged }: Props) {
           <Chip
             style={{ borderRadius: 24 }}
             icon={props => <MaterialCommunityIcons {...props} name="chevron-down" size={24} />}
-            onPress={() => console.log('Pressed')}
+            onPress={() => onFilterPress()}
           >
-            Sort
-          </Chip>
-          <Chip icon="information" onPress={() => console.log('Pressed')}>
-            Example Chip
+            Filter
           </Chip>
         </ScrollView>
       </View>

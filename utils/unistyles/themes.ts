@@ -66,11 +66,15 @@ const sharedTheme = {
     },
     utils: {},
   },
+  colors: {
+    backgroundTest: '#DAF7A6'
+  },
 };
 
 export const lightTheme = {
   ...sharedTheme,
   colors: {
+    ...sharedTheme.colors,
     primary: '#3E64FF',
     secondary: '#03dac6',
     typography: '#000000',
