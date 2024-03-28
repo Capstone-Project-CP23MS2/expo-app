@@ -1,7 +1,12 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Pressable } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
 import React, { useState, useCallback } from 'react'
-import { UseDeleteNotification, UseGetMyUserInfo, UseGetNotifications } from '@/hooks/useAPI'
+import {
+  UseDeleteNotification,
+  UseGetMyUserInfo,
+  UseGetNotifications,
+  UseUpdateNotification,
+} from '@/hooks/useAPI'
 import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons'
 
 import { COLORS, SIZES } from '@/constants'
@@ -11,6 +16,22 @@ const NotificationScreen = () => {
   const { data, isLoading, isError, error, refetch } = UseGetNotifications()
   const { data: userInfoData } = UseGetMyUserInfo()
   const { content: notifications } = data || {}
+
+  // Update Unread
+  const updateMutation = UseUpdateNotification()
+  const updateNotification = (notiId: number, unRead: boolean) => {
+    updateMutation.mutate(
+      { notiId, unRead },
+      {
+        onSuccess() {
+          console.log('update unread')
+        },
+        onError() {
+          console.log('fail to update')
+        },
+      },
+    )
+  }
 
   // Delete Notification
   const deleteMutation = UseDeleteNotification()
@@ -28,7 +49,13 @@ const NotificationScreen = () => {
   }, [])
 
   const renderNotification = ({ item }: any) => (
-    <View style={styles.notificationContainer}>
+    <Pressable
+      style={[
+        styles.notificationContainer,
+        { backgroundColor: item.unRead ? '#FFF' : COLORS.lightWhite },
+      ]}
+      onPress={() => updateNotification(item.notificationId, !item.unRead)}
+    >
       <View
         style={{
           height: 50,
@@ -55,7 +82,7 @@ const NotificationScreen = () => {
       <TouchableOpacity onPress={() => delNotification(item.notificationId)}>
         <Ionicons name="close-circle" size={24} color="#666" />
       </TouchableOpacity>
-    </View>
+    </Pressable>
   )
 
   return (
@@ -104,7 +131,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 15,
     padding: 16,
-    backgroundColor: '#fff',
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',
