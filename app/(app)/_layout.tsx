@@ -28,11 +28,27 @@ const AppEntry = (props: Props) => {
       }}
     >
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      {/* <Stack.Screen name="(tabs)/activities" options={{ headerShown: false }} /> */}
+
       <Stack.Screen name="activities/[id]" options={{ headerTitle: 'Activity Details' }} />
       <Stack.Screen name="activities/create-form" options={{ headerTitle: 'Create Activity' }} />
-      {/* <Stack.Screen name="profile/profile" options={{ headerTitle: 'Profile' }} /> */}
-      {/* <Stack.Screen name="notification/notification" options={{ headerTitle: 'Notification' }} /> */}
+      <Stack.Screen
+        name="activities/edit"
+        options={{
+          headerTitle: 'Edit Activity',
+          animation: 'slide_from_right',
+          animationDuration: 200,
+        }}
+      />
+      <Stack.Screen
+        name="activities/search"
+        options={{
+          headerTitle: 'Search Activity',
+          animation: 'slide_from_right',
+          animationDuration: 200,
+        }}
+      />
+      <Stack.Screen name="profile/profile" options={{ headerTitle: 'Profile' }} />
+      <Stack.Screen name="notification/notification" options={{ headerTitle: 'Notification' }} />
     </Stack>
   )
 }

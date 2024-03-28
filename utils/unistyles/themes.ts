@@ -66,7 +66,7 @@ const sharedTheme = {
     },
     utils: {},
   },
-}
+};
 
 export const lightTheme = {
   ...sharedTheme,
@@ -76,7 +76,7 @@ export const lightTheme = {
     typography: '#000000',
     background: '#ffffff',
   },
-} as const
+} as const;
 
 export const darkTheme = {
   ...sharedTheme,
@@ -86,4 +86,4 @@ export const darkTheme = {
     typography: '#ffffff',
     background: '#000000',
   },
-} as const
+} as const;

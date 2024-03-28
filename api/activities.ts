@@ -17,6 +17,11 @@ class ActivitiesApi {
     return data;
   }
 
+  async getActivitiesNew(params: requestParams) {
+    const { data: { content: activities, ...paginationData } } = await apiClient.get<ActivitiesResponse>('/activities', { params });
+    return { activities, paginationData };
+  }
+
   async getActivityById(id: string | string[]) {
     const { data } = await apiClient.get<ActivityResponse>(`/activities/${id}`);
     return data;
