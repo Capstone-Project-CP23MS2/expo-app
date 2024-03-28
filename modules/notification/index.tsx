@@ -7,7 +7,6 @@ import {
   UseUpdateNotification,
 } from '@/hooks/useAPI'
 import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons'
-import { useNotificationStore } from '@/stores/notificationStore'
 
 import { COLORS, SIZES } from '@/constants'
 import { useAuth } from '@/context/authContext'
@@ -17,10 +16,6 @@ const NotificationScreen = () => {
   const { user } = useAuth()
   const { data, isLoading, isError, error, refetch } = UseGetNotificationById(user?.userId)
   const { content: notifications } = data || {}
-
-  useNotificationStore.set.unreadCount(
-    notifications?.filter(notification => notification.unRead).length ?? 0,
-  )
 
   // Update Unread
   const updateMutation = UseUpdateNotification()

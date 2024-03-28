@@ -3,13 +3,18 @@ import React, { useState, useEffect } from 'react'
 import { Tabs } from 'expo-router'
 import { COLORS, FONT } from '@/constants'
 import { FontAwesome5, AntDesign, Entypo } from '@expo/vector-icons'
-import { useNotificationStore } from '@/stores/notificationStore'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+
+import { UseGetNotificationById } from '@/hooks/useAPI'
+import { useAuth } from '@/context/authContext'
 
 type Props = {}
 
 const TabsLayout = (props: Props) => {
-  const unreadCount = useNotificationStore.get.unreadCount()
+  const { user } = useAuth()
+  const { data } = UseGetNotificationById(user?.userId)
+  const { content: notifications } = data || {}
+
+  const unreadCount = notifications?.filter(notification => notification.unRead).length
 
   return (
     <Tabs
