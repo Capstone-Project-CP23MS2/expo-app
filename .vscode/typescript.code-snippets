@@ -28,4 +28,14 @@
     ],
     "description": "Typescript React Function Component",
   },
+  "View with style": {
+    "prefix": ",v",
+    "body": ["<View style={styles.$1}>", "  $2", "</View>"],
+    "description": "Typescript React Function Component",
+  },
+  "Text with style": {
+    "prefix": ",t",
+    "body": ["<Text style={styles.$1}>$2</Text>"],
+    "description": "Typescript React Function Component",
+  },
 }
