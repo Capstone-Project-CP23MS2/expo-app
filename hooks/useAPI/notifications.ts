@@ -18,3 +18,15 @@ export function UseDeleteNotification() {
     },
   })
 }
+
+export function UseCreateNotification() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationKey: ['createNotification'],
+    mutationFn: notificationsApi.createNotification,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['notifications'] })
+    },
+  })
+}
