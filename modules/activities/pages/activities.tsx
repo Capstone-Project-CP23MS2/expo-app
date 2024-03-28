@@ -1,5 +1,5 @@
 import { COLORS, FONT, SIZES } from '@/constants'
-import { Link, Stack, useRouter } from 'expo-router'
+import { Link, Stack, useRouter, Tabs } from 'expo-router'
 import { View, Text, StyleSheet, Pressable, ActivityIndicator, Button } from 'react-native'
 
 import { BaseButton, RefreshControl, ScrollView, TextInput } from 'react-native-gesture-handler'
@@ -203,6 +203,22 @@ const index = (props: Props) => {
           headerShown: true,
         }}
       /> */}
+      <Tabs.Screen
+        options={{
+          header: () => (
+            <SafeAreaView style={styles.safeArea}>
+              <View style={styles.headerArea}>
+                <AppButton
+                  label="search"
+                  variant="primary"
+                  onPress={() => router.push('/(app)/activities/search')}
+                  fullWidth
+                />
+              </View>
+            </SafeAreaView>
+          ),
+        }}
+      />
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ backgroundColor: 'white' }}

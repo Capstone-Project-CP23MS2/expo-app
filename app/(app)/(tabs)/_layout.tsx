@@ -11,6 +11,7 @@ import {
   Ionicons,
   Entypo,
 } from '@expo/vector-icons'
+import AppButton from '@/modules/shared/AppButton'
 
 type Props = {}
 
@@ -29,8 +30,6 @@ const TabsLayout = (props: Props) => {
         name="index"
         options={{
           tabBarIcon: ({ size, color }) => <AntDesign name="profile" size={size} color={color} />,
-          headerTitle: 'Activities',
-          headerTitleAlign: 'center',
         }}
       />
 
