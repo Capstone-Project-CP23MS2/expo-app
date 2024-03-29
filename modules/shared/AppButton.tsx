@@ -7,8 +7,8 @@ import { BaseButton, BaseButtonProps } from 'react-native-gesture-handler'
 export type Color = 'primary' | 'secondary' | 'tertiary' | 'danger' | 'disable'
 
 type Props = BaseButtonProps & {
-  variant: Color
-  label: string
+  variant?: Color
+  label?: string
   fullWidth?: boolean
   round?: boolean
   // onPress: () => void

@@ -11,6 +11,30 @@ export function UseGetActivities(params: requestParams) {
   });
 };
 
+type ActivitiesSortBy = 'activityId' | 'createdAt' | 'dateTime' | 'noOfMembers' | 'title';
+
+type ActivitiesParameters = {
+  page?: number;
+  pageSize?: number;
+  sortBy?: ActivitiesSortBy;
+  categoryIds?: [number];
+  //TODO: change name later
+  title?: string;
+};
+
+export function UseSearchActivities(params: ActivitiesParameters = {}, test: any = '') {
+  console.log('🚚 UseSearchActivities:');
+  const { data, ...rest } = useQuery({
+    queryKey: ['activities-search'],
+    queryFn: () => activitiesApi.getActivities(params),
+  });
+
+  const { content: activities, ...paginationData } = data!;
+  console.log(activities);
+
+  return { activities, paginationData, ...rest };
+};
+
 export function UseGetActivity(activityId: string | string[]) {
   return useQuery({
     queryKey: ['activities', activityId],

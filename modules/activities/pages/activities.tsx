@@ -1,5 +1,5 @@
 import { COLORS, FONT, SIZES } from '@/constants'
-import { Link, Stack, useRouter } from 'expo-router'
+import { Link, Stack, useRouter, Tabs } from 'expo-router'
 import { View, Text, StyleSheet, Pressable, ActivityIndicator, Button } from 'react-native'
 
 import { BaseButton, RefreshControl, ScrollView, TextInput } from 'react-native-gesture-handler'
@@ -15,6 +15,7 @@ import { UseGetActivities, UseGetCategories, UseGetMyUserInfo } from '@/hooks/us
 import { FAB, Icon, AnimatedFAB } from 'react-native-paper'
 import { FloatingButton, TouchableOpacity, SegmentedControl } from 'react-native-ui-lib'
 import ActivityCard from '../components/Card/'
+import AppButton from '@/modules/shared/AppButton'
 
 type Props = {}
 type DataProp = {
@@ -165,7 +166,7 @@ const index = (props: Props) => {
 
   return (
     <View style={{ flex: 1, marginTop: 0 }}>
-      <Stack.Screen
+      {/* <Stack.Screen
         options={{
           header: () => (
             <SafeAreaView style={styles.safeArea}>
@@ -173,6 +174,11 @@ const index = (props: Props) => {
                 <TouchableOpacity onPress={() => router.push('/(app)/profile/profile')}>
                   <MaterialIcons name="account-circle" size={48} color="black" />
                 </TouchableOpacity>
+                <AppButton
+                  label="search"
+                  variant="primary"
+                  onPress={() => router.push('/(app)/activities/search')}
+                />
                 <View>
                   <Text style={styles.headerTitle}>Activities</Text>
                 </View>
@@ -195,6 +201,22 @@ const index = (props: Props) => {
           ),
           headerShadowVisible: true,
           headerShown: true,
+        }}
+      /> */}
+      <Tabs.Screen
+        options={{
+          header: () => (
+            <SafeAreaView style={styles.safeArea}>
+              <View style={styles.headerArea}>
+                <AppButton
+                  label="search"
+                  variant="primary"
+                  onPress={() => router.push('/(app)/activities/search')}
+                  fullWidth
+                />
+              </View>
+            </SafeAreaView>
+          ),
         }}
       />
       <ScrollView

@@ -28,7 +28,7 @@ export default function Page(props: Props) {
   const { styles, breakpoint } = useStyles(stylesheet)
 
   useEffect(() => {
-    navigation.setOptions({ headerShown: false })
+    navigation.setOptions({})
   }, [navigation])
 
   return (

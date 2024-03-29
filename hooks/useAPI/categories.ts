@@ -1,6 +1,12 @@
 import categoriesApi from "@/api/category";
 import { useQuery } from "@tanstack/react-query";
 
+
+type CategoriesParameters = {
+    page?: number;
+    pageSize?: number;
+};
+
 export function UseGetCategories() {
     return useQuery({
         queryKey: ['categories'],
