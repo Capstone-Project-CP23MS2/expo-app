@@ -20,6 +20,7 @@ import {
   User as GoogleUserInfo,
   statusCodes,
 } from '@react-native-google-signin/google-signin'
+import { TouchableOpacity } from 'react-native'
 
 import Colors from '@/constants/Colors'
 
@@ -77,9 +78,9 @@ export default function login() {
           <Text style={styles.title}>Let's get started</Text>
           <Text style={styles.subTitle}>Connect your lifestyle with SConnect</Text>
         </View>
-        <Pressable style={styles.button} onPress={onGoogleSignIn}>
+        <TouchableOpacity style={styles.button} onPress={onGoogleSignIn}>
           <Text style={styles.text}>Sign in with Google</Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   )
