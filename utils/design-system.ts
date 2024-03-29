@@ -1,5 +1,4 @@
-import { Colors, Typography, Spacings } from 'react-native-ui-lib';
-// import { RNUIThemeManagerInit } from './ComponentsConfig';
+import { Colors, Typography, Spacings, ThemeManager } from 'react-native-ui-lib';
 
 export class DesignSystem {
   static setup() {
@@ -43,8 +42,7 @@ export class DesignSystem {
       lg: 24,
       xl: 40,
     });
-    // RNUIThemeManagerInit();
-
   }
 }
+
 
