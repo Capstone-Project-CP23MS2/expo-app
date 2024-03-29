@@ -85,7 +85,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const login = async ({ redirectToRegister = true } = {}) => {
     const isSignedInWithGoogle = await GoogleSignin.isSignedIn()
-    if (isSignedInWithGoogle) logout()
+    if (isSignedInWithGoogle) await logout()
 
     const { email, idToken }: any = await googleAuthentication()
     setSession({
