@@ -16,17 +16,16 @@ import { FAB, Icon, AnimatedFAB } from 'react-native-paper'
 import { FloatingButton, TouchableOpacity, SegmentedControl } from 'react-native-ui-lib'
 import ActivityCard from '../components/Card/'
 import AppButton from '@/modules/shared/AppButton'
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
+import MapActivities from '../components/MapActivities'
 
 type Props = {}
+
 type DataProp = {
   content: any
 }
 
 const index = (props: Props) => {
   const router = useRouter()
-  // const [activities, setActivities] = useState<any[]>([]);
-  // console.log(activities);
   const { data, isLoading, isError, error, refetch } = UseGetActivities({})
   const { content: activities, first, totalPages } = data || {}
 
@@ -56,7 +55,9 @@ const index = (props: Props) => {
           <Text>Error! {error.message}</Text>
         ) : activities?.length ? (
           activities
-            ?.filter(activity => !activity.users.some(user => user.userId === userInfoData?.userId))
+            ?.filter(
+              activity => !activity.users.some((user: any) => user.userId === userInfoData?.userId),
+            )
             .map(activity => (
               <ActivityCard
                 key={`activity-${activity.activityId}`}
@@ -70,11 +71,6 @@ const index = (props: Props) => {
       </View>
     )
   }
-
-  const onChangeIndex = useCallback((index: number) => {
-    setSelectedIndex(index)
-    onRefresh()
-  }, [])
 
   return (
     <View style={{ flex: 1, marginTop: 0 }}>
@@ -100,7 +96,13 @@ const index = (props: Props) => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         <View style={styles.container}>
-          <MapView style={styles.map} provider={PROVIDER_GOOGLE} />
+          <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Find Your Activities</Text>
+          <Pressable
+            style={{ borderRadius: SIZES.small, overflow: 'hidden' }}
+            onPress={() => router.push('/(app)/map/')}
+          >
+            <MapActivities />
+          </Pressable>
           <AvailableActivities />
         </View>
       </ScrollView>
@@ -137,8 +139,10 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   container: {
+    flex: 1,
     paddingTop: 15,
     padding: SIZES.medium,
+    gap: 10,
   },
   header: {
     flexDirection: 'row',
@@ -167,9 +171,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
-  },
-  map: {
-    width: '100%',
-    height: '100%',
   },
 })
