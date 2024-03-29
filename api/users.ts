@@ -1,5 +1,6 @@
-import { UserResponse, UsersResponse } from "./type";
+import { UserResponse, UserUpdateRequest, UsersResponse } from "./type";
 import apiClient from "./apiClient";
+import { objToFormData } from "@/utils";
 
 class UsersApi {
 
@@ -21,6 +22,16 @@ class UsersApi {
 
   async getUserByEmail(email: any) {
     const { data } = await apiClient.get<UsersResponse>('/users', { params: { email } });
+    return data;
+  }
+
+  async updateUser({ userId, updateRequest }: { userId: number, updateRequest: UserUpdateRequest; }) {
+    const headers = {
+      'Content-Type': 'multipart/form-data',
+    };
+    const { data } = await apiClient.patch<UserResponse>(
+      `users/${userId}`, objToFormData(updateRequest), { headers }
+    );
     return data;
   }
 
