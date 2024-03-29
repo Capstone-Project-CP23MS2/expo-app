@@ -5,11 +5,13 @@ import {
   statusCodes,
   User as GoogleUserInfo,
 } from '@react-native-google-signin/google-signin'
-import { UserResponse } from '@/api/type'
+import { UserResponse, UserUpdateRequest } from '@/api/type'
 import { useRouter, useSegments } from 'expo-router'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import usersApi from '@/api/users'
 import { AxiosError, isAxiosError } from 'axios'
+import { UseUpdateMyUserInfo } from '@/hooks/useAPI'
+import { set } from 'react-hook-form'
 
 const TOKEN_KEY = 'my-jwt'
 
@@ -23,6 +25,8 @@ interface AuthProps {
   onLogin?: (args?: { redirectToRegister?: boolean }) => Promise<any>
   onLogout?: () => Promise<any>
   isLoading?: boolean
+  onSyncUserInfo?: (userInfo: UserResponse) => void
+  // test?: (props: any) => any
 }
 
 export const AuthContext = createContext<AuthProps>({})
@@ -72,6 +76,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const register = async (newUser: UserResponse) => {
     setUser(newUser)
     router.push('/(app)/(tabs)')
+  }
+  const syncUserInfo = (userInfo: UserResponse) => {
+    setUser(userInfo)
   }
 
   const loginMutation = useMutation({
@@ -134,6 +141,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     onRegister: register,
     onLogin: login,
     onLogout: logout,
+    onSyncUserInfo: syncUserInfo,
     session,
     isLoading: isLoading,
   }
@@ -185,3 +193,22 @@ const googleAuthentication = async () => {
     }
   }
 }
+
+// const updateUserInfoMutation = UseUpdateMyUserInfo()
+
+// const updateUser = async (updateData: UserUpdateRequest) => {
+//   updateUserInfoMutation.mutate(
+//     { userId: user?.userId!, updateRequest: updateData },
+//     {
+//       onSuccess: data => {
+//         setUser(data)
+//         console.log('onSuccess in UpdateProfilePage')
+//         router.back()
+//       },
+//       onError: error => {
+//         console.log('error')
+//         console.log(error)
+//       },
+//     },
+//   )
+// }
