@@ -36,13 +36,25 @@ const sharedTheme = {
       fontSize: 18,
       fontFamily: 'NotoSansThaiRegular',
     },
+    lgB: {
+      fontSize: 18,
+      fontFamily: 'NotoSansThaiBold',
+    },
     md: {
       fontSize: 16,
       fontFamily: 'NotoSansThaiRegular',
     },
+    mdB: {
+      fontSize: 16,
+      fontFamily: 'NotoSansThaiBold',
+    },
     sm: {
       fontSize: 14,
       fontFamily: 'NotoSansThaiRegular',
+    },
+    smB: {
+      fontSize: 14,
+      fontFamily: 'NotoSansThaiBold',
     },
     xs: {
       fontSize: 12,
@@ -67,7 +79,8 @@ const sharedTheme = {
     utils: {},
   },
   colors: {
-    backgroundTest: '#DAF7A6'
+    backgroundTest: '#DAF7A6',
+
   },
 };
 
@@ -79,6 +92,7 @@ export const lightTheme = {
     secondary: '#03dac6',
     typography: '#000000',
     background: '#ffffff',
+    danger: '#ff5252',
   },
 } as const;
 
@@ -89,5 +103,6 @@ export const darkTheme = {
     secondary: '#03dac6',
     typography: '#ffffff',
     background: '#000000',
+    danger: '#ff5252',
   },
 } as const;
