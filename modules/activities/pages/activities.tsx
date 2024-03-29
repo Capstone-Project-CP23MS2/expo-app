@@ -16,6 +16,7 @@ import { FAB, Icon, AnimatedFAB } from 'react-native-paper'
 import { FloatingButton, TouchableOpacity, SegmentedControl } from 'react-native-ui-lib'
 import ActivityCard from '../components/Card/'
 import AppButton from '@/modules/shared/AppButton'
+import MapView from 'react-native-maps'
 
 type Props = {}
 type DataProp = {
@@ -70,95 +71,6 @@ const index = (props: Props) => {
     )
   }
 
-  function YourActivities() {
-    return (
-      <View style={styles.cardsContainer}>
-        <View style={{ gap: 2 }}>
-          <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Joined Activities</Text>
-        </View>
-        {isLoading ? (
-          <ActivityIndicator size="large" color={COLORS.gray} />
-        ) : isError ? (
-          <Text>Error! {error.message}</Text>
-        ) : activities?.filter(activity =>
-            activity.users.some(user => user.userId === userInfoData?.userId),
-          ).length ? (
-          activities
-            ?.filter(activity => activity.users.some(user => user.userId === userInfoData?.userId))
-            .map(activity => (
-              <ActivityCard
-                key={`activity-${activity.activityId}`}
-                activity={activity}
-                handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
-              />
-            ))
-        ) : (
-          <View
-            style={{
-              flex: 1,
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#FFF',
-              padding: 20,
-              elevation: 4,
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.23,
-              shadowRadius: 2.62,
-              borderRadius: SIZES.small,
-            }}
-          >
-            <Text>No Join Activity.</Text>
-          </View>
-        )}
-        <View style={{ gap: 2 }}>
-          <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Host Activities</Text>
-        </View>
-        {isLoading ? (
-          <ActivityIndicator size="large" color={COLORS.gray} />
-        ) : isError ? (
-          <Text>Error! {error.message}</Text>
-        ) : activities?.filter(activity => activity.hostUserId === userInfoData?.userId).length ? (
-          activities
-            ?.filter(activity => activity.hostUserId === userInfoData?.userId)
-            .map(activity => (
-              <ActivityCard
-                key={`activity-${activity.activityId}`}
-                activity={activity}
-                handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
-              />
-            ))
-        ) : (
-          <View
-            style={{
-              flex: 1,
-              width: '100%',
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#FFF',
-              padding: 20,
-              elevation: 4,
-              shadowColor: '#000',
-              shadowOffset: {
-                width: 0,
-                height: 2,
-              },
-              shadowOpacity: 0.23,
-              shadowRadius: 2.62,
-              borderRadius: SIZES.small,
-            }}
-          >
-            <Text>No Host Activity.</Text>
-          </View>
-        )}
-      </View>
-    )
-  }
-
   const onChangeIndex = useCallback((index: number) => {
     setSelectedIndex(index)
     onRefresh()
@@ -166,43 +78,6 @@ const index = (props: Props) => {
 
   return (
     <View style={{ flex: 1, marginTop: 0 }}>
-      {/* <Stack.Screen
-        options={{
-          header: () => (
-            <SafeAreaView style={styles.safeArea}>
-              <View style={styles.headerArea}>
-                <TouchableOpacity onPress={() => router.push('/(app)/profile/profile')}>
-                  <MaterialIcons name="account-circle" size={48} color="black" />
-                </TouchableOpacity>
-                <AppButton
-                  label="search"
-                  variant="primary"
-                  onPress={() => router.push('/(app)/activities/search')}
-                />
-                <View>
-                  <Text style={styles.headerTitle}>Activities</Text>
-                </View>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: COLORS.black,
-                    padding: 5,
-                    borderRadius: 50,
-                    width: 40,
-                    height: 40,
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}
-                  onPress={() => router.push('/(app)/notification/notification')}
-                >
-                  <Ionicons name="notifications-outline" size={25} color="white" />
-                </TouchableOpacity>
-              </View>
-            </SafeAreaView>
-          ),
-          headerShadowVisible: true,
-          headerShown: true,
-        }}
-      /> */}
       <Tabs.Screen
         options={{
           header: () => (
@@ -225,13 +100,8 @@ const index = (props: Props) => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         <View style={styles.container}>
-          <SegmentedControl
-            onChangeIndex={onChangeIndex}
-            segments={[{ label: 'Available Activities' }, { label: 'Your Activity' }]}
-            style={{ marginVertical: 15, marginTop: 20 }}
-          />
-
-          {selectedIndex === 0 ? <AvailableActivities /> : <YourActivities />}
+          <MapView style={styles.map} />
+          <AvailableActivities />
         </View>
       </ScrollView>
       <View style={styles.addButton}>
@@ -267,7 +137,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   container: {
-    paddingTop: 0,
+    paddingTop: 15,
     padding: SIZES.medium,
   },
   header: {
@@ -297,5 +167,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
+  },
+  map: {
+    width: '100%',
+    height: '100%',
   },
 })

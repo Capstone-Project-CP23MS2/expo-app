@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { Tabs } from 'expo-router'
 import { COLORS, FONT } from '@/constants'
-import { FontAwesome5, AntDesign, Entypo } from '@expo/vector-icons'
+import { FontAwesome5, AntDesign, Entypo, MaterialIcons, Ionicons } from '@expo/vector-icons'
 
 import { UseGetNotificationById } from '@/hooks/useAPI'
 import { useAuth } from '@/context/authContext'
@@ -24,12 +24,23 @@ const TabsLayout = (props: Props) => {
         tabBarHideOnKeyboard: true,
         tabBarStyle: styles.tabBar,
         headerStyle: styles.header,
+        headerTitleAlign: 'center',
       }}
     >
       <Tabs.Screen
+        name="home"
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <MaterialIcons name="home-filled" size={size + 3} color={color} />
+          ),
+          headerTitle: 'Home',
+        }}
+      />
+
+      <Tabs.Screen
         name="index"
         options={{
-          tabBarIcon: ({ size, color }) => <AntDesign name="profile" size={size} color={color} />,
+          tabBarIcon: ({ size, color }) => <Entypo name="list" size={size} color={color} />,
         }}
       />
 
@@ -38,7 +49,6 @@ const TabsLayout = (props: Props) => {
         options={{
           tabBarIcon: ({ size, color }) => <FontAwesome5 name="dev" size={size} color={color} />,
           headerTitle: 'Development',
-          headerTitleAlign: 'center',
           headerShadowVisible: true,
         }}
       />
@@ -47,7 +57,6 @@ const TabsLayout = (props: Props) => {
         name="whishlists"
         options={{
           tabBarIcon: ({ size, color }) => <AntDesign name="star" size={size} color={color} />,
-          headerTitleAlign: 'center',
           headerTitle: 'Review',
         }}
       />
@@ -58,7 +67,6 @@ const TabsLayout = (props: Props) => {
           tabBarIcon: ({ size, color }) => (
             <NotificationIcon size={size} color={color} unreadCount={unreadCount} />
           ),
-          headerTitleAlign: 'center',
           headerTitle: 'Notifications',
         }}
       />
@@ -66,10 +74,7 @@ const TabsLayout = (props: Props) => {
       <Tabs.Screen
         name="profile"
         options={{
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome5 name="user-alt" size={size} color={color} />
-          ),
-          headerTitleAlign: 'center',
+          tabBarIcon: ({ size, color }) => <Ionicons name="person" size={size} color={color} />,
           headerTitle: 'Profile',
         }}
       />
