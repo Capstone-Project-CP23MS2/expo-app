@@ -41,6 +41,15 @@ const AppEntry = (props: Props) => {
         }}
       />
       {/* <Stack.Screen name="profile/profile" options={{ headerTitle: 'Profile' }} /> */}
+      <Stack.Screen
+        name="profile/edit"
+        options={{
+          headerTitle: 'Edit Profile',
+          animation: 'slide_from_right',
+          animationDuration: 200,
+        }}
+      />
+
       {/* <Stack.Screen name="notification/notification" options={{ headerTitle: 'Notification' }} /> */}
     </Stack>
   )
