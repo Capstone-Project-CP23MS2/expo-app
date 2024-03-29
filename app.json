@@ -25,7 +25,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#3E64FF"
       },
-      "package": "com.interbios.sportconnectapp"
+      "package": "com.interbios.sportconnectapp",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAePx_dBntD1rl2iVthBTbpjvCAoSVH4V8"
+        }
+      }
     },
     "web": {
       "bundler": "metro",

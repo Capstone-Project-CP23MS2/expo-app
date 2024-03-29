@@ -16,7 +16,7 @@ import { FAB, Icon, AnimatedFAB } from 'react-native-paper'
 import { FloatingButton, TouchableOpacity, SegmentedControl } from 'react-native-ui-lib'
 import ActivityCard from '../components/Card/'
 import AppButton from '@/modules/shared/AppButton'
-import MapView from 'react-native-maps'
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 
 type Props = {}
 type DataProp = {
@@ -100,7 +100,7 @@ const index = (props: Props) => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         <View style={styles.container}>
-          <MapView style={styles.map} />
+          <MapView style={styles.map} provider={PROVIDER_GOOGLE} />
           <AvailableActivities />
         </View>
       </ScrollView>
