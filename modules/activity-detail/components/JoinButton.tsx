@@ -8,29 +8,31 @@ import notification from '@/app/(app)/notification/notification'
 
 type Props = {
   userId: string
+  userName: string
   activityId: string
+  activityTitle: string
   isParticipant?: boolean
   targetId: number
-  message: string
-  unRead: boolean
-  type: string
 }
 
 export default function JoinButton({
   userId,
+  userName,
   activityId,
+  activityTitle,
   isParticipant,
   targetId,
-  message,
-  unRead,
-  type,
 }: Props) {
   const router = useRouter()
   const createParticipantMutation = UseCreateParticipant()
   const deleteParticipantMutation = UseDeleteParticipant()
   const createNotiMutation = UseCreateNotification()
+  const unRead = true
 
   const onJoinActivity = async () => {
+    const type = 'join'
+    const message = `${userName} joined ${activityTitle}`
+
     createParticipantMutation.mutate(objToFormData({ userId, activityId }), {
       onSuccess: data => {
         ToastAndroid.show("You've joined Activitiy", ToastAndroid.SHORT)
@@ -51,6 +53,9 @@ export default function JoinButton({
   }
 
   const onLeaveActivity = async () => {
+    const type = 'leave'
+    const message = `${userName} left ${activityTitle}`
+
     deleteParticipantMutation.mutate(
       { activityId, userId },
       {
@@ -63,6 +68,14 @@ export default function JoinButton({
         },
       },
     )
+    createNotiMutation.mutate(objToFormData({ targetId, message, unRead, type }), {
+      onSuccess: data => {
+        console.log('🚀 ~ notificationMutation.mutate ~ data:', data)
+      },
+      onError: error => {
+        console.log(error)
+      },
+    })
   }
 
   if (isParticipant) {

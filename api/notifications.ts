@@ -8,6 +8,11 @@ class NotificationsApi {
     return data
   }
 
+  async getNotificationById(notiId: number) {
+    const { data } = await apiClient.get<NotificationsResponse>(`/notifications?targetId=${notiId}`)
+    return data
+  }
+
   async deleteNotification(notiId: string | number) {
     const url = `${API_URL}/notifications/${notiId}`
     await apiClient.delete(url)
@@ -15,10 +20,21 @@ class NotificationsApi {
 
   async createNotification(notification: FormData) {
     const url = `${API_URL}/notifications`
-    const { data } = await apiClient.post<NotificationResponse>(url, notification, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+    const headers = {
+      'Content-Type': 'multipart/form-data',
+    }
+    const { data } = await apiClient.post<NotificationResponse>(url, notification, { headers })
+    return data
+  }
+
+  async updateNotification(notiId: number, unRead: boolean) {
+    const url = `${API_URL}/notifications/${notiId}`
+    const headers = {
+      'Content-Type': 'multipart/form-data',
+    }
+    const body = { unRead }
+    const { data } = await apiClient.patch<NotificationResponse>(url, body, {
+      headers,
     })
     return data
   }

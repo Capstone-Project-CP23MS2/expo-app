@@ -1,16 +1,37 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Pressable } from 'react-native'
 import { RefreshControl } from 'react-native-gesture-handler'
 import React, { useState, useCallback } from 'react'
-import { UseDeleteNotification, UseGetMyUserInfo, UseGetNotifications } from '@/hooks/useAPI'
-import { Ionicons, MaterialCommunityIcons, FontAwesome6, FontAwesome5 } from '@expo/vector-icons'
-import notification from '@/app/(app)/notification/notification'
-import { SIZES } from '@/constants'
+import {
+  UseDeleteNotification,
+  UseGetNotificationById,
+  UseUpdateNotification,
+} from '@/hooks/useAPI'
+import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons'
+
+import { COLORS, SIZES } from '@/constants'
+import { useAuth } from '@/context/authContext'
 
 const NotificationScreen = () => {
   const [refreshing, setRefreshing] = useState(false)
-  const { data, isLoading, isError, error, refetch } = UseGetNotifications()
-  const { data: userInfoData } = UseGetMyUserInfo()
+  const { user } = useAuth()
+  const { data, isLoading, isError, error, refetch } = UseGetNotificationById(user?.userId)
   const { content: notifications } = data || {}
+
+  // Update Unread
+  const updateMutation = UseUpdateNotification()
+  const updateNotification = (notiId: number, unRead: boolean) => {
+    updateMutation.mutate(
+      { notiId, unRead },
+      {
+        onSuccess() {
+          console.log(`Update unread notificationId: ${notiId} to ${unRead}`)
+        },
+        onError() {
+          console.error('Failed to update')
+        },
+      },
+    )
+  }
 
   // Delete Notification
   const deleteMutation = UseDeleteNotification()
@@ -27,14 +48,20 @@ const NotificationScreen = () => {
     setRefreshing(false)
   }, [])
 
-  const renderNotification = ({ item }) => (
-    <View style={styles.notificationContainer}>
+  const renderNotification = ({ item }: any) => (
+    <Pressable
+      style={[
+        styles.notificationContainer,
+        { backgroundColor: item.unRead ? '#FFF' : COLORS.mediumWhite },
+      ]}
+      onPress={() => updateNotification(item.notificationId, !item.unRead)}
+    >
       <View
         style={{
           height: 50,
           width: 50,
           borderRadius: 50,
-          backgroundColor: 'black',
+          backgroundColor: item.type == 'join' ? COLORS.primary : COLORS.gray,
           justifyContent: 'center',
           alignItems: 'center',
           marginRight: 10,
@@ -43,7 +70,7 @@ const NotificationScreen = () => {
         {item.type == 'join' ? (
           <FontAwesome5 name="walking" size={30} color="white" />
         ) : (
-          <FontAwesome5 name="walking" size={30} color="white" />
+          <MaterialCommunityIcons name="account-remove" size={30} color="white" />
         )}
       </View>
       <View style={styles.notificationContent}>
@@ -51,13 +78,11 @@ const NotificationScreen = () => {
         <Text style={styles.notificationTimestamp}>
           {new Date(item.createdAt).toLocaleString()}
         </Text>
-        {/* <Text>Type: {item.type}</Text> */}
-        {/* <Text>Unread: {item.unRead ? 'Yes' : 'No'}</Text> */}
       </View>
       <TouchableOpacity onPress={() => delNotification(item.notificationId)}>
         <Ionicons name="close-circle" size={24} color="#666" />
       </TouchableOpacity>
-    </View>
+    </Pressable>
   )
 
   return (
@@ -67,12 +92,9 @@ const NotificationScreen = () => {
           <Text>Loading...</Text>
         ) : isError ? (
           <Text>Error: {error.message}</Text>
-        ) : notifications?.filter(notification => notification.targetId === userInfoData?.userId)
-            .length ? (
+        ) : notifications?.length ? (
           <FlatList
-            data={notifications?.filter(
-              notification => notification.targetId === userInfoData?.userId,
-            )}
+            data={notifications}
             renderItem={renderNotification}
             keyExtractor={item => item.notificationId.toString()}
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
@@ -106,7 +128,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBottom: 15,
     padding: 16,
-    backgroundColor: '#fff',
     borderRadius: 8,
     flexDirection: 'row',
     alignItems: 'center',

@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       console.log(`😀 You are already logged in with Google.`)
 
-      const { email, idToken } = await googleAuthentication()
+      const { email, idToken }: any = await googleAuthentication()
       if (email === undefined || !email) return logout()
 
       setSession({
@@ -69,11 +69,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     init()
   }, [])
 
-  // useEffect(() => {
-  //   if (!user && rootSegment !== '(auth)') return router.replace('/(auth)/login')
-  //   if (user && rootSegment !== '(app)') return router.replace('/(app)/(tabs)')
-  // }, [user, rootSegment])
-
   const register = async (newUser: UserResponse) => {
     setUser(newUser)
     router.push('/(app)/(tabs)')
@@ -92,7 +87,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const isSignedInWithGoogle = await GoogleSignin.isSignedIn()
     if (isSignedInWithGoogle) logout()
 
-    const { email, idToken } = await googleAuthentication()
+    const { email, idToken }: any = await googleAuthentication()
     setSession({
       authenticated: true,
       idToken: idToken,
@@ -148,8 +143,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 const configureGoogleSignIn = async () => {
   GoogleSignin.configure({
-    scopes: ['email'], // what API you want to access on behalf of the user, default is email and profile
-    webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID, // client ID of type WEB for your server. Required to get the idToken on the user object, and for offline access.
+    scopes: ['email'],
+    webClientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
     iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
   })
 }

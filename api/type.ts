@@ -113,3 +113,7 @@ export type NotificationResponse = {
 }
 
 export type NotificationsResponse = APIPaginationResponse<NotificationResponse>
+
+export type NotificationUpdateRequest = {
+  unRead?: boolean
+}

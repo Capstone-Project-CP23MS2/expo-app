@@ -178,10 +178,18 @@ const Page = (props: Props) => {
                       key={participant.userId}
                       style={{ flex: 1, flexDirection: 'row', gap: 5, alignItems: 'center' }}
                     >
-                      <MaterialIcons name="account-circle" size={24} color="gray" />
+                      <MaterialIcons
+                        name="account-circle"
+                        size={24}
+                        color={
+                          participant?.userId === activity?.hostUserId
+                            ? COLORS.primary
+                            : COLORS.gray
+                        }
+                      />
                       <Text
                         style={[
-                          user?.userId === activity?.hostUserId
+                          participant?.userId === activity?.hostUserId
                             ? { color: COLORS.primary }
                             : { color: COLORS.gray },
                         ]}
@@ -208,12 +216,11 @@ const Page = (props: Props) => {
         ) : (
           <JoinButton
             userId={user?.userId}
+            userName={user?.username}
             activityId={activityId}
+            activityTitle={activity?.title}
             isParticipant={isParticipant}
             targetId={activity?.hostUserId}
-            message={`${user?.username} joined your ${activity?.title}`}
-            unRead={true}
-            type={'join'}
           />
         )}
       </View>
