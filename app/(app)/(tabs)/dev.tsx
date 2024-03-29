@@ -14,7 +14,7 @@ export default function dev() {
   const deleteUserMutation = UseDeleteUser()
   const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories()
   const { content: categories } = categoriesData || {}
-  const [image, setImage] = useState(null)
+  const [image, setImage]: any = useState(null)
 
   const onDeleteUser = async () => {
     deleteUserMutation.mutate(user?.userId!, {
