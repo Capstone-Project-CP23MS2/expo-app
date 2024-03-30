@@ -53,6 +53,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       console.log(`😀 You are already logged in with Google.`)
 
       const { email, idToken }: any = await googleAuthentication()
+      console.log(idToken)
       if (email === undefined || !email) return logout()
 
       setSession({

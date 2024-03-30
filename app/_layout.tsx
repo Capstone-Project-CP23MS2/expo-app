@@ -10,6 +10,7 @@ import { AuthProvider } from '@/context/authContext'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import * as Location from 'expo-location'
 import { useEffect, useState } from 'react'
+import { UserLocationContext } from '@/context/userLocationContext'
 
 // Create a client
 const queryClient = new QueryClient({
@@ -37,36 +38,38 @@ DesignSystem.setup()
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-  // const [location, setLocation] = useState(null)
-  // const [errorMsg, setErrorMsg] = useState(null)
+  const [location, setLocation] = useState(null)
+  const [errorMsg, setErrorMsg] = useState(null)
 
-  // useEffect(() => {
-  //   ;(async () => {
-  //     let { status } = await Location.requestForegroundPermissionsAsync()
-  //     if (status !== 'granted') {
-  //       setErrorMsg('Permission to access location was denied')
-  //       return
-  //     }
+  useEffect(() => {
+    ;(async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync()
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied')
+        return
+      }
 
-  //     let location = await Location.getCurrentPositionAsync({})
-  //     setLocation(location)
-  //     console.log(location)
-  //   })()
-  // }, [])
+      let location = await Location.getCurrentPositionAsync({})
+      setLocation(location.coords)
+      console.log(location)
+    })()
+  }, [])
 
-  // let text = 'Waiting..'
-  // if (errorMsg) {
-  //   text = errorMsg
-  // } else if (location) {
-  //   text = JSON.stringify(location)
-  // }
+  let text = 'Waiting..'
+  if (errorMsg) {
+    text = errorMsg
+  } else if (location) {
+    text = JSON.stringify(location)
+  }
 
   const appLoaded = useAppLoading()
   if (!appLoaded) return null
   return (
     <QueryClientProvider client={queryClient}>
       {/* <StatusBQueryClientProviderar style="dark" /> */}
-      <RootLayoutNav />
+      <UserLocationContext.Provider value={{ location, setLocation }}>
+        <RootLayoutNav />
+      </UserLocationContext.Provider>
     </QueryClientProvider>
   )
 }
