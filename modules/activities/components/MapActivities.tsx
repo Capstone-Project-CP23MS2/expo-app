@@ -1,14 +1,29 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 
 import { COLORS, SIZES } from '@/constants'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import { FontAwesome5 } from '@expo/vector-icons'
+import { UserLocationContext } from '@/context/userLocationContext'
+import { UseGetActivities } from '@/hooks/useAPI'
 
 const MapActivities = () => {
+  const { location, setLocation }: any = useContext(UserLocationContext)
+  const { data } = UseGetActivities({})
+  const { content: activities }: any = data || {}
+
   return (
     <View style={{ flex: 1 }}>
-      <MapView style={styles.map} provider={PROVIDER_GOOGLE} />
+      <MapView
+        style={styles.map}
+        provider={PROVIDER_GOOGLE}
+        initialRegion={{
+          latitude: location?.latitude,
+          longitude: location?.longitude,
+          latitudeDelta: 0.0422,
+          longitudeDelta: 0.0421,
+        }}
+      />
       <View
         style={{
           position: 'absolute',
