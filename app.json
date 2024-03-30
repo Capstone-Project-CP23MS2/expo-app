@@ -12,9 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#3E64FF"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.interbios.sportconnectapp",
@@ -27,7 +25,12 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#3E64FF"
       },
-      "package": "com.interbios.sportconnectapp"
+      "package": "com.interbios.sportconnectapp",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAePx_dBntD1rl2iVthBTbpjvCAoSVH4V8"
+        }
+      }
     },
     "web": {
       "bundler": "metro",
@@ -35,11 +38,13 @@
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
+      ["expo-router"],
+      ["@react-native-google-signin/google-signin"],
       [
-        "expo-router"
-      ],
-      [
-        "@react-native-google-signin/google-signin"
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
       ]
     ],
     "experiments": {
