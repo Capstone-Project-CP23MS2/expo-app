@@ -1,44 +1,76 @@
-import React, { useContext } from 'react'
-import { StyleSheet, View, Text } from 'react-native'
-
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { StyleSheet, View, Text, Pressable } from 'react-native'
 import { COLORS, SIZES } from '@/constants'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 import { FontAwesome5 } from '@expo/vector-icons'
-import { UserLocationContext } from '@/context/userLocationContext'
-import { UseGetActivities } from '@/hooks/useAPI'
+import * as Location from 'expo-location'
+import { useRouter } from 'expo-router'
+import MapViewStyle from '@/assets/data/map-view-style.json'
+
+const INITIAL_REGION = {
+  latitude: 13.75633,
+  longitude: 100.501765,
+  latitudeDelta: 0.0422,
+  longitudeDelta: 0.0421,
+}
 
 const MapActivities = () => {
-  const { location, setLocation }: any = useContext(UserLocationContext)
-  const { data } = UseGetActivities({})
-  const { content: activities }: any = data || {}
+  const router = useRouter()
+  const mapRef = useRef<any>(null)
+
+  useEffect(() => {
+    onLocateMe()
+  }, [])
+
+  const onLocateMe = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync()
+    if (status !== 'granted') {
+      return
+    }
+
+    let location = await Location.getCurrentPositionAsync({})
+    console.log(location)
+
+    const region = {
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      latitudeDelta: 0.2,
+      longitudeDelta: 0.2,
+    }
+
+    mapRef.current?.animateToRegion(region)
+  }
 
   return (
     <View style={{ flex: 1 }}>
-      <MapView
-        style={styles.map}
-        provider={PROVIDER_GOOGLE}
-        initialRegion={{
-          latitude: location?.latitude,
-          longitude: location?.longitude,
-          latitudeDelta: 0.0422,
-          longitudeDelta: 0.0421,
-        }}
-      />
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 10,
-          right: 10,
-          padding: 10,
-          backgroundColor: COLORS.white,
-          borderRadius: 10,
-        }}
+      <Pressable
+        style={{ borderRadius: SIZES.small, overflow: 'hidden' }}
+        onPress={() => router.push('/(app)/map/')}
       >
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 5 }}>
-          <FontAwesome5 name="search" size={10} color={COLORS.black} />
-          <Text style={{ fontSize: SIZES.small, fontWeight: 'bold' }}>View map</Text>
+        <MapView
+          ref={mapRef}
+          style={styles.map}
+          provider={PROVIDER_GOOGLE}
+          initialRegion={INITIAL_REGION}
+          customMapStyle={MapViewStyle}
+          showsUserLocation={true}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 10,
+            right: 10,
+            padding: 10,
+            backgroundColor: COLORS.white,
+            borderRadius: 10,
+          }}
+        >
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 5 }}>
+            <FontAwesome5 name="search" size={10} color={COLORS.black} />
+            <Text style={{ fontSize: SIZES.small, fontWeight: 'bold' }}>View map</Text>
+          </View>
         </View>
-      </View>
+      </Pressable>
     </View>
   )
 }

@@ -6,8 +6,6 @@ import { BaseButton, RefreshControl, ScrollView, TextInput } from 'react-native-
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useCallback, useEffect, useState } from 'react'
 
-import axios, { AxiosResponse } from 'axios'
-
 import { FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons'
 import FloatingActionButton from '@/modules/activities/components/FloatingActionButton'
 import { useNavigation } from '@react-navigation/native'
@@ -17,6 +15,9 @@ import { FloatingButton, TouchableOpacity, SegmentedControl } from 'react-native
 import ActivityCard from '../components/Card/'
 import AppButton from '@/modules/shared/AppButton'
 import MapActivities from '../components/MapActivities'
+
+import * as Location from 'expo-location'
+import { UserLocationContext } from '@/context/userLocationContext'
 
 type Props = {}
 
@@ -39,38 +40,6 @@ const index = (props: Props) => {
     refetch()
     setRefreshing(false)
   }, [])
-
-  function AvailableActivities() {
-    return (
-      <View style={styles.cardsContainer}>
-        <View style={{ gap: 2 }}>
-          <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Available Activities</Text>
-          <Text style={styles.subHeader}>
-            We found {activities?.length} activites. feel free to join !
-          </Text>
-        </View>
-        {isLoading ? (
-          <ActivityIndicator size="large" color={COLORS.gray} />
-        ) : isError ? (
-          <Text>Error! {error.message}</Text>
-        ) : activities?.length ? (
-          activities
-            ?.filter(
-              activity => !activity.users.some((user: any) => user.userId === userInfoData?.userId),
-            )
-            .map(activity => (
-              <ActivityCard
-                key={`activity-${activity.activityId}`}
-                activity={activity}
-                handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
-              />
-            ))
-        ) : (
-          <Text>no activity</Text>
-        )}
-      </View>
-    )
-  }
 
   return (
     <View style={{ flex: 1, marginTop: 0 }}>
@@ -97,13 +66,35 @@ const index = (props: Props) => {
       >
         <View style={styles.container}>
           <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Find Your Activities</Text>
-          <Pressable
-            style={{ borderRadius: SIZES.small, overflow: 'hidden' }}
-            onPress={() => router.push('/(app)/map/')}
-          >
-            <MapActivities />
-          </Pressable>
-          <AvailableActivities />
+          <MapActivities />
+          <View style={styles.cardsContainer}>
+            <View style={{ gap: 2 }}>
+              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Available Activities</Text>
+              <Text style={styles.subHeader}>
+                We found {activities?.length} activites. feel free to join !
+              </Text>
+            </View>
+            {isLoading ? (
+              <ActivityIndicator size="large" color={COLORS.gray} />
+            ) : isError ? (
+              <Text>Error! {error.message}</Text>
+            ) : activities?.length ? (
+              activities
+                ?.filter(
+                  activity =>
+                    !activity.users.some((user: any) => user.userId === userInfoData?.userId),
+                )
+                .map(activity => (
+                  <ActivityCard
+                    key={`activity-${activity.activityId}`}
+                    activity={activity}
+                    handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                  />
+                ))
+            ) : (
+              <Text>no activity</Text>
+            )}
+          </View>
         </View>
       </ScrollView>
       <View style={styles.addButton}>
