@@ -1,3 +1,4 @@
+import { CategoriesRequestParameters } from "@/api/categories/categories.type";
 import categoriesApi from "@/api/category";
 import { useQuery } from "@tanstack/react-query";
 
@@ -7,14 +8,15 @@ type CategoriesParameters = {
     pageSize?: number;
 };
 
-export function UseGetCategories() {
+export function UseGetCategories(params: CategoriesRequestParameters = {}) {
     return useQuery({
         queryKey: ['categories'],
-        queryFn: categoriesApi.getCategories,
+        queryFn: () => categoriesApi.getCategories(params),
     });
     // TODO
     // return { data: categories, paginationInfo: ..., ...otherRes }
 };
+
 
 export function UseGetCategory(id: string | number | string[] | undefined) {
     return useQuery({

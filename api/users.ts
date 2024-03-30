@@ -1,6 +1,8 @@
+
 import { UserResponse, UserUpdateRequest, UsersResponse } from "./type";
 import apiClient from "./apiClient";
 import { objToFormData } from "@/utils";
+import { UserInterestCreateRequest } from './user/users.type';
 
 class UsersApi {
 
@@ -49,6 +51,20 @@ class UsersApi {
   async deleteUser(id: string | number) {
     await apiClient.delete(`/users/${id}`);
   }
+
+  async createUserInterest(createRequest: UserInterestCreateRequest) {
+    const config = {
+
+      // paramsSerializer: {
+      //   indexes: null
+      // }
+    };
+    const { data } = await apiClient.post(`/users`, createRequest, config);
+    return data;
+  }
+
 }
+
+
 const usersApi = new UsersApi();
 export default usersApi;
