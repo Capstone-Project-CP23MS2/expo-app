@@ -35,12 +35,12 @@ const index = () => {
             style={styles.map}
             provider={PROVIDER_GOOGLE}
             showsUserLocation={true}
-            // initialRegion={{
-            //   latitude: location?.latitude,
-            //   longitude: location?.longitude,
-            //   latitudeDelta: 0.0422,
-            //   longitudeDelta: 0.0421,
-            // }}
+            initialRegion={{
+              latitude: 13.75633,
+              longitude: 100.501765,
+              latitudeDelta: 0.0422,
+              longitudeDelta: 0.0421,
+            }}
             region={region}
           >
             {activities.map((item, index) => (

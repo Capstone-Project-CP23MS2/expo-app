@@ -31,9 +31,18 @@ const TabsLayout = (props: Props) => {
         name="home"
         options={{
           tabBarIcon: ({ size, color }) => (
-            <MaterialIcons name="home-filled" size={size + 3} color={color} />
+            <MaterialIcons name="home-filled" size={size} color={color} />
           ),
           headerTitle: 'Home',
+        }}
+      />
+
+      <Tabs.Screen
+        name="calendar"
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome5 name="calendar" size={size - 3} color={color} />
+          ),
         }}
       />
 
