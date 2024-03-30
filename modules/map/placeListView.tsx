@@ -1,14 +1,14 @@
-import { View, Text, FlatList, Dimensions } from 'react-native'
+import { View, Text, FlatList, Dimensions, Pressable } from 'react-native'
 import PlaceItem from './placeItem'
 import { useRef, useEffect, useContext } from 'react'
 import { SelectMarkerContext } from '@/context/selectMarkerContext'
 
-export default function PlaceListView({ activities }: any) {
+export default function PlaceListView({ activities, onRegionChange }: any) {
   const flatListRef = useRef(null)
   const { selectedMarker, setSelectedMarker }: any = useContext(SelectMarkerContext)
 
   useEffect(() => {
-    selectedMarker && scrollToIndex(2)
+    selectedMarker && scrollToIndex(selectedMarker)
   }, [selectedMarker])
 
   const scrollToIndex = (index): any => {
@@ -21,6 +21,17 @@ export default function PlaceListView({ activities }: any) {
     index,
   })
 
+  const handlePlaceSelect = (place: any) => {
+    const newRegion = {
+      latitude: place.location.latitude,
+      longitude: place.location.longitude,
+      latitudeDelta: 0.0422,
+      longitudeDelta: 0.0421,
+    }
+    onRegionChange(newRegion)
+    console.log(newRegion)
+  }
+
   return (
     <View>
       <FlatList
@@ -32,7 +43,9 @@ export default function PlaceListView({ activities }: any) {
         getItemLayout={getItemLayout}
         renderItem={({ item, index }) => (
           <View key={index}>
-            <PlaceItem place={item} />
+            <Pressable onPress={() => handlePlaceSelect(item)}>
+              <PlaceItem place={item} />
+            </Pressable>
           </View>
         )}
       />

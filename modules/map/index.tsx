@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 
 import { COLORS, SIZES } from '@/constants'
@@ -9,12 +9,23 @@ import { UserLocationContext } from '@/context/userLocationContext'
 import PlaceListView from './placeListView'
 import { UseGetActivities } from '@/hooks/useAPI'
 import { SelectMarkerContext } from '@/context/selectMarkerContext'
+import Markers from './markers'
 
-const MapActivities = () => {
+const index = () => {
   const { location, setLocation }: any = useContext(UserLocationContext)
   const { data } = UseGetActivities({})
   const { content: activities }: any = data || {}
   const [selectedMarker, setSelectedMarker] = useState([])
+  const [region, setRegion] = useState({
+    latitude: location?.latitude,
+    longitude: location?.longitude,
+    latitudeDelta: 0.0422,
+    longitudeDelta: 0.0421,
+  })
+
+  const handleRegionChange = (newRegion): any => {
+    setRegion(newRegion)
+  }
 
   return (
     <SelectMarkerContext.Provider value={{ selectedMarker, setSelectedMarker }}>
@@ -24,27 +35,20 @@ const MapActivities = () => {
             style={styles.map}
             provider={PROVIDER_GOOGLE}
             showsUserLocation={true}
-            initialRegion={{
-              latitude: location?.latitude,
-              longitude: location?.longitude,
-              latitudeDelta: 0.0422,
-              longitudeDelta: 0.0421,
-            }}
+            // initialRegion={{
+            //   latitude: location?.latitude,
+            //   longitude: location?.longitude,
+            //   latitudeDelta: 0.0422,
+            //   longitudeDelta: 0.0421,
+            // }}
+            region={region}
           >
             {activities.map((item, index) => (
-              <Marker
-                coordinate={{
-                  latitude: item.location.latitude,
-                  longitude: item.location.longitude,
-                }}
-                index={index}
-                key={index}
-                onPress={() => setSelectedMarker(index)}
-              />
+              <Markers key={index} place={item} index={index} />
             ))}
           </MapView>
           <View style={styles.placelist}>
-            <PlaceListView activities={activities} />
+            <PlaceListView activities={activities} onRegionChange={handleRegionChange} />
           </View>
         </View>
       )}
@@ -52,7 +56,7 @@ const MapActivities = () => {
   )
 }
 
-export default MapActivities
+export default index
 
 const styles = StyleSheet.create({
   map: {

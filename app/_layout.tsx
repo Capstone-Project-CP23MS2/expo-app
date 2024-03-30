@@ -38,6 +38,17 @@ DesignSystem.setup()
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
+  const appLoaded = useAppLoading()
+  if (!appLoaded) return null
+  return (
+    <QueryClientProvider client={queryClient}>
+      {/* <StatusBQueryClientProviderar style="dark" /> */}
+      <RootLayoutNav />
+    </QueryClientProvider>
+  )
+}
+
+function RootLayoutNav() {
   const [location, setLocation] = useState(null)
   const [errorMsg, setErrorMsg] = useState(null)
 
@@ -62,24 +73,13 @@ export default function RootLayout() {
     text = JSON.stringify(location)
   }
 
-  const appLoaded = useAppLoading()
-  if (!appLoaded) return null
-  return (
-    <QueryClientProvider client={queryClient}>
-      {/* <StatusBQueryClientProviderar style="dark" /> */}
-      <UserLocationContext.Provider value={{ location, setLocation }}>
-        <RootLayoutNav />
-      </UserLocationContext.Provider>
-    </QueryClientProvider>
-  )
-}
-
-function RootLayoutNav() {
   return (
     <AuthProvider>
-      <BottomSheetModalProvider>
-        <Slot />
-      </BottomSheetModalProvider>
+      <UserLocationContext.Provider value={{ location, setLocation }}>
+        <BottomSheetModalProvider>
+          <Slot />
+        </BottomSheetModalProvider>
+      </UserLocationContext.Provider>
     </AuthProvider>
   )
 }
