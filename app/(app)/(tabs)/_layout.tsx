@@ -84,7 +84,7 @@ const TabsLayout = (props: Props) => {
 
 const NotificationIcon = ({ size, color, unreadCount }: any) => (
   <View>
-    <Entypo name="notification" size={size} color={color} />
+    <Ionicons name="notifications" size={size} color={color} />
     {unreadCount > 0 && (
       <View
         style={{
