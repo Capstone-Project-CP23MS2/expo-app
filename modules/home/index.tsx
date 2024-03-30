@@ -39,11 +39,17 @@ const Page = (props: Props) => {
           <ActivityIndicator size="large" color={COLORS.gray} />
         ) : isError ? (
           <Text>Error! {error.message}</Text>
-        ) : activities?.filter(activity =>
-            activity.users.some(user => user.userId === userInfo?.userId),
+        ) : activities?.filter(
+            activity =>
+              activity.users.some(user => user.userId === userInfo?.userId) &&
+              activity.hostUserId !== userInfo?.userId,
           ).length ? (
           activities
-            ?.filter(activity => activity.users.some(user => user.userId === userInfo?.userId))
+            ?.filter(
+              activity =>
+                activity.users.some(user => user.userId === userInfo?.userId) &&
+                activity.hostUserId !== userInfo?.userId,
+            )
             .map(activity => (
               <ActivityCard
                 key={`activity-${activity.activityId}`}
