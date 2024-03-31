@@ -105,11 +105,11 @@ const Page = (props: Props) => {
               </View>
             )}
             <View style={{ gap: 2 }}>
-              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Your Calendar</Text>
+              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Activity Status</Text>
             </View>
             <StatusListView onStatusChanged={onDataChanged} />
             {activities?.length && (
-              <View style={{ gap: 10 }}>
+              <View style={{ gap: 10, marginBottom: 15 }}>
                 {status === 'ALL' &&
                   activities
                     ?.filter(activity =>

@@ -37,7 +37,7 @@ export default function ActivityCalendar() {
 
     return (
       <Pressable
-        style={[styles.item, { height: reservation.height }]}
+        style={[styles.item, { height: reservation.height, elevation: 2, overflow: 'hidden' }]}
         onPress={() => router.push(`/activities/${reservation.id}`)}
       >
         <Text style={{ fontSize, color }}>{reservation.name}</Text>

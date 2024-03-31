@@ -81,8 +81,7 @@ const stylesheet = createStyleSheet(({ colors, spacings }) => ({
     backgroundColor: 'white',
   },
   content: {
-    // padding: 20,
-    // gap: 5,
+    paddingTop: 20,
   },
   settingListContainer: {
     flexDirection: 'column',

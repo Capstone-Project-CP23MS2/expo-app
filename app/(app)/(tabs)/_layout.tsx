@@ -43,6 +43,7 @@ const TabsLayout = (props: Props) => {
           tabBarIcon: ({ size, color }) => (
             <FontAwesome5 name="calendar" size={size - 3} color={color} />
           ),
+          headerTitle: 'Calendar',
         }}
       />
 
