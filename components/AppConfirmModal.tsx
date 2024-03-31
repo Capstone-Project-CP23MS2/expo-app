@@ -1,7 +1,7 @@
 import { View, Text, Modal, ModalProps, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { RNUIButton } from '@/components'
+import RNUIButton from './RNUIButton'
 
 type Props = ModalProps & {
   title?: string
@@ -10,7 +10,7 @@ type Props = ModalProps & {
   onCancel: () => void
 }
 
-export default function SignOutModal({
+export default function AppConfirmModal({
   title = 'Header',
   desc,
   onConfirm,
@@ -40,7 +40,7 @@ export default function SignOutModal({
   }
 
   return (
-    <Modal visible={visible} {...rest}>
+    <Modal visible={visible} animationType="fade" onRequestClose={handleCancel} {...rest}>
       <View style={styles.container}>
         <View style={styles.modalView}>
           <View style={styles.header}>
@@ -62,6 +62,7 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: colors.backgroundModal,
   },
   modalView: {
     margin: spacings.lg,

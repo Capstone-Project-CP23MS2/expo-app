@@ -69,11 +69,7 @@ const Page = (props: Props) => {
     <SafeAreaView style={styles.container}>
       <AppConfirmModal
         visible={showSignOutModal}
-        animationType="fade"
-        transparent={true}
-        onRequestClose={() => {
-          console.log('close')
-        }}
+        transparent
         title="ยืนยันการออกจากระบบ"
         onConfirm={handleConfirmSignOut}
         onCancel={handleCancelSignOut}

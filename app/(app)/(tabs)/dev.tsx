@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, Alert } from 'react-native'
 import React from 'react'
 import { UseDeleteUser, UseGetCategories } from '@/hooks/useAPI'
 import AppButton from '@/modules/shared/AppButton'
@@ -23,6 +23,20 @@ export default function dev() {
       },
     })
   }
+
+  const createThreeButtonAlert = () =>
+    Alert.alert('Alert Title', 'My Alert Msg', [
+      {
+        text: 'Ask me later',
+        onPress: () => console.log('Ask me later pressed'),
+      },
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      { text: 'OK', onPress: () => console.log('OK Pressed') },
+    ])
 
   return (
     <View>
@@ -50,6 +64,7 @@ export default function dev() {
         label="Modal View"
         onPress={() => router.push('/dev/DevModalView')}
       />
+      <AppButton label={'3-Button Alert'} onPress={createThreeButtonAlert} />
     </View>
   )
 }
