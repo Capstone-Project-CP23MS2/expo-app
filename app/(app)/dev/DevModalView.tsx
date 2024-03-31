@@ -41,12 +41,26 @@ export default function DevModalView(props: Props) {
         <Text style={styles.textStyle}>Show Modal</Text>
       </Pressable>
 
+      {/* RNUI Modal */}
       <RNUIModal
-        animationType="slide"
+        statusBarTranslucent
+        transparent
+        overlayBackgroundColor={'rgba(0,0,0,0.5)'}
+        onRequestClose={() => setRNUIModalVisible(false)}
         visible={RNUIModalVisible}
         onBackgroundPress={() => console.log('background pressed')}
       >
-        <Text>Hello World!</Text>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Hello World!</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setRNUIModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Hide Modal</Text>
+            </Pressable>
+          </View>
+        </View>
       </RNUIModal>
       <Pressable
         style={[styles.button, styles.buttonOpen]}
@@ -54,7 +68,6 @@ export default function DevModalView(props: Props) {
       >
         <Text style={styles.textStyle}>Show RNUIModal 1</Text>
       </Pressable>
-
       <RNUIModal.TopBar
         title="modal title"
         onCancel={() => setRNUIModalTopbarVisible(false)}
@@ -63,14 +76,12 @@ export default function DevModalView(props: Props) {
           disabled: true,
         }}
       />
-
       <Pressable
         style={[styles.button, styles.buttonOpen]}
         onPress={() => setRNUIModalTopbarVisible(true)}
       >
         <Text style={styles.textStyle}>Show RNUIModal 2</Text>
       </Pressable>
-
       <AppModal isOpen={appModalVisible} />
     </View>
   )

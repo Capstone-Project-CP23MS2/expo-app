@@ -1,4 +1,4 @@
-import { View, Text, Modal, ModalProps, Pressable } from 'react-native'
+import { View, Text, Modal, ModalProps, TouchableWithoutFeedback, Pressable } from 'react-native'
 import React, { useState } from 'react'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import RNUIButton from './RNUIButton'
@@ -40,19 +40,27 @@ export default function AppConfirmModal({
   }
 
   return (
-    <Modal visible={visible} animationType="fade" onRequestClose={handleCancel} {...rest}>
-      <View style={styles.container}>
-        <View style={styles.modalView}>
-          <View style={styles.header}>
-            <Text style={styles.title}>{title}</Text>
+    <Modal
+      visible={visible}
+      animationType="fade"
+      onRequestClose={handleCancel}
+      onDismiss={() => console.log('s')}
+      {...rest}
+    >
+      <Pressable style={styles.container} onPress={handleCancel}>
+        <TouchableWithoutFeedback>
+          <View style={styles.modalView}>
+            <View style={styles.header}>
+              <Text style={styles.title}>{title}</Text>
+            </View>
+            {desc && renderDescription()}
+            <View style={styles.footer}>
+              <RNUIButton label="ยกเลิก" color="secondary" onPress={handleCancel} />
+              <RNUIButton label="ยืนยัน" color="danger" onPress={handleConfirm} />
+            </View>
           </View>
-          {desc && renderDescription()}
-          <View style={styles.footer}>
-            <RNUIButton label="ยกเลิก" color="secondary" onPress={handleCancel} />
-            <RNUIButton label="ยืนยัน" color="danger" onPress={handleConfirm} />
-          </View>
-        </View>
-      </View>
+        </TouchableWithoutFeedback>
+      </Pressable>
     </Modal>
   )
 }
@@ -61,7 +69,7 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   container: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
     backgroundColor: colors.backgroundModal,
   },
   modalView: {
