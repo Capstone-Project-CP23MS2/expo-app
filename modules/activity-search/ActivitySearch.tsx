@@ -1,54 +1,25 @@
-import { View, Text } from 'react-native'
+import { View, Text, ActivityIndicator, ScrollView, KeyboardAvoidingView } from 'react-native'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Stack, useLocalSearchParams } from 'expo-router'
-import { UseGetActivities, UseSearchActivities } from '@/hooks/useAPI'
-import AppTextInput from '../shared/AppTextInputOld'
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { useQuery } from '@tanstack/react-query'
 import activitiesApi from '@/api/activities'
 import { UnistylesRuntime, createStyleSheet, useStyles } from 'react-native-unistyles'
 import SearchHeader from './components/SearchHeader'
-import { Button, Chip } from 'react-native-ui-lib'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import BottomSheet, {
-  BottomSheetBackdrop,
-  BottomSheetTextInput,
-  BottomSheetView,
-  BottomSheetModal,
-  useBottomSheetModal,
-  BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet'
+import BottomSheet, { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet'
 import AppBottomSheetModal from '../shared/AppBottomSheetModal'
 import CategoriesFilterBottomSheet from './components/CategoriesFilterBottomSheet'
-import { CategoryFilterListItemPressHandler } from './components/CategoryFilterListItem'
-import AppButton from '../shared/AppButton'
+import ActivityCard from '../activities/components/Card/'
+import { COLORS, SIZES } from '@/constants'
 
 export default function ActivitySearch() {
   const { styles } = useStyles(stylesheet)
+  const router = useRouter()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([])
 
-  // const handleFilterSelect: CategoryFilterListItemPressHandler = category => {
-  //   setSelectedCategoryIds(prev => {
-  //     if (prev.includes(category.categoryId)) {
-  //       return prev.filter(id => id !== category.categoryId)
-  //     } else {
-  //       return [...prev, category.categoryId]
-  //     }
-  //   })
-  //   console.log('🚚 selectedCategoryIds:', selectedCategoryIds)
-
-  // }
-
   const debouncedSearchQuery = useDebounce(searchQuery, 200)
-  // const { activities } = UseSearchActivities({
-  //   title: searchQuery,
-  // })
-
-  // useEffect(() => {
-  //   console.log('🚚 debouncedSearchQuery:', debouncedSearchQuery)
-  // }, [debouncedSearchQuery])
 
   const handleApplyPress = (categoryIds: number[]) => {
     console.log(categoryIds)
@@ -74,7 +45,7 @@ export default function ActivitySearch() {
   const handlePresentModalClosePress = () => bottomSheetModalRef.current?.close()
 
   return (
-    <View style={styles.container}>
+    <View style={{ flex: 1, marginTop: 0 }}>
       <Stack.Screen
         options={{
           header: () => (
@@ -86,23 +57,29 @@ export default function ActivitySearch() {
           ),
         }}
       />
-
-      {activities?.map(activity => (
-        <View key={activity.activityId}>
-          <Text>{activity.title}</Text>
+      <ScrollView showsVerticalScrollIndicator={false} style={{ backgroundColor: 'white' }}>
+        <View style={styles.container}>
+          <View style={styles.cardsContainer}>
+            {isLoading ? (
+              <ActivityIndicator size="large" color={COLORS.gray} />
+            ) : activities?.length ? (
+              activities.map(activity => (
+                <ActivityCard
+                  key={activity.activityId}
+                  activity={activity}
+                  handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                />
+              ))
+            ) : (
+              <Text>no activity</Text>
+            )}
+          </View>
         </View>
-      ))}
+      </ScrollView>
 
-      <AppBottomSheetModal
-        ref={bottomSheetModalRef}
-        // snapPoints={['1%', '2%']}
-        title="Bottom Sheet Modal"
-        enableDynamicSizing
-        // onDismiss={dismiss}
-      >
+      <AppBottomSheetModal ref={bottomSheetModalRef} title="Bottom Sheet Modal" enableDynamicSizing>
         <CategoriesFilterBottomSheet onApplyPress={handleApplyPress} />
       </AppBottomSheetModal>
-      {/* <CustomBottomSheet title="Custom Bottom Sheet" /> */}
     </View>
   )
 }
@@ -110,7 +87,7 @@ export default function ActivitySearch() {
 const stylesheet = createStyleSheet((theme, runtime) => ({
   container: {
     flex: 1,
-    padding: theme.spacings.md,
+    padding: theme.spacings.lg,
     backgroundColor: theme.colors.background,
   },
   filterBar: {
@@ -141,6 +118,9 @@ const stylesheet = createStyleSheet((theme, runtime) => ({
     lineHeight: 20,
     padding: 8,
     backgroundColor: 'rgba(151, 151, 151, 0.25)',
+  },
+  cardsContainer: {
+    gap: SIZES.small,
   },
 }))
 

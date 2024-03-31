@@ -7,17 +7,13 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useCallback, useEffect, useState } from 'react'
 
 import { FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons'
-import FloatingActionButton from '@/modules/activities/components/FloatingActionButton'
-import { useNavigation } from '@react-navigation/native'
-import { UseGetActivities, UseGetCategories, UseGetMyUserInfo } from '@/hooks/useAPI'
-import { FAB, Icon, AnimatedFAB } from 'react-native-paper'
-import { FloatingButton, TouchableOpacity, SegmentedControl } from 'react-native-ui-lib'
+import { UseGetActivities, UseGetMyUserInfo } from '@/hooks/useAPI'
+import { TouchableOpacity } from 'react-native-ui-lib'
 import ActivityCard from '../components/Card/'
 import AppButton from '@/modules/shared/AppButton'
 import MapActivities from '../components/MapActivities'
-
-import * as Location from 'expo-location'
-import { UserLocationContext } from '@/context/userLocationContext'
+import ActivitySearch from '@/modules/activity-search/ActivitySearch'
+import AppTextInput from '@/modules/shared/AppTextInput'
 
 type Props = {}
 
@@ -48,12 +44,14 @@ const index = (props: Props) => {
           header: () => (
             <SafeAreaView style={styles.safeArea}>
               <View style={styles.headerArea}>
-                <AppButton
-                  label="search"
-                  variant="primary"
-                  onPress={() => router.push('/(app)/activities/search')}
-                  fullWidth
-                />
+                <Pressable onPress={() => router.push('/(app)/activities/search')}>
+                  <AppTextInput
+                    placeholder="Explore available activities."
+                    icon
+                    iconName="search"
+                    disabled
+                  />
+                </Pressable>
               </View>
             </SafeAreaView>
           ),
@@ -112,22 +110,9 @@ const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: 'white',
     elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
   },
   headerArea: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 10,
-    paddingTop: 10,
+    padding: 15,
   },
   container: {
     flex: 1,

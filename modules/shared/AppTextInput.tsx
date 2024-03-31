@@ -20,6 +20,9 @@ type Props = {
   iconName?: keyof typeof MaterialIcons.glyphMap
   icon?: ReactNode
   password?: boolean
+  placeholderTextColor?: boolean
+  textColor?: string
+  autoFocus?: boolean
 
   [key: string]: any
 }
@@ -32,6 +35,9 @@ const Input = ({
   password,
   showCharCounter,
   disabled,
+  placeholderTextColor,
+  textColor,
+  autoFocus,
   ...props
 }: Props) => {
   const [hidePassword, setHidePassword] = useState(password)
@@ -43,7 +49,7 @@ const Input = ({
     <View style={styles.container}>
       {label && <Text style={styles.label}>{label}</Text>}
       <View style={styles.inputContainer}>
-        {icon && <MaterialIcons name={iconName} style={[styles.icon]} />}
+        {icon && <MaterialIcons name={iconName} style={styles.icon} />}
         <TextInput
           style={styles.input}
           onChangeText={onChangeText}
@@ -51,7 +57,8 @@ const Input = ({
           autoCorrect={false}
           secureTextEntry={hidePassword}
           editable={!disabled}
-          placeholderTextColor="#c0c0c0"
+          placeholderTextColor={placeholderTextColor ? `${textColor}` : '#c0c0c0'}
+          autoFocus={autoFocus}
           {...props}
         />
         {password && (
@@ -89,7 +96,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderWidth: 1,
     borderColor: '#c0c0c0',
-    borderRadius: 5,
+    borderRadius: 15,
   },
   input: {
     flex: 1,

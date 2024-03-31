@@ -16,12 +16,6 @@ type Props = {
 }
 type Ref = BottomSheetModal
 
-// const CategoriesFilterBottomSheet = forwardRef<Ref, Props>((props, ref) => {
-//   const { styles } = useStyles(stylesheet)
-
-//   return <></>
-// })
-
 const CategoriesFilterBottomSheet = ({ onApplyPress }: Props) => {
   const { styles } = useStyles(stylesheet)
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([])

@@ -44,7 +44,7 @@ const MapActivities = () => {
   return (
     <View style={{ flex: 1 }}>
       <Pressable
-        style={{ borderRadius: SIZES.small, overflow: 'hidden' }}
+        style={{ borderRadius: SIZES.small, overflow: 'hidden', elevation: 4 }}
         onPress={() => router.push('/(app)/map/')}
       >
         <MapView

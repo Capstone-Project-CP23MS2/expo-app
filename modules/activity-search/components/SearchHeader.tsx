@@ -1,11 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import AppTextInput from '@/modules/shared/AppTextInputOld'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Chip, Searchbar } from 'react-native-paper'
+import { Chip } from 'react-native-ui-lib'
 import { ScrollView } from 'react-native-gesture-handler'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
+import AppTextInput from '@/modules/shared/AppTextInput'
+import { MaterialIcons } from '@expo/vector-icons'
+import { COLORS, FONT } from '@/constants'
 
 type Props = {
   searchQuery: string
@@ -18,11 +19,13 @@ export default function SearchHeader({ searchQuery, onSearchChanged, onFilterPre
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ flex: 1, gap: 8 }}>
-        <Searchbar
-          style={{ maxWidth: 'auto' }}
-          placeholder="Search"
-          onChangeText={onSearchChanged}
+        <AppTextInput
           value={searchQuery}
+          onChangeText={onSearchChanged}
+          placeholder="Explore available activities."
+          icon
+          iconName="search"
+          autoFocus={true}
         />
         <ScrollView
           horizontal
@@ -32,12 +35,15 @@ export default function SearchHeader({ searchQuery, onSearchChanged, onFilterPre
           }}
         >
           <Chip
-            style={{ borderRadius: 24 }}
-            icon={props => <MaterialCommunityIcons {...props} name="chevron-down" size={24} />}
+            borderRadius={10}
+            label={'Categories'}
+            labelStyle={{ color: COLORS.black, fontWeight: 'normal' }}
             onPress={() => onFilterPress()}
-          >
-            Filter
-          </Chip>
+            containerStyle={{
+              borderColor: '#c0c0c0',
+            }}
+            // rightIconSource={<MaterialCommunityIcons name="chevron-down" />}
+          />
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -46,28 +52,16 @@ export default function SearchHeader({ searchQuery, onSearchChanged, onFilterPre
 
 const stylesheet = createStyleSheet(theme => ({
   container: {
-    // padding: theme.spacings.md,
-    // backgroundColor: theme.colors.background,
-    // backgroundColor: '#fff',
     elevation: 4,
-    // shadowColor: '#000',
-    // shadowOpacity: 0.1,
-    // shadowRadius: 6,
-    // shadowOffset: {
-    //   width: 1,
-    //   height: 10,
-    // },
     flexDirection: 'row',
     alignItems: 'center',
-
-    padding: theme.spacings.md,
+    padding: 15,
     backgroundColor: theme.colors.background, // Adjust background color as needed
   },
   filterBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // marginBottom: 20,
   },
   text: {
     ...theme.typography.md,

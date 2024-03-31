@@ -37,11 +37,9 @@ const AppEntry = (props: Props) => {
         name="activities/search"
         options={{
           headerTitle: 'Search Activity',
-          animation: 'slide_from_right',
-          animationDuration: 200,
+          animation: 'fade',
         }}
       />
-      {/* <Stack.Screen name="profile/profile" options={{ headerTitle: 'Profile' }} /> */}
       <Stack.Screen
         name="profile/edit"
         options={{
@@ -50,8 +48,6 @@ const AppEntry = (props: Props) => {
           animationDuration: 200,
         }}
       />
-
-      {/* <Stack.Screen name="notification/notification" options={{ headerTitle: 'Notification' }} /> */}
     </Stack>
   )
 }
