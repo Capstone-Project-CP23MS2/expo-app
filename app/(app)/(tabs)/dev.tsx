@@ -45,6 +45,11 @@ export default function dev() {
         label="Interests"
         onPress={() => router.push('/profile/onboarding/interests')}
       />
+      <AppButton
+        variant="primary"
+        label="Modal View"
+        onPress={() => router.push('/dev/DevModalView')}
+      />
     </View>
   )
 }

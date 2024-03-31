@@ -8,7 +8,7 @@ import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
 import { SIZES } from '@/constants'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { RNUIButton } from '@/components'
+import { RNUIButton, AppConfirmModal } from '@/components'
 import ProfileSettingListItem from './components/ProfileSettingListItem'
 
 type Props = {}
@@ -18,7 +18,6 @@ const Page = (props: Props) => {
   const { onLogout } = useAuth()
   const { data: user } = UseGetMyUserInfo()
   const router = useRouter()
-  const deleteMutation = UseDeleteUser()
 
   const settingList = [
     {
@@ -49,13 +48,37 @@ const Page = (props: Props) => {
       },
     },
   ]
-  const handleSignOutPress = () => {
+
+  const [showSignOutModal, setShowSignOutModal] = useState(false)
+
+  const handleSignOut = () => {
+    setShowSignOutModal(true)
+  }
+
+  const handleConfirmSignOut = async () => {
     console.log('Sign Out')
     onLogout?.()
+    setShowSignOutModal(false)
+  }
+
+  const handleCancelSignOut = () => {
+    setShowSignOutModal(false)
   }
 
   return (
     <SafeAreaView style={styles.container}>
+      <AppConfirmModal
+        visible={showSignOutModal}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={() => {
+          console.log('close')
+        }}
+        title="ยืนยันการออกจากระบบ"
+        onConfirm={handleConfirmSignOut}
+        onCancel={handleCancelSignOut}
+      />
+
       <View style={styles.content}>
         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
           <MaterialIcons name="account-circle" size={100} color={'black'} />
@@ -69,7 +92,7 @@ const Page = (props: Props) => {
           ))}
         </View>
         <View style={styles.signOutContainer}></View>
-        <ProfileSettingListItem title="ออกจากระบบ" onPress={handleSignOutPress} />
+        <ProfileSettingListItem title="ออกจากระบบ" onPress={handleSignOut} />
       </View>
     </SafeAreaView>
   )

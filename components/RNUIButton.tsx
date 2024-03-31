@@ -38,7 +38,8 @@ export default function RNUIButton(props: Props) {
 const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   container: {
     paddingVertical: spacings.md,
-    width: '100%',
+    // width: '100%',
+    flexGrow: 1,
     variants: {},
   },
   extraStyle: (color: ButtonColor = 'primary') => ({
