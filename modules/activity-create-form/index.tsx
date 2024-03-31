@@ -124,6 +124,7 @@ const CreateActivity = (props: Props) => {
                     searchPlaceholder={'Search a category'}
                     searchStyle={{ color: Colors.blue30, placeholderTextColor: Colors.grey50 }}
                     trailingAccessory={dropdownIcon}
+                    showSearch={true}
                   >
                     {categories?.map(category => (
                       <Picker.Item
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
     height: 48,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 15,
     justifyContent: 'center',
     paddingLeft: 15,
   },
