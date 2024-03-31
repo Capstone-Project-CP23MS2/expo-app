@@ -32,8 +32,8 @@ const MapActivities = () => {
     console.log(location)
 
     const region = {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
+      latitude: location.coords.latitude ?? 13.75633,
+      longitude: location.coords.longitude ?? 100.501765,
       latitudeDelta: 0.2,
       longitudeDelta: 0.2,
     }
