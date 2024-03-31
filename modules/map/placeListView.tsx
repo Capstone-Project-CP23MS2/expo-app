@@ -29,7 +29,6 @@ export default function PlaceListView({ activities, onRegionChange }: any) {
       longitudeDelta: 0.0421,
     }
     onRegionChange(newRegion)
-    console.log(newRegion)
   }
 
   return (
@@ -43,9 +42,9 @@ export default function PlaceListView({ activities, onRegionChange }: any) {
         getItemLayout={getItemLayout}
         renderItem={({ item, index }) => (
           <View key={index}>
-            <Pressable onPress={() => handlePlaceSelect(item)}>
-              <PlaceItem place={item} />
-            </Pressable>
+            <PlaceItem place={item} onPlaceChange={handlePlaceSelect} />
+            {/* <Pressable onPress={() => handlePlaceSelect(item)}>
+            </Pressable> */}
           </View>
         )}
       />
