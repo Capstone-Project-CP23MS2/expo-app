@@ -54,15 +54,6 @@ const TabsLayout = (props: Props) => {
       />
 
       <Tabs.Screen
-        name="dev"
-        options={{
-          tabBarIcon: ({ size, color }) => <FontAwesome5 name="dev" size={size} color={color} />,
-          headerTitle: 'Development',
-          headerShadowVisible: true,
-        }}
-      />
-
-      <Tabs.Screen
         name="whishlists"
         options={{
           tabBarIcon: ({ size, color }) => <AntDesign name="star" size={size} color={color} />,
@@ -85,6 +76,15 @@ const TabsLayout = (props: Props) => {
         options={{
           tabBarIcon: ({ size, color }) => <Ionicons name="person" size={size} color={color} />,
           headerTitle: 'Profile',
+        }}
+      />
+
+      <Tabs.Screen
+        name="dev"
+        options={{
+          tabBarIcon: ({ size, color }) => <FontAwesome5 name="dev" size={size} color={color} />,
+          headerTitle: 'Development',
+          headerShadowVisible: true,
         }}
       />
     </Tabs>

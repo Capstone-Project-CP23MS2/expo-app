@@ -35,6 +35,14 @@ const Page = (props: Props) => {
     setRefreshing(false)
   }, [])
 
+  const isInDuration = (activity: any) => {
+    const currentTime = new Date().getTime()
+    const startTime = new Date(activity.dateTime).getTime()
+    const endTime = startTime + activity.duration * 60 * 1000 // Convert duration to milliseconds
+
+    return currentTime >= startTime && currentTime <= endTime
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
@@ -53,13 +61,13 @@ const Page = (props: Props) => {
               <Text>Error! {error.message}</Text>
             ) : activities?.filter(
                 activity =>
-                  activity.users.some(user => user.userId === userInfo?.userId) &&
+                  activity.users.some((user: any) => user.userId === userInfo?.userId) &&
                   activity.hostUserId !== userInfo?.userId,
               ).length ? (
               activities
                 ?.filter(
                   activity =>
-                    activity.users.some(user => user.userId === userInfo?.userId) &&
+                    activity.users.some((user: any) => user.userId === userInfo?.userId) &&
                     activity.hostUserId !== userInfo?.userId,
                 )
                 .map(activity => (
@@ -70,25 +78,7 @@ const Page = (props: Props) => {
                   />
                 ))
             ) : (
-              <View
-                style={{
-                  flex: 1,
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: '#FFF',
-                  padding: 20,
-                  elevation: 4,
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 0,
-                    height: 2,
-                  },
-                  shadowOpacity: 0.23,
-                  shadowRadius: 2.62,
-                  borderRadius: SIZES.small,
-                }}
-              >
+              <View style={styles.blank}>
                 <Text>No Join Activity.</Text>
               </View>
             )}
@@ -110,34 +100,52 @@ const Page = (props: Props) => {
                   />
                 ))
             ) : (
-              <View
-                style={{
-                  flex: 1,
-                  width: '100%',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  backgroundColor: '#FFF',
-                  padding: 20,
-                  elevation: 4,
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 0,
-                    height: 2,
-                  },
-                  shadowOpacity: 0.23,
-                  shadowRadius: 2.62,
-                  borderRadius: SIZES.small,
-                }}
-              >
+              <View style={styles.blank}>
                 <Text>No Host Activity.</Text>
               </View>
             )}
             <View style={{ gap: 2 }}>
               <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Your Calendar</Text>
             </View>
+            <StatusListView onStatusChanged={onDataChanged} />
+            {activities?.length && (
+              <View style={{ gap: 10 }}>
+                {status === 'ALL' &&
+                  activities
+                    ?.filter(activity =>
+                      activity.users.some((user: any) => user.userId === userInfo?.userId),
+                    )
+                    .map(activity => (
+                      <ActivityCard
+                        key={`activity-${activity.activityId}`}
+                        activity={activity}
+                        handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                      />
+                    ))}
+                {status === 'GOING' &&
+                  activities
+                    ?.filter(activity => isInDuration(activity))
+                    .map(activity => (
+                      <ActivityCard
+                        key={`activity-${activity.activityId}`}
+                        activity={activity}
+                        handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                      />
+                    ))}
+                {status === 'PAST' &&
+                  activities
+                    ?.filter(activity => !isInDuration(activity))
+                    .map(activity => (
+                      <ActivityCard
+                        key={`activity-${activity.activityId}`}
+                        activity={activity}
+                        handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                      />
+                    ))}
+              </View>
+            )}
           </View>
         </View>
-        <StatusListView onStatusChanged={onDataChanged} />
       </ScrollView>
       <View style={styles.addButton}>
         <TouchableOpacity onPress={() => router.push('/activities/create-form')}>
@@ -199,6 +207,23 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
+  },
+  blank: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FFF',
+    padding: 20,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.23,
+    shadowRadius: 2.62,
+    borderRadius: SIZES.small,
   },
 })
 

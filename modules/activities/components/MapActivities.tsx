@@ -63,6 +63,7 @@ const MapActivities = () => {
             padding: 10,
             backgroundColor: COLORS.white,
             borderRadius: 10,
+            elevation: 4,
           }}
         >
           <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 5 }}>
