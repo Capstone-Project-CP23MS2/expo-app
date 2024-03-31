@@ -204,7 +204,7 @@ const CreateActivity = (props: Props) => {
       <View style={styles.footer}>
         {/* <AppButton variant="primary" label="Preset" onPress={usePreset} /> */}
         <AppButton variant="secondary" label="🔮 preset (test)" onPress={usePreset} />
-        <AppButton variant="primary" label="Create Activity" onPress={() => onSummit()} fullWidth />
+        <AppButton label="Create Activity" onPress={() => onSummit()} fullWidth />
       </View>
     </KeyboardAvoidingWrapper>
   )
@@ -215,7 +215,7 @@ export default CreateActivity
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 15,
     backgroundColor: 'white',
   },
   label: {

@@ -4,15 +4,14 @@ import AppButton from '@/modules/shared/AppButton'
 import { UseCreateParticipant, UseDeleteParticipant, UseCreateNotification } from '@/hooks/useAPI'
 import { objToFormData } from '@/utils'
 import { useRouter } from 'expo-router'
-import notification from '@/app/(app)/notification/notification'
 
 type Props = {
-  userId: string
-  userName: string
-  activityId: string
-  activityTitle: string
+  userId?: number
+  userName?: string
+  activityId?: string
+  activityTitle?: string
   isParticipant?: boolean
-  targetId: number
+  targetId?: number
 }
 
 export default function JoinButton({
@@ -82,7 +81,7 @@ export default function JoinButton({
     return <AppButton variant="danger" label="Leave Activity" onPress={onLeaveActivity} fullWidth />
   }
 
-  return <AppButton variant="primary" label="Join Activity" onPress={onJoinActivity} fullWidth />
+  return <AppButton label="Join Activity" onPress={onJoinActivity} fullWidth />
 }
 
 const styles = StyleSheet.create({})

@@ -13,12 +13,7 @@ export default function RegisterFooter({ onCreateAccount, isCompleted }: Prop) {
 
   return (
     <View style={styles.container}>
-      <AppButton
-        label="Create User"
-        variant="primary"
-        onPress={onCreateAccount}
-        enabled={isCompleted}
-      />
+      <AppButton label="Create User" onPress={onCreateAccount} enabled={isCompleted} />
     </View>
   )
 }

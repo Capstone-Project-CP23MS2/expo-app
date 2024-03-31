@@ -43,7 +43,6 @@ const Input = ({
   const [hidePassword, setHidePassword] = useState(password)
   const [isFocused, setIsFocused] = useState(false)
   const { maxLength, error } = props
-  console.log(props)
 
   return (
     <View style={styles.container}>

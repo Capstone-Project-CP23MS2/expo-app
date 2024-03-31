@@ -27,7 +27,7 @@ const index = () => {
     onLocateMe()
   }, [])
 
-  const handleRegionChange = newRegion => {
+  const handleRegionChange = (newRegion: any) => {
     setRegion(newRegion)
   }
 

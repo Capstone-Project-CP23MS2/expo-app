@@ -1,5 +1,5 @@
 import { useAuth } from '@/context/authContext'
-import { UseDeleteUser } from '@/hooks/useAPI'
+import { UseDeleteUser, UseGetMyUserInfo } from '@/hooks/useAPI'
 import { useRouter } from 'expo-router'
 import React, { useState } from 'react'
 import { SafeAreaView, Modal, StyleSheet, View, Pressable } from 'react-native'
@@ -8,12 +8,15 @@ import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
 import { SIZES } from '@/constants'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { RNUIButton } from '@/components'
+import ProfileSettingListItem from './components/ProfileSettingListItem'
 
 type Props = {}
 
 const Page = (props: Props) => {
   const { styles } = useStyles(stylesheet)
-  const { user, onLogout } = useAuth()
+  const { onLogout } = useAuth()
+  const { data: user } = UseGetMyUserInfo()
   const router = useRouter()
   const deleteMutation = UseDeleteUser()
 
@@ -46,6 +49,10 @@ const Page = (props: Props) => {
       },
     },
   ]
+  const handleSignOutPress = () => {
+    console.log('Sign Out')
+    onLogout?.()
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -56,78 +63,31 @@ const Page = (props: Props) => {
           <Text md>{user?.email}</Text>
         </View>
 
-        <View style={styles.settingList}>
+        <View style={styles.settingListContainer}>
           {settingList.map((item, index) => (
-            <Pressable
-              key={item.id}
-              style={styles.settingItemWrapper}
-              activeOpacity={0.5}
-              onPress={item.onPress}
-              android_ripple={{ color: 'gray' }}
-            >
-              <View style={styles.settingItem}>
-                <Text style={styles.settingTitle}>{item.title}</Text>
-                <MaterialIcons name="chevron-right" size={24} color="black" />
-              </View>
-            </Pressable>
+            <ProfileSettingListItem key={index} title={item.title} onPress={item.onPress} />
           ))}
         </View>
-        <Button label="Sign Out" onPress={onLogout} />
+        <View style={styles.signOutContainer}></View>
+        <ProfileSettingListItem title="ออกจากระบบ" onPress={handleSignOutPress} />
       </View>
     </SafeAreaView>
   )
 }
 
-const stylesheet = createStyleSheet(theme => ({
+const stylesheet = createStyleSheet(({ colors, spacings }) => ({
   container: {
     flex: 1,
     backgroundColor: 'white',
   },
-  settingList: {
+  content: {
+    paddingTop: 20,
+  },
+  settingListContainer: {
     flexDirection: 'column',
   },
-  settingItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: theme.spacings.lg,
-    borderBottomColor: '#DCDCDC',
-    borderBottomWidth: 1,
-  },
-  settingItemWrapper: {
-    paddingHorizontal: theme.spacings.lg,
-  },
-  settingTitle: {
-    ...theme.typography.md,
-  },
-
-  content: {
-    // padding: 20,
-    gap: 5,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  headerText: {
-    fontSize: 24,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 16,
-  },
-  text: {
-    width: '100%',
-    height: 48,
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 5,
-    justifyContent: 'center',
-    paddingLeft: 15,
+  signOutContainer: {
+    // marginTop: spacings.lg,
   },
 }))
 

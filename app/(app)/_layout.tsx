@@ -24,7 +24,7 @@ const AppEntry = (props: Props) => {
       {/* <Stack.Screen name="(tabs)/activities" options={{ headerShown: false }} /> */}
       <Stack.Screen name="activities/[id]" options={{ headerTitle: 'Activity Details' }} />
       <Stack.Screen name="activities/create-form" options={{ headerTitle: 'Create Activity' }} />
-      <Stack.Screen name="map/index" options={{ headerTitle: 'Map' }} />
+      <Stack.Screen name="map/index" options={{ headerTitle: 'Explore your activities' }} />
       <Stack.Screen
         name="activities/edit"
         options={{
@@ -48,6 +48,13 @@ const AppEntry = (props: Props) => {
           animationDuration: 200,
         }}
       />
+
+      <Stack.Screen
+        name="profile/onboarding/interests"
+        options={{ headerTitle: 'In', animation: 'slide_from_right', animationDuration: 200 }}
+      />
+
+      {/* <Stack.Screen name="notification/notification" options={{ headerTitle: 'Notification' }} /> */}
     </Stack>
   )
 }
