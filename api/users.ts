@@ -2,7 +2,8 @@
 import { UserResponse, UserUpdateRequest, UsersResponse } from "./type";
 import apiClient from "./apiClient";
 import { objToFormData } from "@/utils";
-import { UserInterestCreateRequest } from './user/users.type';
+import { UserInfoResponse, UserInterestCreateRequest } from './user/users.type';
+import { AxiosRequestConfig } from "axios";
 
 class UsersApi {
 
@@ -18,7 +19,7 @@ class UsersApi {
 
   async getMyUserInfo() {
     // const { data } = await apiClient.get<UserResponse>('/users/me');
-    const { data } = await apiClient.post<UserResponse>('/auth/login');
+    const { data } = await apiClient.post<UserInfoResponse>('/auth/login');
     return data;
   }
 
@@ -53,13 +54,16 @@ class UsersApi {
   }
 
   async createUserInterest(createRequest: UserInterestCreateRequest) {
-    const config = {
+    const config: AxiosRequestConfig = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
 
       // paramsSerializer: {
       //   indexes: null
       // }
     };
-    const { data } = await apiClient.post(`/users`, createRequest, config);
+    const { data } = await apiClient.post(`/interests/create`, objToFormData(createRequest), config);
     return data;
   }
 

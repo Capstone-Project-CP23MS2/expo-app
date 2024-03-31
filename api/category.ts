@@ -5,7 +5,7 @@ import { CategoriesRequestParameters } from './categories/categories.type';
 
 
 class CategoriesApi {
-  async getCategories(params: CategoriesRequestParameters = { pageSize: 25 }) {
+  async getCategories(params: CategoriesRequestParameters) {
     const { data } = await apiClient.get<CategoriesResponse>('/categories', { params });
     return data;
   }

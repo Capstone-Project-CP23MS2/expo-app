@@ -40,6 +40,7 @@ const TabsLayout = (props: Props) => {
           headerTitle: 'Development',
           headerTitleAlign: 'center',
           headerShadowVisible: true,
+          tabBarShowLabel: false,
         }}
       />
 

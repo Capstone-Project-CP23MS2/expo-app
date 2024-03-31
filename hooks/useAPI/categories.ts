@@ -8,7 +8,7 @@ type CategoriesParameters = {
     pageSize?: number;
 };
 
-export function UseGetCategories(params: CategoriesRequestParameters = {}) {
+export function UseGetCategories(params: CategoriesRequestParameters = { pageSize: 25 }) {
     return useQuery({
         queryKey: ['categories'],
         queryFn: () => categoriesApi.getCategories(params),

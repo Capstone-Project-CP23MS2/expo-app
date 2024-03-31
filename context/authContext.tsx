@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const register = async (newUser: UserResponse) => {
     setUser(newUser)
-    router.push('/(app)/(tabs)')
+    router.replace('/(app)/profile/onboarding/interests')
   }
   const syncUserInfo = (userInfo: UserResponse) => {
     setUser(userInfo)
