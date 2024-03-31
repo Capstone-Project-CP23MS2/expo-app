@@ -1,6 +1,7 @@
 import { requestParams, ActivityResponse, ActivitiesResponse, ParticipantResponse, ParticipantsResponse, ActivityUpdateRequest, ActivitiesRequestParams } from './type';
 import apiClient from "./apiClient";
 import { objToFormData } from '@/utils';
+import { AxiosRequestConfig } from 'axios';
 const API_URL: string = process.env.EXPO_PUBLIC_BASE_URL_API!;
 
 //TODO: ย้าย Formdata มาที่นี่ทั้งหมด
@@ -11,19 +12,20 @@ type ParticipantRequestBody = {
 };
 
 class ActivitiesApi {
-
   async getActivities(params: ActivitiesRequestParams) {
     const { data } = await apiClient.get<ActivitiesResponse>('/activities', { params });
     return data;
   }
 
   async getActivitiesNew(params: ActivitiesRequestParams) {
+    const config: AxiosRequestConfig = {
+      params,
+      paramsSerializer: {
+        indexes: null
+      }
+    };
     const { data: { content: activities, ...paginationData } }
-      = await apiClient.get<ActivitiesResponse>('/activities', {
-        params, paramsSerializer: {
-          indexes: null
-        }
-      });
+      = await apiClient.get<ActivitiesResponse>('/activities', config);
     return { activities, paginationData };
   }
 

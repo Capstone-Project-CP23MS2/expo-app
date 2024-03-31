@@ -6,6 +6,7 @@ import AppButton from '@/modules/shared/AppButton'
 import { useAuth } from '@/context/authContext'
 import { useRouter } from 'expo-router'
 import { SegmentedControl } from 'react-native-ui-lib'
+import { RNUIButton } from '@/components'
 import * as ImagePicker from 'expo-image-picker'
 
 export default function dev() {
@@ -44,13 +45,24 @@ export default function dev() {
   return (
     <View>
       <Text>API</Text>
-      <AppButton variant="primary" label="Get Categories" onPress={() => console.log(categories)} />
+      {/* <AppButton variant="primary" label="Get Categories" onPress={() => console.log(categories)} /> */}
       <AppButton variant="primary" label="Logout" onPress={onLogout} />
       <SegmentedControl
         segments={[{ label: 'Available Activities' }, { label: 'Your Activity' }]}
         style={{ marginVertical: 15, marginTop: 20 }}
       />
       <AppButton variant="primary" label="Delete User" onPress={onDeleteUser} />
+      <AppButton
+        variant="primary"
+        label="Button"
+        onPress={() => router.push('/dev/DevButtonView')}
+      />
+      <AppButton variant="primary" label="Wizard" onPress={() => router.push('/dev/DevWizard')} />
+      <AppButton
+        variant="primary"
+        label="Interests"
+        onPress={() => router.push('/profile/onboarding/interests')}
+      />
       <View>
         <Button title="Pick an image from camera roll" onPress={pickImage} />
         {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
