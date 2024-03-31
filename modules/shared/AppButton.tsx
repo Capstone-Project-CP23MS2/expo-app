@@ -34,7 +34,7 @@ const stylesheet = createStyleSheet(theme => ({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 15,
+    borderRadius: 10,
     padding: 12,
     // ...theme.component.button.contained,
     // height: 48,

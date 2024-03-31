@@ -7,12 +7,12 @@ import { useRouter } from 'expo-router'
 import notification from '@/app/(app)/notification/notification'
 
 type Props = {
-  userId: string
-  userName: string
-  activityId: string
-  activityTitle: string
+  userId?: number
+  userName?: string
+  activityId?: string
+  activityTitle?: string
   isParticipant?: boolean
-  targetId: number
+  targetId?: number
 }
 
 export default function JoinButton({

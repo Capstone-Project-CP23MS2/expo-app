@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { UpdateActivityInfo, UpdateActivityInfoSchema } from './updateActivity.schema'
 import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper'
 import { ScrollView } from 'react-native-gesture-handler'
-import AppTextInput from '../shared/AppTextInputOld'
+import AppTextInput from '../shared/AppTextInput'
 import FormDatetimePicker from '../activity-create-form/components/form-datetime-picker'
 import AppButton from '../shared/AppButton'
 import { UseGetActivity, UseGetCategories, UseUpdateActivity } from '@/hooks/useAPI'
@@ -158,7 +158,6 @@ export default function ActivityEditScreen() {
                   onChangeText={text => onChange(parseInt(text, 10))}
                   error={error}
                   placeholder="eg. 2"
-                  iconName="people"
                 />
               )}
             />
@@ -196,7 +195,7 @@ export default function ActivityEditScreen() {
 const stylesheet = createStyleSheet(theme => ({
   container: {
     flex: 1,
-    padding: theme.spacings.md,
+    padding: 15,
     backgroundColor: theme.colors.background,
   },
   text: {
@@ -208,5 +207,14 @@ const stylesheet = createStyleSheet(theme => ({
     justifyContent: 'space-between',
     padding: 20,
     backgroundColor: theme.colors.background,
+  },
+  textinput: {
+    width: '100%',
+    height: 48,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 15,
+    justifyContent: 'center',
+    paddingLeft: 15,
   },
 }))
