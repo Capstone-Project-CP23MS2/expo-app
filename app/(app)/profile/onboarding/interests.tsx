@@ -11,6 +11,7 @@ import RegisterInterestsListItem, {
 import { Stack, Tabs, useRouter } from 'expo-router'
 import { UseCreateUserInterests } from '@/hooks/useAPI/userInterests'
 import { useAuth } from '@/context/authContext'
+import { FONT } from '@/constants'
 
 type Props = {}
 
@@ -66,6 +67,7 @@ export default function userInterests(props: Props) {
       <Stack.Screen
         options={{
           headerTitle: 'เลือกกีฬาที่คุณสนใจ',
+          headerTitleStyle: { fontFamily: FONT.regular },
         }}
       />
       <View style={styles.content}>
@@ -87,6 +89,10 @@ export default function userInterests(props: Props) {
             estimatedItemSize={100}
             numColumns={1}
             showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              padding: 15,
+            }}
+
             // onEndReached={handleLoadMore}
           />
         </View>
@@ -106,11 +112,11 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   container: {
     flex: 1,
     // backgroundColor: 'white',
+    fontFamily: FONT.regular,
   },
   content: {
-    // backgroundColor: colors.test,
+    backgroundColor: 'white',
     flex: 1,
-    padding: spacings.md,
   },
   title: {
     ...typography.lgB,
@@ -119,10 +125,10 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
     flexGrow: 1,
   },
   footer: {
-    // backgroundColor: '#fff',
+    backgroundColor: '#fff',
     // backgroundColor: 'transparent',
     padding: spacings.md,
-    borderTopColor: '#ccc',
-    borderTopWidth: 1,
+    // borderTopColor: '#ccc',
+    // borderTopWidth: 1,
   },
 }))
