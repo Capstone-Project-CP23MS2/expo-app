@@ -71,6 +71,7 @@ const Page = (props: Props) => {
         visible={showSignOutModal}
         transparent
         title="ยืนยันการออกจากระบบ"
+        subheading="คุณจะย้อนกลับไปยังหน้าล็อคอิน"
         onConfirm={handleConfirmSignOut}
         onCancel={handleCancelSignOut}
       />
