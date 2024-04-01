@@ -1,17 +1,17 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { TextField, TextFieldProps } from 'react-native-ui-lib'
+import { View, Text } from 'react-native';
+import React from 'react';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { TextField, TextFieldProps } from 'react-native-ui-lib';
 
 type Props = TextFieldProps & {
-  error?: { message?: string }
-}
+  error?: { message?: string };
+};
 
 //showCharCounter
 
 export default function RNUITextField(props: Props) {
-  const { styles } = useStyles(stylesheet)
-  const { error, ...restProps } = props
+  const { styles } = useStyles(stylesheet);
+  const { error, ...restProps } = props;
 
   return (
     <TextField
@@ -24,7 +24,7 @@ export default function RNUITextField(props: Props) {
       validationMessage={error?.message}
       {...restProps}
     />
-  )
+  );
 }
 
 const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
@@ -49,8 +49,10 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   errorMessage: {
     ...typography.sm,
     color: colors.danger,
+    paddingLeft: spacings.md,
   },
   charCounter: {
     ...typography.sm,
+    paddingRight: spacings.md,
   },
-}))
+}));
