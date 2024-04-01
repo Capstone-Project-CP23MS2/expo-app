@@ -1,11 +1,4 @@
-import {
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, Text, View } from 'react-native';
 
 import React, { ReactNode } from 'react';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -21,7 +14,8 @@ const keyboardAvoidingWrapper = ({ children }: Props) => {
     <KeyboardAvoidingView
       keyboardVerticalOffset={headerHeight}
       // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={{ flex: 1 }}>
+      style={{ flex: 1 }}
+    >
       {/* <TouchableWithoutFeedback onPress={Keyboard.dismiss}> */}
       {children}
       {/* </TouchableWithoutFeedback> */}
