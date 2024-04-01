@@ -1,47 +1,57 @@
-import { useAuth } from '@/context/authContext'
-import { UseDeleteUser, UseGetActivities, UseGetMyUserInfo } from '@/hooks/useAPI'
-import { BaseButton, RefreshControl, ScrollView, TextInput } from 'react-native-gesture-handler'
-import { useRouter } from 'expo-router'
-import React, { useCallback, useState } from 'react'
-import { SafeAreaView, Modal, StyleSheet, View } from 'react-native'
-import { Button, Text } from 'react-native-ui-lib'
-import { FontAwesome, MaterialIcons, AntDesign } from '@expo/vector-icons'
-import { COLORS, FONT, SIZES } from '@/constants'
-import { ActivityIndicator } from 'react-native-paper'
-import ActivityCard from '../activities/components/Card/'
-import { TouchableOpacity } from 'react-native-ui-lib'
-import StatusListView from './components/StatusListView'
+import { useAuth } from '@/context/authContext';
+import { UseDeleteUser, UseGetActivities, UseGetMyUserInfo } from '@/hooks/useAPI';
+import { BaseButton, RefreshControl, ScrollView, TextInput } from 'react-native-gesture-handler';
+import { useRouter } from 'expo-router';
+import React, { useCallback, useState } from 'react';
+import { SafeAreaView, Modal, StyleSheet, View } from 'react-native';
+import { Button, Chip, Text } from 'react-native-ui-lib';
+import { FontAwesome, MaterialIcons, AntDesign } from '@expo/vector-icons';
+import { COLORS, FONT, SIZES } from '@/constants';
+import { ActivityIndicator } from 'react-native-paper';
+import { ActivityCard } from '../activities/components/';
+import { TouchableOpacity } from 'react-native-ui-lib';
+import StatusListView from './components/StatusListView';
 
-type Props = {}
+type Props = {};
 
 const Page = (props: Props) => {
-  const router = useRouter()
+  const router = useRouter();
 
-  const { data, isLoading, isError, error, refetch } = UseGetActivities({})
-  const { content: activities } = data || {}
+  const { data, isLoading, isError, error, refetch } = UseGetActivities({});
+  const { content: activities } = data || {};
 
-  const { user: userInfo } = useAuth()
+  const { user: userInfo } = useAuth();
 
-  const [refreshing, setRefreshing] = useState(false)
+  const [refreshing, setRefreshing] = useState(false);
 
-  const [status, setStatus] = useState('ALL')
+  const [status, setStatus] = useState('ALL');
   const onDataChanged = (status: string) => {
-    setStatus(status)
-  }
+    setStatus(status);
+  };
 
   const onRefresh = useCallback(() => {
-    setRefreshing(true)
-    refetch()
-    setRefreshing(false)
-  }, [])
+    setRefreshing(true);
+    refetch();
+    setRefreshing(false);
+  }, []);
 
   const isInDuration = (activity: any) => {
-    const currentTime = new Date().getTime()
-    const startTime = new Date(activity.dateTime).getTime()
-    const endTime = startTime + activity.duration * 60 * 1000 // Convert duration to milliseconds
+    const currentTime = new Date().getTime();
+    const startTime = new Date(activity.dateTime).getTime();
+    const endTime = startTime + activity.duration * 60 * 1000; // Convert duration to milliseconds
 
-    return currentTime >= startTime && currentTime <= endTime
-  }
+    return currentTime >= startTime && currentTime <= endTime;
+  };
+
+  const activityJoined = activities?.filter(
+    activity =>
+      activity.users.some((user: any) => user.userId === userInfo?.userId) &&
+      activity.hostUserId !== userInfo?.userId,
+  ).length;
+
+  const activityHost = activities?.filter(
+    activity => activity.hostUserId === userInfo?.userId,
+  ).length;
 
   return (
     <View style={{ flex: 1 }}>
@@ -52,18 +62,15 @@ const Page = (props: Props) => {
       >
         <View style={styles.container}>
           <View style={styles.cardsContainer}>
-            <View style={{ gap: 2 }}>
-              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Joined Activies</Text>
+            <View style={{ gap: 5, flexDirection: 'row' }}>
+              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Joined Activities</Text>
+              <Chip label={String(activityJoined)} />
             </View>
             {isLoading ? (
               <ActivityIndicator size="large" color={COLORS.gray} />
             ) : isError ? (
               <Text>Error! {error.message}</Text>
-            ) : activities?.filter(
-                activity =>
-                  activity.users.some((user: any) => user.userId === userInfo?.userId) &&
-                  activity.hostUserId !== userInfo?.userId,
-              ).length ? (
+            ) : activityJoined ? (
               activities
                 ?.filter(
                   activity =>
@@ -74,7 +81,7 @@ const Page = (props: Props) => {
                   <ActivityCard
                     key={`activity-${activity.activityId}`}
                     activity={activity}
-                    handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                    onPress={() => router.push(`/activities/${activity.activityId}`)}
                   />
                 ))
             ) : (
@@ -82,21 +89,22 @@ const Page = (props: Props) => {
                 <Text>No Join Activity.</Text>
               </View>
             )}
-            <View style={{ gap: 2 }}>
+            <View style={{ gap: 5, flexDirection: 'row' }}>
               <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Host Activities</Text>
+              <Chip label={String(activityHost)} />
             </View>
             {isLoading ? (
               <ActivityIndicator size="large" color={COLORS.gray} />
             ) : isError ? (
               <Text>Error! {error.message}</Text>
-            ) : activities?.filter(activity => activity.hostUserId === userInfo?.userId).length ? (
+            ) : activityHost ? (
               activities
                 ?.filter(activity => activity.hostUserId === userInfo?.userId)
                 .map(activity => (
                   <ActivityCard
                     key={`activity-${activity.activityId}`}
                     activity={activity}
-                    handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                    onPress={() => router.push(`/activities/${activity.activityId}`)}
                   />
                 ))
             ) : (
@@ -119,7 +127,7 @@ const Page = (props: Props) => {
                       <ActivityCard
                         key={`activity-${activity.activityId}`}
                         activity={activity}
-                        handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                        onPress={() => router.push(`/activities/${activity.activityId}`)}
                       />
                     ))}
                 {status === 'GOING' &&
@@ -129,7 +137,7 @@ const Page = (props: Props) => {
                       <ActivityCard
                         key={`activity-${activity.activityId}`}
                         activity={activity}
-                        handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                        onPress={() => router.push(`/activities/${activity.activityId}`)}
                       />
                     ))}
                 {status === 'PAST' &&
@@ -139,7 +147,7 @@ const Page = (props: Props) => {
                       <ActivityCard
                         key={`activity-${activity.activityId}`}
                         activity={activity}
-                        handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                        onPress={() => router.push(`/activities/${activity.activityId}`)}
                       />
                     ))}
               </View>
@@ -153,8 +161,8 @@ const Page = (props: Props) => {
         </TouchableOpacity>
       </View>
     </View>
-  )
-}
+  );
+};
 const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: 'white',
@@ -225,6 +233,6 @@ const styles = StyleSheet.create({
     shadowRadius: 2.62,
     borderRadius: SIZES.small,
   },
-})
+});
 
-export default Page
+export default Page;

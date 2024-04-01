@@ -23,6 +23,8 @@ import {
 import { TouchableOpacity } from 'react-native'
 
 import Colors from '@/constants/Colors'
+import { RNUIButton } from '@/components'
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons'
 
 const soccer = require('../../assets/images/login-soccer.png')
 
@@ -60,8 +62,17 @@ export default function login() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ flex: 1, alignItems: 'center', paddingTop: 80 }}>
-        <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'white' }}>SPORT CONNECT</Text>
+      <View style={{ flex: 1, paddingTop: 80, alignItems: 'center' }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 10,
+          }}
+        >
+          <FontAwesome5 name="walking" size={40} color="white" />
+          <Text style={{ fontSize: 30, fontWeight: 'bold', color: 'white' }}>SCONNECT</Text>
+        </View>
       </View>
       <View
         style={{
@@ -74,13 +85,13 @@ export default function login() {
         }}
       >
         <Image source={soccer} style={styles.image}></Image>
-        <View style={{ gap: 10, paddingBottom: 20, alignItems: 'center' }}>
+        <View style={{ gap: 5, paddingBottom: 20, alignItems: 'center' }}>
           <Text style={styles.title}>Let's get started</Text>
-          <Text style={styles.subTitle}>Connect your lifestyle with SConnect</Text>
+          <Text style={styles.subTitle}>Connect your lifestyle with Sport Connect</Text>
         </View>
-        <TouchableOpacity style={styles.button} onPress={onGoogleSignIn}>
-          <Text style={styles.text}>Sign in with Google</Text>
-        </TouchableOpacity>
+        <View>
+          <RNUIButton color="primary" label="Sign in with Google" onPress={onGoogleSignIn} />
+        </View>
       </View>
     </SafeAreaView>
   )
@@ -110,14 +121,5 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     fontWeight: 'bold',
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 20,
-    elevation: 3,
-    backgroundColor: Colors.primary,
   },
 })

@@ -115,6 +115,7 @@ export default function Register(props: Props) {
                   name="phoneNumber"
                   render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
                     <TextInput
+                      keyboardType="numeric"
                       value={value}
                       placeholder="Enter your phone number"
                       onChangeText={onChange}

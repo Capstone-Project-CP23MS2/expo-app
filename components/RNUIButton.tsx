@@ -29,6 +29,7 @@ export default function RNUIButton(props: Props) {
       style={[styles.container, styles.extraStyle(color)]}
       iconStyle={[styles.icon]}
       labelStyle={[styles.label, styles.labelType(color)]}
+      borderRadius={10}
       outlineWidth={1}
       {...restProps}
     />
