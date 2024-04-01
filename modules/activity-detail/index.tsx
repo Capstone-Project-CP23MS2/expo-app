@@ -217,7 +217,7 @@ const Page = (props: Props) => {
       <View style={styles.footerContainer}>
         {isOwner ? (
           <View style={{ flex: 1, gap: 10 }}>
-            <Pressable
+            <TouchableOpacity
               onPress={onEdit}
               style={{
                 flex: 1,
@@ -228,7 +228,6 @@ const Page = (props: Props) => {
                 borderWidth: 1,
                 borderRadius: 10,
                 padding: 12,
-                elevation: 4,
                 backgroundColor: COLORS.white,
                 gap: 10,
               }}
@@ -237,7 +236,7 @@ const Page = (props: Props) => {
               <Text style={{ color: COLORS.gray, fontFamily: FONT.regular }}>
                 Edit your activity
               </Text>
-            </Pressable>
+            </TouchableOpacity>
             <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
           </View>
         ) : (

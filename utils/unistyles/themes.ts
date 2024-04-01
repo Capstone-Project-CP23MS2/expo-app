@@ -102,6 +102,8 @@ export const lightTheme = {
     test: '#DAF7A6',
     gray: '#505050',
     outline: 'rgb(124, 117, 126)',
+    lightgray: '#BABBC3',
+    red: '#CC0000',
   },
 } as const
 

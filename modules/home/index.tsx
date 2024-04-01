@@ -4,7 +4,7 @@ import { BaseButton, RefreshControl, ScrollView, TextInput } from 'react-native-
 import { useRouter } from 'expo-router'
 import React, { useCallback, useState } from 'react'
 import { SafeAreaView, Modal, StyleSheet, View } from 'react-native'
-import { Button, Text } from 'react-native-ui-lib'
+import { Button, Chip, Text } from 'react-native-ui-lib'
 import { FontAwesome, MaterialIcons, AntDesign } from '@expo/vector-icons'
 import { COLORS, FONT, SIZES } from '@/constants'
 import { ActivityIndicator } from 'react-native-paper'
@@ -43,6 +43,16 @@ const Page = (props: Props) => {
     return currentTime >= startTime && currentTime <= endTime
   }
 
+  const activityJoined = activities?.filter(
+    activity =>
+      activity.users.some((user: any) => user.userId === userInfo?.userId) &&
+      activity.hostUserId !== userInfo?.userId,
+  ).length
+
+  const activityHost = activities?.filter(
+    activity => activity.hostUserId === userInfo?.userId,
+  ).length
+
   return (
     <View style={{ flex: 1 }}>
       <ScrollView
@@ -52,18 +62,15 @@ const Page = (props: Props) => {
       >
         <View style={styles.container}>
           <View style={styles.cardsContainer}>
-            <View style={{ gap: 2 }}>
-              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Joined Activies</Text>
+            <View style={{ gap: 5, flexDirection: 'row' }}>
+              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Joined Activities</Text>
+              <Chip label={String(activityJoined)} />
             </View>
             {isLoading ? (
               <ActivityIndicator size="large" color={COLORS.gray} />
             ) : isError ? (
               <Text>Error! {error.message}</Text>
-            ) : activities?.filter(
-                activity =>
-                  activity.users.some((user: any) => user.userId === userInfo?.userId) &&
-                  activity.hostUserId !== userInfo?.userId,
-              ).length ? (
+            ) : activityJoined ? (
               activities
                 ?.filter(
                   activity =>
@@ -82,14 +89,15 @@ const Page = (props: Props) => {
                 <Text>No Join Activity.</Text>
               </View>
             )}
-            <View style={{ gap: 2 }}>
+            <View style={{ gap: 5, flexDirection: 'row' }}>
               <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Host Activities</Text>
+              <Chip label={String(activityHost)} />
             </View>
             {isLoading ? (
               <ActivityIndicator size="large" color={COLORS.gray} />
             ) : isError ? (
               <Text>Error! {error.message}</Text>
-            ) : activities?.filter(activity => activity.hostUserId === userInfo?.userId).length ? (
+            ) : activityHost ? (
               activities
                 ?.filter(activity => activity.hostUserId === userInfo?.userId)
                 .map(activity => (

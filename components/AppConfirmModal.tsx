@@ -2,9 +2,11 @@ import { View, Text, Modal, ModalProps, TouchableWithoutFeedback, Pressable } fr
 import React, { useState } from 'react'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import RNUIButton from './RNUIButton'
+import { COLORS } from '@/constants'
 
 type Props = ModalProps & {
   title?: string
+  subheading?: string
   desc?: string
   onConfirm: () => void
   onCancel: () => void
@@ -12,6 +14,7 @@ type Props = ModalProps & {
 
 export default function AppConfirmModal({
   title = 'Header',
+  subheading,
   desc,
   onConfirm,
   onCancel,
@@ -52,11 +55,12 @@ export default function AppConfirmModal({
           <View style={styles.modalView}>
             <View style={styles.header}>
               <Text style={styles.title}>{title}</Text>
+              {subheading && <Text style={styles.subheading}>{subheading}</Text>}
             </View>
             {desc && renderDescription()}
             <View style={styles.footer}>
-              <RNUIButton label="ยกเลิก" color="secondary" onPress={handleCancel} />
-              <RNUIButton label="ยืนยัน" color="danger" onPress={handleConfirm} />
+              <RNUIButton label="ยกเลิก" color="lightgray" onPress={handleCancel} />
+              <RNUIButton label="ยืนยัน" color="primary" onPress={handleConfirm} />
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -91,12 +95,18 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   title: {
     ...typography.lgB,
   },
+  subheading: {
+    ...typography.sm,
+    marginBottom: spacings.sm,
+  },
   description: {
     ...typography.sm,
     color: colors.gray,
   },
   header: {
     marginBottom: spacings.sm,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   main: {
     marginBottom: spacings.sm,
