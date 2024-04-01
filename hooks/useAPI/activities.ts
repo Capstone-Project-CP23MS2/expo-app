@@ -3,17 +3,16 @@ import { ActivityUpdateRequest, requestParams } from "@/api/type";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export function UseGetActivities(params: requestParams) {
+export function UseGetActivities(params: ActivitiesRequestParameters) {
   return useQuery({
     queryKey: ['activities'],
     queryFn: () => activitiesApi.getActivities(params),
-    // refetchInterval: 1000, // 1 second
   });
 };
 
 type ActivitiesSortBy = 'activityId' | 'createdAt' | 'dateTime' | 'noOfMembers' | 'title';
 
-type ActivitiesParameters = {
+type ActivitiesRequestParameters = {
   page?: number;
   pageSize?: number;
   sortBy?: ActivitiesSortBy;
@@ -22,7 +21,7 @@ type ActivitiesParameters = {
   title?: string;
 };
 
-export function UseSearchActivities(params: ActivitiesParameters = {}, test: any = '') {
+export function UseSearchActivities(params: ActivitiesRequestParameters = {}, test: any = '') {
   console.log('🚚 UseSearchActivities:');
   const { data, ...rest } = useQuery({
     queryKey: ['activities-search'],
