@@ -1,30 +1,30 @@
-import { View, Text, ActivityIndicator, ScrollView, KeyboardAvoidingView } from 'react-native'
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
-import { useQuery } from '@tanstack/react-query'
-import activitiesApi from '@/api/activities'
-import { UnistylesRuntime, createStyleSheet, useStyles } from 'react-native-unistyles'
-import SearchHeader from './components/SearchHeader'
-import BottomSheet, { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet'
-import AppBottomSheetModal from '../shared/AppBottomSheetModal'
-import CategoriesFilterBottomSheet from './components/CategoriesFilterBottomSheet'
-import ActivityCard from '../activities/components/Card/'
-import { COLORS, SIZES } from '@/constants'
+import { View, Text, ActivityIndicator, ScrollView, KeyboardAvoidingView } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
+import { useQuery } from '@tanstack/react-query';
+import activitiesApi from '@/api/activities';
+import { UnistylesRuntime, createStyleSheet, useStyles } from 'react-native-unistyles';
+import SearchHeader from './components/SearchHeader';
+import BottomSheet, { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
+import AppBottomSheetModal from '../shared/AppBottomSheetModal';
+import CategoriesFilterBottomSheet from './components/CategoriesFilterBottomSheet';
+import { ActivityCard } from '../activities/components/';
+import { COLORS, SIZES } from '@/constants';
 
 export default function ActivitySearch() {
-  const { styles } = useStyles(stylesheet)
-  const router = useRouter()
+  const { styles } = useStyles(stylesheet);
+  const router = useRouter();
 
-  const [searchQuery, setSearchQuery] = useState<string>('')
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('')
-  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([])
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
 
-  const debouncedSearchQuery = useDebounce(searchQuery, 200)
+  const debouncedSearchQuery = useDebounce(searchQuery, 200);
 
   const handleApplyPress = (categoryIds: number[]) => {
-    console.log(categoryIds)
-    setSelectedCategoryIds(categoryIds)
-  }
+    console.log(categoryIds);
+    setSelectedCategoryIds(categoryIds);
+  };
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['search', debouncedSearchQuery, selectedCategoryIds],
@@ -33,16 +33,16 @@ export default function ActivitySearch() {
         title: searchQuery,
         categoryIds: selectedCategoryIds,
       }),
-  })
+  });
 
-  const { activities, paginationData } = data || {}
+  const { activities, paginationData } = data || {};
 
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-  const { dismiss } = useBottomSheetModal()
+  const { dismiss } = useBottomSheetModal();
 
-  const handlePresentModalOpenPress = () => bottomSheetModalRef.current?.present()
-  const handlePresentModalClosePress = () => bottomSheetModalRef.current?.close()
+  const handlePresentModalOpenPress = () => bottomSheetModalRef.current?.present();
+  const handlePresentModalClosePress = () => bottomSheetModalRef.current?.close();
 
   return (
     <View style={{ flex: 1, marginTop: 0 }}>
@@ -67,7 +67,7 @@ export default function ActivitySearch() {
                 <ActivityCard
                   key={activity.activityId}
                   activity={activity}
-                  handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                  onPress={() => router.push(`/activities/${activity.activityId}`)}
                 />
               ))
             ) : (
@@ -81,7 +81,7 @@ export default function ActivitySearch() {
         <CategoriesFilterBottomSheet onApplyPress={handleApplyPress} />
       </AppBottomSheetModal>
     </View>
-  )
+  );
 }
 
 const stylesheet = createStyleSheet((theme, runtime) => ({
@@ -122,20 +122,20 @@ const stylesheet = createStyleSheet((theme, runtime) => ({
   cardsContainer: {
     gap: SIZES.small,
   },
-}))
+}));
 
 const useDebounce = (value: string, delay: number) => {
-  const [debouncedValue, setDebouncedValue] = useState(value)
+  const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
+      setDebouncedValue(value);
+    }, delay);
 
     return () => {
-      clearTimeout(handler)
-    }
-  }, [value, delay])
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
 
-  return debouncedValue
-}
+  return debouncedValue;
+};

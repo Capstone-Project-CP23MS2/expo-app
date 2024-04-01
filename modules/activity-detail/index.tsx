@@ -20,11 +20,17 @@ import {
 } from 'react-native-gesture-handler'
 import ActivityFooter from '@/modules/activity-detail/components/ActivityFooter'
 import { Button, Chip, Modal, Portal, PaperProvider, Icon, Card } from 'react-native-paper'
-import { UseDeleteActivity, UseGetActivity, UseGetActivityParticipants } from '@/hooks/useAPI'
+import {
+  UseDeleteActivity,
+  UseDeleteParticipant,
+  UseGetActivity,
+  UseGetActivityParticipants,
+} from '@/hooks/useAPI'
 
 import AppButton from '@/modules/shared/AppButton'
 import JoinButton from './components/JoinButton'
 import { useAuth } from '@/context/authContext'
+import AppConfirmModal from '@/components/AppConfirmModal'
 type Props = {}
 
 const Page = (props: Props) => {
@@ -39,6 +45,8 @@ const Page = (props: Props) => {
     refetch: activityRefetch,
   } = UseGetActivity(activityId)
 
+  const [userParticipant, setUserParticipant] = useState(0)
+
   const isOwner = user?.userId === activity?.hostUserId
 
   const { data: participantsData, refetch: participantsRefetch } =
@@ -48,6 +56,7 @@ const Page = (props: Props) => {
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
 
   const deleteMutation = UseDeleteActivity()
+  // const deleteParticipantMutation = UseDeleteParticipant()
 
   const onDelete = () => {
     deleteMutation.mutate(activityId, {
@@ -57,6 +66,31 @@ const Page = (props: Props) => {
       },
     })
   }
+
+  // const onDeleteParticipant = () => {
+  //   const message = `remove ${userParticipant} from ${activity?.title}`
+
+  //   deleteParticipantMutation.mutate(
+  //     { activityId, userParticipant },
+  //     {
+  //       onSuccess: () => {
+  //         ToastAndroid.show(message, ToastAndroid.SHORT)
+  //         router.push('/(app)/(tabs)/')
+  //       },
+  //       onError: error => {
+  //         console.log(error)
+  //       },
+  //     },
+  //   )
+  //   createNotiMutation.mutate(objToFormData({ targetId, message, unRead, type }), {
+  //     onSuccess: data => {
+  //       console.log('🚀 ~ notificationMutation.mutate ~ data:', data)
+  //     },
+  //     onError: error => {
+  //       console.log(error)
+  //     },
+  //   })
+  // }
 
   const [visible, setVisible] = React.useState(false)
 
@@ -85,9 +119,37 @@ const Page = (props: Props) => {
     router.push({ pathname: '/(app)/activities/edit', params: { activityId } })
   }
 
+  // const [showSignOutModal, setShowSignOutModal] = useState(false)
+
+  // const handleRemoveParticipant = (userId: number) => {
+  //   console.log(userId)
+  //   setUserParticipant(userId)
+  //   setShowSignOutModal(true)
+  // }
+
+  // const handleConfirmParticipant = () => {
+  //   console.log('remove', userParticipant)
+  //   onDeleteParticipant()
+  //   setShowSignOutModal(false)
+  // }
+
+  // const handleCancelParticipant = () => {
+  //   setShowSignOutModal(false)
+  // }
+
   return (
     <PaperProvider>
       <View style={styles.container}>
+        {/* <AppConfirmModal
+          visible={showSignOutModal}
+          transparent
+          title="Delete this user ?"
+          subheading="This action cannot be undone. user will be lost"
+          onConfirm={handleConfirmParticipant}
+          onCancel={handleCancelParticipant}
+          btnColor="red"
+        /> */}
+
         <ScrollView
           contentContainerStyle={{ paddingBottom: 100 }}
           scrollEventThrottle={16}
@@ -197,15 +259,29 @@ const Page = (props: Props) => {
                             : COLORS.gray
                         }
                       />
-                      <Text
-                        style={[
-                          participant?.userId === activity?.hostUserId
-                            ? { color: COLORS.primary }
-                            : { color: COLORS.gray },
-                        ]}
+                      <View
+                        style={{
+                          flex: 1,
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                        }}
                       >
-                        {participant.username}
-                      </Text>
+                        <Text
+                          style={[
+                            participant?.userId === activity?.hostUserId
+                              ? { color: COLORS.primary }
+                              : { color: COLORS.gray },
+                          ]}
+                        >
+                          {participant.username}
+                        </Text>
+                        {/* {participant?.userId !== activity?.hostUserId && isOwner && (
+                          <Pressable onPress={() => handleRemoveParticipant(participant?.userId)}>
+                            <MaterialIcons name="highlight-remove" size={24} color="red" />
+                          </Pressable>
+                        )} */}
+                      </View>
                     </View>
                   ))}
                 </View>
@@ -217,7 +293,7 @@ const Page = (props: Props) => {
       <View style={styles.footerContainer}>
         {isOwner ? (
           <View style={{ flex: 1, gap: 10 }}>
-            <Pressable
+            <TouchableOpacity
               onPress={onEdit}
               style={{
                 flex: 1,
@@ -228,7 +304,6 @@ const Page = (props: Props) => {
                 borderWidth: 1,
                 borderRadius: 10,
                 padding: 12,
-                elevation: 4,
                 backgroundColor: COLORS.white,
                 gap: 10,
               }}
@@ -237,7 +312,7 @@ const Page = (props: Props) => {
               <Text style={{ color: COLORS.gray, fontFamily: FONT.regular }}>
                 Edit your activity
               </Text>
-            </Pressable>
+            </TouchableOpacity>
             <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
           </View>
         ) : (

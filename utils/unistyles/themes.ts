@@ -85,14 +85,14 @@ const sharedTheme = {
 };
 
 const sharedColors = {
-  backgroundModal: 'rgba(0,0,0,0.5)'
+  backgroundModal: 'rgba(0,0,0,0.5)',
 };
 
 export const lightTheme = {
   ...sharedTheme,
   colors: {
     ...sharedColors,
-    primary: '#FFB033',
+    primary: '#3E64FF',
     secondary: '#03dac6',
     typography: '#000000',
     background: '#ffffff',
@@ -106,6 +106,8 @@ export const lightTheme = {
     test: '#DAF7A6',
     gray: '#505050',
     outline: 'rgb(124, 117, 126)',
+    lightgray: '#BABBC3',
+    red: '#CC0000',
   },
 } as const;
 

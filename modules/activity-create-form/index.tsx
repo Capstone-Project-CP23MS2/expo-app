@@ -17,6 +17,7 @@ import { ActivityInfoSchema, ActivityInfo } from './activity.schema'
 import { Colors, Picker } from 'react-native-ui-lib'
 import AppButton from '../shared/AppButton'
 import { useAuth } from '@/context/authContext'
+import { RNUIButton } from '@/components'
 
 const dropdownIcon = <MaterialIcons name="arrow-drop-down" size={30} color="black" />
 
@@ -69,7 +70,7 @@ const CreateActivity = (props: Props) => {
       onSuccess: () => {
         console.log('onSuccess in CreateActivityPage')
         ToastAndroid.show('New activity created', ToastAndroid.SHORT)
-        router.push('/(app)/(tabs)/')
+        router.push('/(app)/(tabs)/home')
       },
       onError: error => {
         console.log('error')
@@ -202,9 +203,8 @@ const CreateActivity = (props: Props) => {
         </View>
       </ScrollView>
       <View style={styles.footer}>
-        {/* <AppButton variant="primary" label="Preset" onPress={usePreset} /> */}
-        <AppButton variant="secondary" label="🔮 preset (test)" onPress={usePreset} />
-        <AppButton label="Create Activity" onPress={() => onSummit()} fullWidth />
+        <RNUIButton color="lightgray" label="Example input data" onPress={usePreset} />
+        <RNUIButton color="primary" label="Create activity" onPress={() => onSummit()} />
       </View>
     </KeyboardAvoidingWrapper>
   )
@@ -257,7 +257,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingVertical: 16,
     paddingHorizontal: 16,
-    flexDirection: 'row',
     gap: 10,
   },
   textinput: {
@@ -265,7 +264,7 @@ const styles = StyleSheet.create({
     height: 48,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 15,
+    borderRadius: 10,
     justifyContent: 'center',
     paddingLeft: 15,
   },
