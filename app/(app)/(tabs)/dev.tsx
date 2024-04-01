@@ -58,6 +58,16 @@ export default function dev() {
 
   return (
     <View>
+      <View>
+        <Text>Test Screen</Text>
+        <View>
+          <RNUIButton
+            label="New Activities Screen"
+            color="secondary"
+            onPress={() => router.push('/activities/new')}
+          />
+        </View>
+      </View>
       <Text>API</Text>
       {/* <AppButton variant="primary" label="Get Categories" onPress={() => console.log(categories)} /> */}
       <AppButton variant="primary" label="Logout" onPress={onLogout} />
@@ -88,7 +98,7 @@ export default function dev() {
       />
       <AppButton label={'3-Button Alert'} onPress={createThreeButtonAlert} />
       <View>
-        <Button title="Pick an image from camera roll" onPress={pickImage} />
+        <AppButton label="Pick an image from camera roll" onPress={pickImage} />
         {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
       </View>
     </View>

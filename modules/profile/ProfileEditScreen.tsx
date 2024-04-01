@@ -1,33 +1,33 @@
-import { View, Text } from 'react-native'
-import React, { useRef } from 'react'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { Controller, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { UpdateUserInfo, UpdateUserInfoSchema } from './updateUser.schema'
-import { DateTimePicker, Picker } from 'react-native-ui-lib'
-import { UseGetMyUserInfo, UseUpdateMyUserInfo } from '@/hooks/useAPI'
-import { filterChangedFormFields } from '@/utils'
-import { useRouter } from 'expo-router'
-import { useAuth } from '@/context/authContext'
-import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper'
-import { ScrollView } from 'react-native-gesture-handler'
-import { RNUIButton, RNUITextField } from '@/components'
+import { View, Text } from 'react-native';
+import React, { useRef } from 'react';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { UpdateUserInfo, UpdateUserInfoSchema } from './updateUser.schema';
+import { DateTimePicker, Picker } from 'react-native-ui-lib';
+import { UseGetMyUserInfo, UseUpdateMyUserInfo } from '@/hooks/useAPI';
+import { filterChangedFormFields } from '@/utils';
+import { useRouter } from 'expo-router';
+import { useAuth } from '@/context/authContext';
+import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper';
+import { ScrollView } from 'react-native-gesture-handler';
+import { RNUIButton, RNUITextField } from '@/components';
 
-type Props = {}
+type Props = {};
 
 export default function ProfileEditScreen(props: Props) {
-  const { styles } = useStyles(stylesheet)
-  const router = useRouter()
-  const { onSyncUserInfo } = useAuth()
-  const { data: user, isLoading: isLoadingUser } = UseGetMyUserInfo()
-  const updateUserInfoMutation = UseUpdateMyUserInfo()
+  const { styles } = useStyles(stylesheet);
+  const router = useRouter();
+  const { onSyncUserInfo } = useAuth();
+  const { data: user, isLoading: isLoadingUser } = UseGetMyUserInfo();
+  const updateUserInfoMutation = UseUpdateMyUserInfo();
   const genders = [
     { id: 'Male', label: 'ชาย' },
     { id: 'Female', label: 'หญิง' },
     { id: 'Other', label: 'อื่นๆ' },
     { id: 'NotApplicable', label: 'ไม่ระบุ' },
     { id: 'Unknown', label: 'ไม่ทราบ' },
-  ]
+  ];
   const {
     formState: { isValid, isSubmitting, errors, isDirty, dirtyFields },
     control,
@@ -41,26 +41,26 @@ export default function ProfileEditScreen(props: Props) {
       phoneNumber: user?.phoneNumber,
       lineId: user?.lineId,
     },
-  })
+  });
 
   const onSummit = handleSubmit(async updateData => {
-    const filterChangedActivity = filterChangedFormFields(updateData, dirtyFields)
+    const filterChangedActivity = filterChangedFormFields(updateData, dirtyFields);
 
     updateUserInfoMutation.mutate(
       { userId: user?.userId!, updateRequest: filterChangedActivity },
       {
         onSuccess: user => {
-          console.log('onSuccess in UpdateProfilePage')
-          onSyncUserInfo(user)
-          router.back()
+          console.log('onSuccess in UpdateProfilePage');
+          onSyncUserInfo(user);
+          router.back();
         },
         onError: error => {
-          console.log('error')
-          console.log(error)
+          console.log('error');
+          console.log(error);
         },
       },
-    )
-  })
+    );
+  });
 
   return (
     <KeyboardAvoidingWrapper>
@@ -163,7 +163,7 @@ export default function ProfileEditScreen(props: Props) {
                     placeholder={'เลือกวัน'}
                     enableErrors
                   />
-                )
+                );
               }}
             />
           )}
@@ -173,7 +173,7 @@ export default function ProfileEditScreen(props: Props) {
         <RNUIButton label="Save" onPress={() => onSummit()} disabled={!isDirty} />
       </View>
     </KeyboardAvoidingWrapper>
-  )
+  );
 }
 
 const stylesheet = createStyleSheet(({ colors, spacings }) => ({
@@ -182,7 +182,7 @@ const stylesheet = createStyleSheet(({ colors, spacings }) => ({
     padding: spacings.md,
     backgroundColor: colors.background,
   },
-}))
+}));
 
 // const updateUserInfoMutation = UseUpdateMyUserInfo()
 // const genderBottomSheetModalRef = useRef<BottomSheetModal>(null)

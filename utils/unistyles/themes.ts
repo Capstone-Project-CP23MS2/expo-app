@@ -46,7 +46,7 @@ const sharedTheme = {
     },
     mdB: {
       fontSize: 16,
-      fontFamily: 'NotoSansThaiBold',
+      fontFamily: 'NotoSansThaiSemiBold',
     },
     sm: {
       fontSize: 14,
@@ -54,11 +54,15 @@ const sharedTheme = {
     },
     smB: {
       fontSize: 14,
-      fontFamily: 'NotoSansThaiBold',
+      fontFamily: 'NotoSansThaiSemiBold',
     },
     xs: {
       fontSize: 12,
       fontFamily: 'NotoSansThaiRegular',
+    },
+    xsB: {
+      fontSize: 12,
+      fontFamily: 'NotoSansThaiSemiBold',
     },
   },
   component: {
@@ -78,7 +82,7 @@ const sharedTheme = {
     },
     utils: {},
   },
-}
+};
 
 const sharedColors = {
   backgroundModal: 'rgba(0,0,0,0.5)'
@@ -103,7 +107,7 @@ export const lightTheme = {
     gray: '#505050',
     outline: 'rgb(124, 117, 126)',
   },
-} as const
+} as const;
 
 export const darkTheme = {
   ...sharedTheme,
@@ -124,7 +128,7 @@ export const darkTheme = {
     gray: '#505050',
     outline: 'rgb(124, 117, 126)',
   },
-} as const
+} as const;
 
 const test = {
   colors: {
@@ -169,4 +173,4 @@ const test = {
     onSurfaceDisabled: 'rgba(29, 27, 30, 0.38)',
     backdrop: 'rgba(51, 47, 55, 0.4)',
   },
-}
+};

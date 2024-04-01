@@ -1,41 +1,42 @@
-import { COLORS, FONT, SIZES } from '@/constants'
-import { Link, Stack, useRouter, Tabs } from 'expo-router'
-import { View, Text, StyleSheet, Pressable, ActivityIndicator, Button } from 'react-native'
+import { COLORS, FONT, SIZES } from '@/constants';
+import { Link, Stack, useRouter, Tabs } from 'expo-router';
+import { View, Text, StyleSheet, Pressable, ActivityIndicator, Button } from 'react-native';
 
-import { BaseButton, RefreshControl, ScrollView, TextInput } from 'react-native-gesture-handler'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useCallback, useEffect, useState } from 'react'
+import { BaseButton, RefreshControl, ScrollView, TextInput } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useCallback, useEffect, useState } from 'react';
 
-import { FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons'
-import { UseGetActivities, UseGetMyUserInfo } from '@/hooks/useAPI'
-import { TouchableOpacity } from 'react-native-ui-lib'
-import ActivityCard from '../components/Card/'
-import AppButton from '@/modules/shared/AppButton'
-import MapActivities from '../components/MapActivities'
-import ActivitySearch from '@/modules/activity-search/ActivitySearch'
-import AppTextInput from '@/modules/shared/AppTextInput'
+import { FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
+import { UseGetActivities, UseGetMyUserInfo } from '@/hooks/useAPI';
+import { TouchableOpacity } from 'react-native-ui-lib';
+// import ActivityCard from '../components/Card/'
+import { ActivityCard } from '../components/';
+import AppButton from '@/modules/shared/AppButton';
+import MapActivities from '../components/MapActivities';
+import ActivitySearch from '@/modules/activity-search/ActivitySearch';
+import AppTextInput from '@/modules/shared/AppTextInput';
 
-type Props = {}
+type Props = {};
 
 type DataProp = {
-  content: any
-}
+  content: any;
+};
 
 const index = (props: Props) => {
-  const router = useRouter()
-  const { data, isLoading, isError, error, refetch } = UseGetActivities({})
-  const { content: activities, first, totalPages } = data || {}
+  const router = useRouter();
+  const { data, isLoading, isError, error, refetch } = UseGetActivities({});
+  const { content: activities, first, totalPages } = data || {};
 
-  const { data: userInfoData } = UseGetMyUserInfo()
+  const { data: userInfoData } = UseGetMyUserInfo();
 
-  const [refreshing, setRefreshing] = useState(false)
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const [refreshing, setRefreshing] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const onRefresh = useCallback(() => {
-    setRefreshing(true)
-    refetch()
-    setRefreshing(false)
-  }, [])
+    setRefreshing(true);
+    refetch();
+    setRefreshing(false);
+  }, []);
 
   return (
     <View style={{ flex: 1, marginTop: 0 }}>
@@ -86,7 +87,7 @@ const index = (props: Props) => {
                   <ActivityCard
                     key={`activity-${activity.activityId}`}
                     activity={activity}
-                    handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                    onPress={() => router.push(`/activities/${activity.activityId}`)}
                   />
                 ))
             ) : (
@@ -101,10 +102,10 @@ const index = (props: Props) => {
         </TouchableOpacity>
       </View>
     </View>
-  )
-}
+  );
+};
 
-export default index
+export default index;
 
 const styles = StyleSheet.create({
   safeArea: {
@@ -148,4 +149,4 @@ const styles = StyleSheet.create({
     bottom: 20,
     right: 20,
   },
-})
+});

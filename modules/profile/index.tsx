@@ -1,23 +1,23 @@
-import { useAuth } from '@/context/authContext'
-import { UseDeleteUser, UseGetMyUserInfo } from '@/hooks/useAPI'
-import { useRouter } from 'expo-router'
-import React, { useState } from 'react'
-import { SafeAreaView, Modal, StyleSheet, View, Pressable } from 'react-native'
-import { Button, ListItem, Text } from 'react-native-ui-lib'
-import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
-import { SIZES } from '@/constants'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { TouchableOpacity } from 'react-native-gesture-handler'
-import { RNUIButton, AppConfirmModal } from '@/components'
-import ProfileSettingListItem from './components/ProfileSettingListItem'
+import { useAuth } from '@/context/authContext';
+import { UseDeleteUser, UseGetMyUserInfo } from '@/hooks/useAPI';
+import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { SafeAreaView, Modal, StyleSheet, View, Pressable } from 'react-native';
+import { Button, ListItem, Text } from 'react-native-ui-lib';
+import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
+import { SIZES } from '@/constants';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { RNUIButton, AppConfirmModal } from '@/components';
+import ProfileSettingListItem from './components/ProfileSettingListItem';
 
-type Props = {}
+type Props = {};
 
 const Page = (props: Props) => {
-  const { styles } = useStyles(stylesheet)
-  const { onLogout } = useAuth()
-  const { data: user } = UseGetMyUserInfo()
-  const router = useRouter()
+  const { styles } = useStyles(stylesheet);
+  const { onLogout } = useAuth();
+  const { data: user } = UseGetMyUserInfo();
+  const router = useRouter();
 
   const settingList = [
     {
@@ -25,9 +25,9 @@ const Page = (props: Props) => {
       title: 'แก้ไขข้อมูล',
       icon: 'edit',
       onPress: () => {
-        console.log('👤 Edit Profile')
+        console.log('👤 Edit Profile');
 
-        router.push('/profile/edit')
+        router.push('/profile/edit');
       },
     },
     {
@@ -35,7 +35,7 @@ const Page = (props: Props) => {
       title: 'สิ่งที่สนใจ',
       icon: 'heart',
       onPress: () => {
-        console.log('👤 Edit Interest')
+        console.log('👤 Edit Interest');
       },
     },
     {
@@ -43,27 +43,27 @@ const Page = (props: Props) => {
       title: 'จัดการบัญชี',
       icon: 'account',
       onPress: () => {
-        console.log('👤 ManageAccount')
-        router.push('/profile/manage-account')
+        console.log('👤 ManageAccount');
+        router.push('/profile/manage-account');
       },
     },
-  ]
+  ];
 
-  const [showSignOutModal, setShowSignOutModal] = useState(false)
+  const [showSignOutModal, setShowSignOutModal] = useState(false);
 
   const handleSignOut = () => {
-    setShowSignOutModal(true)
-  }
+    setShowSignOutModal(true);
+  };
 
   const handleConfirmSignOut = async () => {
-    console.log('Sign Out')
-    onLogout?.()
-    setShowSignOutModal(false)
-  }
+    console.log('Sign Out');
+    onLogout?.();
+    setShowSignOutModal(false);
+  };
 
   const handleCancelSignOut = () => {
-    setShowSignOutModal(false)
-  }
+    setShowSignOutModal(false);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -91,8 +91,8 @@ const Page = (props: Props) => {
         <ProfileSettingListItem title="ออกจากระบบ" onPress={handleSignOut} />
       </View>
     </SafeAreaView>
-  )
-}
+  );
+};
 
 const stylesheet = createStyleSheet(({ colors, spacings }) => ({
   container: {
@@ -108,6 +108,6 @@ const stylesheet = createStyleSheet(({ colors, spacings }) => ({
   signOutContainer: {
     // marginTop: spacings.lg,
   },
-}))
+}));
 
-export default Page
+export default Page;

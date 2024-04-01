@@ -1,17 +1,18 @@
-import { Image, StyleSheet, Text, View, ActivityIndicator } from 'react-native'
-import { useEffect } from 'react'
-import { FlatList, ScrollView } from 'react-native-gesture-handler'
-import categories from '@/modules/test/demo/components/ExploreHeader/categories'
-import { Stack, Link, useNavigation, useRouter } from 'expo-router'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { COLORS, SIZES } from '@/constants'
-import ActivityCard from '@/modules/activities/components/Card'
-import { Button, FAB } from 'react-native-paper'
-import { UnistylesRuntime, createStyleSheet, useStyles } from 'react-native-unistyles'
-import AppButton from '@/modules/shared/AppButton'
+import { Image, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { useEffect } from 'react';
+import { FlatList, ScrollView } from 'react-native-gesture-handler';
+import categories from '@/modules/test/demo/components/ExploreHeader/categories';
+import { Stack, Link, useNavigation, useRouter } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { COLORS, SIZES } from '@/constants';
+import ActivityCard from '@/modules/activities/components/Card';
+import { Button, FAB } from 'react-native-paper';
+import { UnistylesRuntime, createStyleSheet, useStyles } from 'react-native-unistyles';
+import AppButton from '@/modules/shared/AppButton';
+import { RNUIButton } from '@/components';
 
-type Props = {}
+type Props = {};
 
 function LogoTitle() {
   return (
@@ -19,23 +20,23 @@ function LogoTitle() {
       style={{ width: 50, height: 50 }}
       source={{ uri: 'https://reactnative.dev/img/tiny_logo.png' }}
     />
-  )
+  );
 }
 
 export default function Page(props: Props) {
-  const router = useRouter()
-  const navigation = useNavigation()
-  const { styles, breakpoint } = useStyles(stylesheet)
+  const router = useRouter();
+  const navigation = useNavigation();
+  const { styles, breakpoint } = useStyles(stylesheet);
 
   useEffect(() => {
-    navigation.setOptions({})
-  }, [navigation])
+    navigation.setOptions({});
+  }, [navigation]);
 
   return (
     <SafeAreaView>
       <ScrollView>
         <View style={styles.container}>
-          <Text style={styles.text}>Unistyles example</Text>
+          <Text style={styles.text}>Unistyles </Text>
           <AppButton
             label="Toggle Theme"
             variant="primary"
@@ -43,9 +44,9 @@ export default function Page(props: Props) {
               UnistylesRuntime.setTheme(UnistylesRuntime.themeName === 'light' ? 'dark' : 'light')
             }
           />
-          <AppButton
+          <RNUIButton
             label="Toggle Theme"
-            variant="secondary"
+            color="secondary"
             onPress={() =>
               UnistylesRuntime.setTheme(UnistylesRuntime.themeName === 'light' ? 'dark' : 'light')
             }
@@ -56,7 +57,7 @@ export default function Page(props: Props) {
         </View>
       </ScrollView>
     </SafeAreaView>
-  )
+  );
 }
 const stylesheet = createStyleSheet(theme => ({
   container: {
@@ -69,4 +70,4 @@ const stylesheet = createStyleSheet(theme => ({
     ...theme.typography.md,
     color: theme.colors.typography,
   },
-}))
+}));
