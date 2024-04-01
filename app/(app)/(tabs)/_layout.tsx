@@ -50,6 +50,7 @@ const TabsLayout = (props: Props) => {
           tabBarIcon: ({ size, color }) => <FontAwesome5 name="dev" size={size} color={color} />,
           headerTitle: 'Development',
           headerShadowVisible: true,
+          tabBarShowLabel: false,
         }}
       />
 
