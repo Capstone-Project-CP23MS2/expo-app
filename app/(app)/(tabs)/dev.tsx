@@ -1,4 +1,4 @@
-import { View, Text, Button, Image, Platform } from 'react-native'
+import { View, Text, Button, Image, Platform, Alert } from 'react-native'
 import React, { useState, useEffect } from 'react'
 
 import { UseDeleteUser, UseGetCategories } from '@/hooks/useAPI'
@@ -26,6 +26,20 @@ export default function dev() {
       },
     })
   }
+
+  const createThreeButtonAlert = () =>
+    Alert.alert('Alert Title', 'My Alert Msg', [
+      {
+        text: 'Ask me later',
+        onPress: () => console.log('Ask me later pressed'),
+      },
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      { text: 'OK', onPress: () => console.log('OK Pressed') },
+    ])
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -63,6 +77,12 @@ export default function dev() {
         label="Interests"
         onPress={() => router.push('/profile/onboarding/interests')}
       />
+      <AppButton
+        variant="primary"
+        label="Modal View"
+        onPress={() => router.push('/dev/DevModalView')}
+      />
+      <AppButton label={'3-Button Alert'} onPress={createThreeButtonAlert} />
       <View>
         <Button title="Pick an image from camera roll" onPress={pickImage} />
         {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
