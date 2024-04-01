@@ -33,6 +33,11 @@ export default function dev() {
           title: 'New Activities Screen',
           onPress: () => router.push('/activities/new'),
         },
+        {
+          id: 'screen-new-activities-form',
+          title: 'New Activities Form Screen',
+          onPress: () => router.push('/activities/activity-create'),
+        },
       ],
     },
     {
@@ -41,7 +46,12 @@ export default function dev() {
       content: [
         {
           id: 'component-button',
-          title: 'Bottom',
+          title: 'RNUI Button',
+          onPress: () => router.push('/dev/DevButtonView'),
+        },
+        {
+          id: 'component-textfield',
+          title: 'RNUI Textfield',
           onPress: () => router.push('/dev/DevButtonView'),
         },
         {
@@ -76,9 +86,10 @@ export default function dev() {
     }
   };
 
-  const renderItem = (title: string, onPress: () => void) => {
+  const renderItem = (key: string, title: string, onPress: () => void) => {
     return (
       <Pressable
+        key={key}
         style={styles.listItemContainer}
         onPress={onPress}
         android_ripple={{ color: 'gray' }}
@@ -94,8 +105,8 @@ export default function dev() {
     <ScrollView>
       {itemList.map(item => (
         <View key={item.id}>
-          <Text>{item.title}</Text>
-          {item.content.map(content => renderItem(content.title, content.onPress))}
+          <Text style={styles.title}>{item.title}</Text>
+          {item.content.map(content => renderItem(content.id, content.title, content.onPress))}
         </View>
       ))}
 
@@ -111,6 +122,13 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   container: {
     flex: 1,
   },
+
+  title: {
+    ...typography.lgB,
+    paddingHorizontal: spacings.lg,
+    paddingTop: spacings.xl,
+  },
+
   listItemContainer: {
     paddingHorizontal: spacings.lg,
   },
