@@ -1,18 +1,20 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { RNUIButton } from '@/components'
-import { Button } from 'react-native-ui-lib'
+import { View, Text } from 'react-native';
+import React from 'react';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { RNUIButton } from '@/components';
+import { Button } from 'react-native-ui-lib';
+import AppButton from '@/modules/shared/AppButton';
+import { ScrollView } from 'react-native-gesture-handler';
 
-type Props = {}
+type Props = {};
 
 export default function DevButtonView(props: Props) {
-  const { styles } = useStyles(stylesheet)
+  const { styles } = useStyles(stylesheet);
 
   return (
-    <View style={styles.container}>
-      <Text>Button</Text>
+    <ScrollView style={styles.container}>
       <View style={styles.listContainer}>
+        <Text style={styles.header2}>RNUI Button</Text>
         <RNUIButton label="Contained" type="contained" />
         <RNUIButton label="Outlined" type="outlined" />
         <RNUIButton label="Text" type="text" />
@@ -28,12 +30,20 @@ export default function DevButtonView(props: Props) {
         <Button label={'Press'} size={Button.sizes.large} />
         <Button label={'Press'} outline outlineWidth={4} size={Button.sizes.large} />
       </View>
-    </View>
-  )
+
+      <View style={styles.listContainer}>
+        <Text style={styles.header2}>App Button</Text>
+        <AppButton label="Contained" variant="primary" />
+      </View>
+    </ScrollView>
+  );
 }
 
-const stylesheet = createStyleSheet(({ colors, spacings }) => ({
+const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   container: {},
+  header2: {
+    ...typography.h4,
+  },
   listContainer: {
     flexDirection: 'column',
     // justifyContent: 'space-between',
@@ -41,4 +51,4 @@ const stylesheet = createStyleSheet(({ colors, spacings }) => ({
     gap: spacings.sm,
     paddingHorizontal: spacings.md,
   },
-}))
+}));
