@@ -8,6 +8,7 @@ type Props = ModalProps & {
   title?: string
   subheading?: string
   desc?: string
+  btnColor?: string
   onConfirm: () => void
   onCancel: () => void
 }
@@ -18,6 +19,7 @@ export default function AppConfirmModal({
   desc,
   onConfirm,
   onCancel,
+  btnColor,
   ...rest
 }: Props) {
   const { styles } = useStyles(stylesheet)
@@ -60,7 +62,7 @@ export default function AppConfirmModal({
             {desc && renderDescription()}
             <View style={styles.footer}>
               <RNUIButton label="ยกเลิก" color="lightgray" onPress={handleCancel} />
-              <RNUIButton label="ยืนยัน" color="primary" onPress={handleConfirm} />
+              <RNUIButton label="ยืนยัน" color={btnColor ?? 'primary'} onPress={handleConfirm} />
             </View>
           </View>
         </TouchableWithoutFeedback>
