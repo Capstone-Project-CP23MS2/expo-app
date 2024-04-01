@@ -6,17 +6,14 @@ import { BaseButton, RefreshControl, ScrollView, TextInput } from 'react-native-
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useCallback, useEffect, useState } from 'react'
 
-import axios, { AxiosResponse } from 'axios'
-
 import { FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons'
-import FloatingActionButton from '@/modules/activities/components/FloatingActionButton'
-import { useNavigation } from '@react-navigation/native'
-import { UseGetActivities, UseGetCategories, UseGetMyUserInfo } from '@/hooks/useAPI'
-import { FAB, Icon, AnimatedFAB } from 'react-native-paper'
-import { FloatingButton, TouchableOpacity, SegmentedControl } from 'react-native-ui-lib'
+import { UseGetActivities, UseGetMyUserInfo } from '@/hooks/useAPI'
+import { TouchableOpacity } from 'react-native-ui-lib'
 import ActivityCard from '../components/Card/'
 import AppButton from '@/modules/shared/AppButton'
 import MapActivities from '../components/MapActivities'
+import ActivitySearch from '@/modules/activity-search/ActivitySearch'
+import AppTextInput from '@/modules/shared/AppTextInput'
 
 type Props = {}
 
@@ -40,38 +37,6 @@ const index = (props: Props) => {
     setRefreshing(false)
   }, [])
 
-  function AvailableActivities() {
-    return (
-      <View style={styles.cardsContainer}>
-        <View style={{ gap: 2 }}>
-          <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Available Activities</Text>
-          <Text style={styles.subHeader}>
-            We found {activities?.length} activites. feel free to join !
-          </Text>
-        </View>
-        {isLoading ? (
-          <ActivityIndicator size="large" color={COLORS.gray} />
-        ) : isError ? (
-          <Text>Error! {error.message}</Text>
-        ) : activities?.length ? (
-          activities
-            ?.filter(
-              activity => !activity.users.some((user: any) => user.userId === userInfoData?.userId),
-            )
-            .map(activity => (
-              <ActivityCard
-                key={`activity-${activity.activityId}`}
-                activity={activity}
-                handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
-              />
-            ))
-        ) : (
-          <Text>no activity</Text>
-        )}
-      </View>
-    )
-  }
-
   return (
     <View style={{ flex: 1, marginTop: 0 }}>
       <Tabs.Screen
@@ -79,12 +44,14 @@ const index = (props: Props) => {
           header: () => (
             <SafeAreaView style={styles.safeArea}>
               <View style={styles.headerArea}>
-                <AppButton
-                  label="search"
-                  variant="primary"
-                  onPress={() => router.push('/(app)/activities/search')}
-                  fullWidth
-                />
+                <Pressable onPress={() => router.push('/(app)/activities/search')}>
+                  <AppTextInput
+                    placeholder="Explore available activities."
+                    icon
+                    iconName="search"
+                    disabled
+                  />
+                </Pressable>
               </View>
             </SafeAreaView>
           ),
@@ -97,13 +64,35 @@ const index = (props: Props) => {
       >
         <View style={styles.container}>
           <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Find Your Activities</Text>
-          <Pressable
-            style={{ borderRadius: SIZES.small, overflow: 'hidden' }}
-            onPress={() => router.push('/(app)/map/')}
-          >
-            <MapActivities />
-          </Pressable>
-          <AvailableActivities />
+          <MapActivities />
+          <View style={styles.cardsContainer}>
+            <View style={{ gap: 2 }}>
+              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Available Activities</Text>
+              <Text style={styles.subHeader}>
+                We found {activities?.length} activites. feel free to join !
+              </Text>
+            </View>
+            {isLoading ? (
+              <ActivityIndicator size="large" color={COLORS.gray} />
+            ) : isError ? (
+              <Text>Error! {error.message}</Text>
+            ) : activities?.length ? (
+              activities
+                ?.filter(
+                  activity =>
+                    !activity.users.some((user: any) => user.userId === userInfoData?.userId),
+                )
+                .map(activity => (
+                  <ActivityCard
+                    key={`activity-${activity.activityId}`}
+                    activity={activity}
+                    handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
+                  />
+                ))
+            ) : (
+              <Text>no activity</Text>
+            )}
+          </View>
         </View>
       </ScrollView>
       <View style={styles.addButton}>
@@ -121,22 +110,9 @@ const styles = StyleSheet.create({
   safeArea: {
     backgroundColor: 'white',
     elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
   },
   headerArea: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 10,
-    paddingTop: 10,
+    padding: 15,
   },
   container: {
     flex: 1,

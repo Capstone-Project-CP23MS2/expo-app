@@ -7,7 +7,7 @@ import Animated, {
   useAnimatedStyle,
   useScrollViewOffset,
 } from 'react-native-reanimated'
-import { Ionicons, MaterialIcons } from '@expo/vector-icons'
+import { AntDesign, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { COLORS, FONT, SIZES } from '@/constants'
 import Colors from '@/constants/Colors'
 import dayjs from 'dayjs'
@@ -66,8 +66,7 @@ const Page = (props: Props) => {
     backgroundColor: 'white',
     padding: 20,
     margin: 20,
-    borderRadius: 20,
-    gap: 5,
+    borderRadius: 15,
   }
 
   const isParticipant = participants?.some(participant => participant.userId === user?.userId)
@@ -89,43 +88,54 @@ const Page = (props: Props) => {
   return (
     <PaperProvider>
       <View style={styles.container}>
-        {/* <Animated.ScrollView */}
         <ScrollView
           contentContainerStyle={{ paddingBottom: 100 }}
-          // ref={scrollRef}
           scrollEventThrottle={16}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
-          {/* <Animated.Image
-          source={{ uri: listing.xl_picture_url }}
-          style={[styles.image, imageAnimatedStyle]}
-          resizeMode="cover"
-        /> */}
-
           <View style={styles.infoContainer}>
             <Portal>
               <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-                <Text>This activity will be gone.</Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    gap: 10,
-                  }}
-                >
-                  <BaseButton
-                    onPress={hideModal}
-                    style={[defaultStyles.btn, { backgroundColor: 'gray' }]}
+                <View style={{ justifyContent: 'center', alignItems: 'center', gap: 10 }}>
+                  <AntDesign name="warning" size={60} color={COLORS.red} />
+                  <View style={{ alignItems: 'center', gap: 3 }}>
+                    <Text
+                      style={{ fontFamily: FONT.bold, fontSize: SIZES.large, color: COLORS.red }}
+                    >
+                      Delete Activity
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: FONT.regular,
+                        fontSize: 13,
+                        color: COLORS.gray,
+                      }}
+                    >
+                      This action cannot be undone. Are you sure?
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      gap: 10,
+                    }}
                   >
-                    <Text style={[defaultStyles.btnText, { color: 'black' }]}>Cancel</Text>
-                  </BaseButton>
-                  <BaseButton
-                    style={[defaultStyles.btn, { backgroundColor: 'red' }]}
-                    onPress={onDelete}
-                  >
-                    <Text style={[defaultStyles.btnText, { color: 'white' }]}>Confirm</Text>
-                  </BaseButton>
+                    <BaseButton
+                      onPress={hideModal}
+                      style={[defaultStyles.btn, { backgroundColor: COLORS.grey, height: 45 }]}
+                    >
+                      <Text style={{ color: 'white', fontFamily: FONT.bold }}>No, Keep it.</Text>
+                    </BaseButton>
+
+                    <BaseButton
+                      style={[defaultStyles.btn, { backgroundColor: COLORS.red, height: 45 }]}
+                      onPress={onDelete}
+                    >
+                      <Text style={{ color: 'white', fontFamily: FONT.bold }}>Yes, Delete!</Text>
+                    </BaseButton>
+                  </View>
                 </View>
               </Modal>
             </Portal>
@@ -200,19 +210,36 @@ const Page = (props: Props) => {
                   ))}
                 </View>
               </View>
-
-              {isOwner && (
-                <View style={{ marginTop: 10 }}>
-                  <AppButton label="Edit" variant="primary" onPress={onEdit} fullWidth />
-                </View>
-              )}
             </View>
           </View>
         </ScrollView>
       </View>
       <View style={styles.footerContainer}>
-        {user?.userId === activity?.hostUserId ? (
-          <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
+        {isOwner ? (
+          <View style={{ flex: 1, gap: 10 }}>
+            <Pressable
+              onPress={onEdit}
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderColor: COLORS.grey,
+                borderWidth: 1,
+                borderRadius: 10,
+                padding: 12,
+                elevation: 4,
+                backgroundColor: COLORS.white,
+                gap: 10,
+              }}
+            >
+              <Feather name="edit" size={24} color={COLORS.gray} />
+              <Text style={{ color: COLORS.gray, fontFamily: FONT.regular }}>
+                Edit your activity
+              </Text>
+            </Pressable>
+            <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
+          </View>
         ) : (
           <JoinButton
             userId={user?.userId}
@@ -236,11 +263,6 @@ const styles = StyleSheet.create({
   block: {
     gap: 5,
   },
-  // participants: {
-  //   backgroundColor: 'green',
-  //   borderRadius: 20,
-  //   padding: 8,
-  // },
   infoHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -341,7 +363,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
-
     elevation: 4,
   },
   footerContainer: {

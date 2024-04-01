@@ -3,7 +3,7 @@ import React, { useMemo } from 'react'
 import { createStyleSheet, useStyles } from 'react-native-unistyles'
 import { CategoryResponse } from '@/api/type'
 import { Pressable } from 'react-native'
-import { MaterialIcons } from '@expo/vector-icons'
+import { MaterialIcons, Octicons } from '@expo/vector-icons'
 
 type Props = {
   category: CategoryResponse
@@ -35,7 +35,7 @@ export default function RegisterInterestsListItem({
   return (
     <Pressable style={styles.container} onPress={handlePress}>
       <Text style={styles.title}>{category.name}</Text>
-      <MaterialIcons name="check" size={24} style={styles.icon} />
+      {isSelected && <Octicons name="check-circle-fill" size={22} style={styles.icon} />}
     </Pressable>
   )
 }
@@ -43,22 +43,19 @@ export default function RegisterInterestsListItem({
 const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   container: {
     padding: spacings.md,
-    // backgroundColor: colors.primary,
-
-    borderWidth: 2,
+    backgroundColor: 'white',
     borderRadius: spacings.sm,
     flexDirection: 'row',
     justifyContent: 'space-between',
     textAlign: 'center',
+    elevation: 4,
 
     variants: {
       isSelected: {
         true: {
-          borderColor: colors.primary,
+          backgroundColor: colors.primary,
         },
-        false: {
-          borderColor: colors.gray,
-        },
+        false: {},
       },
       isFirst: {
         default: {
@@ -74,7 +71,7 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
     variants: {
       isSelected: {
         true: {
-          color: colors.primary,
+          color: 'white',
         },
         false: {
           color: colors.gray,
@@ -85,5 +82,15 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
 
   title: {
     ...typography.md,
+    variants: {
+      isSelected: {
+        true: {
+          color: 'white',
+        },
+        false: {
+          color: 'black',
+        },
+      },
+    },
   },
 }))

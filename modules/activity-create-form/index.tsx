@@ -124,6 +124,7 @@ const CreateActivity = (props: Props) => {
                     searchPlaceholder={'Search a category'}
                     searchStyle={{ color: Colors.blue30, placeholderTextColor: Colors.grey50 }}
                     trailingAccessory={dropdownIcon}
+                    showSearch={true}
                   >
                     {categories?.map(category => (
                       <Picker.Item
@@ -203,7 +204,7 @@ const CreateActivity = (props: Props) => {
       <View style={styles.footer}>
         {/* <AppButton variant="primary" label="Preset" onPress={usePreset} /> */}
         <AppButton variant="secondary" label="🔮 preset (test)" onPress={usePreset} />
-        <AppButton variant="primary" label="Create Activity" onPress={() => onSummit()} fullWidth />
+        <AppButton label="Create Activity" onPress={() => onSummit()} fullWidth />
       </View>
     </KeyboardAvoidingWrapper>
   )
@@ -214,7 +215,7 @@ export default CreateActivity
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
+    padding: 15,
     backgroundColor: 'white',
   },
   label: {
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
     height: 48,
     borderColor: '#ccc',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 15,
     justifyContent: 'center',
     paddingLeft: 15,
   },

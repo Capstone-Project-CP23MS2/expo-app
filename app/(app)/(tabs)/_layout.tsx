@@ -31,9 +31,19 @@ const TabsLayout = (props: Props) => {
         name="home"
         options={{
           tabBarIcon: ({ size, color }) => (
-            <MaterialIcons name="home-filled" size={size + 3} color={color} />
+            <MaterialIcons name="home-filled" size={size} color={color} />
           ),
           headerTitle: 'Home',
+        }}
+      />
+
+      <Tabs.Screen
+        name="calendar"
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome5 name="calendar" size={size - 3} color={color} />
+          ),
+          headerTitle: 'Calendar',
         }}
       />
 
@@ -41,16 +51,6 @@ const TabsLayout = (props: Props) => {
         name="index"
         options={{
           tabBarIcon: ({ size, color }) => <Entypo name="list" size={size} color={color} />,
-        }}
-      />
-
-      <Tabs.Screen
-        name="dev"
-        options={{
-          tabBarIcon: ({ size, color }) => <FontAwesome5 name="dev" size={size} color={color} />,
-          headerTitle: 'Development',
-          headerShadowVisible: true,
-          tabBarShowLabel: false,
         }}
       />
 
@@ -77,6 +77,15 @@ const TabsLayout = (props: Props) => {
         options={{
           tabBarIcon: ({ size, color }) => <Ionicons name="person" size={size} color={color} />,
           headerTitle: 'Profile',
+        }}
+      />
+
+      <Tabs.Screen
+        name="dev"
+        options={{
+          tabBarIcon: ({ size, color }) => <FontAwesome5 name="dev" size={size} color={color} />,
+          headerTitle: 'Development',
+          headerShadowVisible: true,
         }}
       />
     </Tabs>
