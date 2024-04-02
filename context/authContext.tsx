@@ -92,37 +92,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   const login = async ({ redirectToRegister = true } = {}) => {
-    try {
-      const isSignedInWithGoogle = await GoogleSignin.isSignedIn();
-      if (isSignedInWithGoogle) await logout();
+    const isSignedInWithGoogle = await GoogleSignin.isSignedIn();
+    if (isSignedInWithGoogle) await logout();
 
-      const { email, idToken }: any = await googleAuthentication();
-      setSession({
-        authenticated: true,
-        idToken: idToken,
-      });
+    const { email, idToken }: any = await googleAuthentication();
+    setSession({
+      authenticated: true,
+      idToken: idToken,
+    });
 
-      setIsLoading(true);
-      await SecureStore.setItemAsync(TOKEN_KEY, idToken!);
+    setIsLoading(true);
+    await SecureStore.setItemAsync(TOKEN_KEY, idToken!);
 
-      loginMutation.mutate(undefined, {
-        onError: async (error: Error | AxiosError) => {
-          if (!isAxiosError(error)) return;
-          if (error.response?.status === 404) {
-            router.push({
-              pathname: '/(auth)/register',
-              params: { email },
-            });
-          }
-        },
-        onSettled: async () => {
-          setIsLoading(false);
-        },
-      });
-    } catch (error: any) {
-      ToastAndroid.show('เกิดข้อผิดพลาดบางอย่างที่เซิฟเวอร์', ToastAndroid.SHORT);
-      logout();
-    }
+    loginMutation.mutate(undefined, {
+      onError: async (error: Error | AxiosError) => {
+        if (!isAxiosError(error)) return;
+        if (error.response?.status === 404) {
+          router.push({
+            pathname: '/(auth)/register',
+            params: { email },
+          });
+        }
+      },
+      onSettled: async () => {
+        setIsLoading(false);
+      },
+    });
   };
 
   const logout = async () => {
