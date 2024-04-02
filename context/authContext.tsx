@@ -10,7 +10,7 @@ import { useRouter, useSegments } from 'expo-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import usersApi from '@/api/users';
 import { AxiosError, isAxiosError } from 'axios';
-import { UseUpdateMyUserInfo } from '@/hooks/useAPI';
+import { UseGetUserByEmail, UseUpdateMyUserInfo } from '@/hooks/useAPI';
 import { set } from 'react-hook-form';
 import { ToastAndroid } from 'react-native';
 
@@ -27,6 +27,7 @@ interface AuthProps {
   onLogout?: () => Promise<any>;
   isLoading?: boolean;
   onSyncUserInfo?: (userInfo: UserResponse) => void;
+  onByPassGoogleLogin?: () => any;
   // test?: (props: any) => any
 }
 
@@ -141,6 +142,34 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     setIsLoading(false);
   };
+  const { data } = UseGetUserByEmail('chickenforregis1@gmail.com');
+  const byPassGoogleLogin = async () => {
+    const testEmail = 'chickenforregis1@gmail.com';
+    const testToken =
+      'eyJhbGciOiJSUzI1NiIsImtpZCI6ImFkZjVlNzEwZWRmZWJlY2JlZmE5YTYxNDk1NjU0ZDAzYzBiOGVkZjgiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiMTA1MzY1NTk0NjI0MC1xYmd0NmFnY3JnMDJzZmxtZ2V2aG9laHM3aGFyZnJwaS5hcHBzLmdvb2dsZXVzZXJjb250ZW50LmNvbSIsImF1ZCI6IjEwNTM2NTU5NDYyNDAtcWJndDZhZ2NyZzAyc2ZsbWdldmhvZWhzN2hhcmZycGkuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTUxMjYwMDQzOTYwMzU3NjAzNTQiLCJlbWFpbCI6ImNoaWNrZW5mb3JyZWdpczFAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImF0X2hhc2giOiJyWTVMeXhNNUZKOGFnMlgxME5tVG1BIiwiaWF0IjoxNzExMzg5OTcwLCJleHAiOjE3MTEzOTM1NzB9.Pgx3BgDngjRrYdJGOPfG9OjHitgPovmdPnlSMZ4_lukYWeG-_P4Oak7ZAtw2XiCXnpOQjmOX5oXj6i1t3TRZEYJ_UcOW5AeQ5hSabLAbs6I5QAdLufcpKyOzYBY43EinuK1E4SlGw4NxDcUY2vw02lGweGrFIEwEI3UrHdWbfKpYotr-29fz0udkMr-jRug5AFSO_B9vRAzTaTngZZZyrLTneTD3-VKynBg7F__SEy37WyknDq_JGs74MsULc1gRTnvnrf6FQNnXGRFbRbZtl3F46SOtKbzh579QUmNVTpnTqSNRvqb7w48-u39AvQ4s4lqDnzVRCwap8jPpgyy6pQ';
+    setSession({
+      authenticated: true,
+      idToken: testToken,
+    });
+
+    setIsLoading(true);
+    await SecureStore.setItemAsync(TOKEN_KEY, testToken!);
+
+    loginMutation.mutate(undefined, {
+      onError: async (error: Error | AxiosError) => {
+        if (!isAxiosError(error)) return;
+        if (error.response?.status === 404) {
+          router.push({
+            pathname: '/(auth)/register',
+            params: { testEmail },
+          });
+        }
+      },
+      onSettled: async () => {
+        setIsLoading(false);
+      },
+    });
+  };
 
   const value = {
     user,
@@ -150,6 +179,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     onSyncUserInfo: syncUserInfo,
     session,
     isLoading: isLoading,
+    onByPassGoogleLogin: byPassGoogleLogin,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
