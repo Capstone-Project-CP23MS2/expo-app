@@ -80,8 +80,8 @@ export default function ActivityCreateForm() {
               onChangeText={onChange}
               enableErrors
               error={error}
-              label="ชื่อผู้ใช้งาน"
-              placeholder={'ชื่อผู้ใช้งาน'}
+              label="ชื่อกิจกรรม"
+              placeholder={'ชื่อกิจกรรม'}
               maxLength={100}
               showCharCounter
             />
