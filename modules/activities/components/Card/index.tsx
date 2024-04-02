@@ -1,73 +1,44 @@
-import { COLORS, SHADOWS, SIZES, FONT } from '@/constants'
-import { View, Text, StyleSheet, Pressable, Image } from 'react-native'
-import { Icon, MD3Colors } from 'react-native-paper'
+import { COLORS, SHADOWS, SIZES, FONT } from '@/constants';
+import { View, Text, StyleSheet, Pressable, Image } from 'react-native';
+import { Icon, MD3Colors } from 'react-native-paper';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
-import dayjs from 'dayjs'
+import dayjs from 'dayjs';
+import { ActivityResponse } from '@/api/type';
 
 type ActivityCardProps = {
-  activity: {
-    activityId: number
-    title: string
-    description: string
-    dateTime: string
-    duration: number
-    place?: string
-    createdAt: string
-    updatedAt: string
-    currentParticipants?: number
-    maxParticipants?: number
-  }
-  handleNavigate: () => void
-}
+  activity: ActivityResponse;
+  handleNavigate: () => void;
+};
 
 const index = ({ activity, handleNavigate }: ActivityCardProps) => {
-  const { title, dateTime, duration, place, currentParticipants, maxParticipants } = activity
-  // console.log(activity);
-  const array = [1, 2]
+  const { styles } = useStyles(stylesheet);
+
+  const array = [1, 2];
   return (
     <Pressable style={styles.container} onPress={handleNavigate}>
-      {/* <Pressable style={styles.logoContainer}>
-        <Image
-          source={{
-            uri: checkImageURL(job.employer_logo)
-              ? job.employer_logo
-              : 'https://t4.ftcdn.net/jpg/05/05/61/73/360_F_505617309_NN1CW7diNmGXJfMicpY9eXHKV4sqzO5H.jpg',
-          }}
-          resizeMode="contain"
-          style={styles.logoImage}
-        />
-      </Pressable> */}
-
       <View style={styles.textContainer}>
         <Text style={styles.title} numberOfLines={1}>
-          {title}
+          {activity.title}
         </Text>
-        <View
-          style={{
-            borderBottomColor: 'gray',
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            marginTop: 5,
-            marginBottom: 5,
-            opacity: 0.3,
-          }}
-        />
+        <Text>{activity.dateTime} ssss</Text>
         <View style={styles.infoContainer}>
           <View style={styles.infoSubContainer}>
             <Icon source={'calendar'} color={COLORS.gray} size={18}></Icon>
-            <Text style={styles.infoText}>{dayjs(dateTime).format('ddd, MMM D')}</Text>
+            <Text style={styles.infoText}>{dayjs(activity.dateTime).format('ddd, MMM D')}</Text>
           </View>
           <View style={styles.infoSubContainer}>
             <Icon source={'clock'} color={COLORS.gray} size={18}></Icon>
-            <Text style={styles.infoText}>{dayjs(dateTime).format('h:mm A')}</Text>
+            <Text style={styles.infoText}>{dayjs(activity.dateTime).format('h:mm A')}</Text>
           </View>
         </View>
-        <Text style={styles.infoText}>Location: {place}</Text>
+        <Text style={styles.infoText}>Location: {activity.location.name}</Text>
       </View>
     </Pressable>
-  )
-}
+  );
+};
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   card: {
     backgroundColor: '#fff',
     padding: 16,
@@ -115,7 +86,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
-
     elevation: 4,
   },
   logoContainer: {
@@ -132,8 +102,8 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    marginHorizontal: SIZES.medium,
+    marginHorizontal: SIZES.small,
   },
-})
+}));
 
-export default index
+export default index;

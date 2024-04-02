@@ -1,17 +1,15 @@
-import { View, Pressable, Text, StyleSheet } from 'react-native'
+import { View, Pressable, Text, StyleSheet, ToastAndroid } from 'react-native'
 import React, { useCallback, useEffect, useState } from 'react'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import Animated, {
-  SlideInDown,
   interpolate,
   useAnimatedRef,
   useAnimatedStyle,
   useScrollViewOffset,
 } from 'react-native-reanimated'
-import { Ionicons, MaterialIcons } from '@expo/vector-icons'
+import { AntDesign, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
 import { COLORS, FONT, SIZES } from '@/constants'
 import Colors from '@/constants/Colors'
-import useFetch from '@/hooks/useFetch'
 import dayjs from 'dayjs'
 import { defaultStyles } from '@/constants/Styles'
 import {
@@ -22,33 +20,77 @@ import {
 } from 'react-native-gesture-handler'
 import ActivityFooter from '@/modules/activity-detail/components/ActivityFooter'
 import { Button, Chip, Modal, Portal, PaperProvider, Icon, Card } from 'react-native-paper'
-import { UseDeleteActivity, UseGetActivity, UseGetActivityParticipants } from '@/hooks/useAPI'
-import { useAuth } from '@/context/auth'
+import {
+  UseDeleteActivity,
+  UseDeleteParticipant,
+  UseGetActivity,
+  UseGetActivityParticipants,
+} from '@/hooks/useAPI'
+
 import AppButton from '@/modules/shared/AppButton'
 import JoinButton from './components/JoinButton'
+import { useAuth } from '@/context/authContext'
+import AppConfirmModal from '@/components/AppConfirmModal'
 type Props = {}
 
 const Page = (props: Props) => {
   const router = useRouter()
-  const { id } = useLocalSearchParams()
+  const { id: activityId } = useLocalSearchParams<{ id: string }>()
   const { user } = useAuth()
+  const {
+    data: activity,
+    isLoading,
+    isError,
+    error,
+    refetch: activityRefetch,
+  } = UseGetActivity(activityId)
 
-  const { data: activity, isLoading, isError, error, refetch: activityRefetch } = UseGetActivity(id)
+  const [userParticipant, setUserParticipant] = useState(0)
 
-  const { data: participantsData, refetch: participantsRefetch } = UseGetActivityParticipants(id)
+  const isOwner = user?.userId === activity?.hostUserId
+
+  const { data: participantsData, refetch: participantsRefetch } =
+    UseGetActivityParticipants(activityId)
   const { content: participants } = participantsData || {}
 
   const scrollRef = useAnimatedRef<Animated.ScrollView>()
 
   const deleteMutation = UseDeleteActivity()
+  // const deleteParticipantMutation = UseDeleteParticipant()
 
   const onDelete = () => {
-    deleteMutation.mutate(String(id), {
+    deleteMutation.mutate(activityId, {
       onSuccess() {
-        router.push('/(app)/(tabs)/activities')
+        ToastAndroid.show('Activity deleted', ToastAndroid.SHORT)
+        router.push('/(app)/(tabs)')
       },
     })
   }
+
+  // const onDeleteParticipant = () => {
+  //   const message = `remove ${userParticipant} from ${activity?.title}`
+
+  //   deleteParticipantMutation.mutate(
+  //     { activityId, userParticipant },
+  //     {
+  //       onSuccess: () => {
+  //         ToastAndroid.show(message, ToastAndroid.SHORT)
+  //         router.push('/(app)/(tabs)/')
+  //       },
+  //       onError: error => {
+  //         console.log(error)
+  //       },
+  //     },
+  //   )
+  //   createNotiMutation.mutate(objToFormData({ targetId, message, unRead, type }), {
+  //     onSuccess: data => {
+  //       console.log('🚀 ~ notificationMutation.mutate ~ data:', data)
+  //     },
+  //     onError: error => {
+  //       console.log(error)
+  //     },
+  //   })
+  // }
 
   const [visible, setVisible] = React.useState(false)
 
@@ -58,8 +100,7 @@ const Page = (props: Props) => {
     backgroundColor: 'white',
     padding: 20,
     margin: 20,
-    borderRadius: 20,
-    gap: 5,
+    borderRadius: 15,
   }
 
   const isParticipant = participants?.some(participant => participant.userId === user?.userId)
@@ -72,46 +113,91 @@ const Page = (props: Props) => {
     setRefreshing(false)
   }, [])
 
+  const onEdit = () => {
+    console.log(activityId)
+
+    router.push({ pathname: '/(app)/activities/edit', params: { activityId } })
+  }
+
+  // const [showSignOutModal, setShowSignOutModal] = useState(false)
+
+  // const handleRemoveParticipant = (userId: number) => {
+  //   console.log(userId)
+  //   setUserParticipant(userId)
+  //   setShowSignOutModal(true)
+  // }
+
+  // const handleConfirmParticipant = () => {
+  //   console.log('remove', userParticipant)
+  //   onDeleteParticipant()
+  //   setShowSignOutModal(false)
+  // }
+
+  // const handleCancelParticipant = () => {
+  //   setShowSignOutModal(false)
+  // }
+
   return (
     <PaperProvider>
       <View style={styles.container}>
-        {/* <Animated.ScrollView */}
+        {/* <AppConfirmModal
+          visible={showSignOutModal}
+          transparent
+          title="Delete this user ?"
+          subheading="This action cannot be undone. user will be lost"
+          onConfirm={handleConfirmParticipant}
+          onCancel={handleCancelParticipant}
+          btnColor="red"
+        /> */}
+
         <ScrollView
           contentContainerStyle={{ paddingBottom: 100 }}
-          // ref={scrollRef}
           scrollEventThrottle={16}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
-          {/* <Animated.Image
-          source={{ uri: listing.xl_picture_url }}
-          style={[styles.image, imageAnimatedStyle]}
-          resizeMode="cover"
-        /> */}
-
           <View style={styles.infoContainer}>
             <Portal>
               <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
-                <Text>This activity will be gone.</Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    gap: 10,
-                  }}
-                >
-                  <BaseButton
-                    onPress={hideModal}
-                    style={[defaultStyles.btn, { backgroundColor: 'gray' }]}
+                <View style={{ justifyContent: 'center', alignItems: 'center', gap: 10 }}>
+                  <AntDesign name="warning" size={60} color={COLORS.red} />
+                  <View style={{ alignItems: 'center', gap: 3 }}>
+                    <Text
+                      style={{ fontFamily: FONT.bold, fontSize: SIZES.large, color: COLORS.red }}
+                    >
+                      Delete Activity
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: FONT.regular,
+                        fontSize: 13,
+                        color: COLORS.gray,
+                      }}
+                    >
+                      This action cannot be undone. Are you sure?
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      gap: 10,
+                    }}
                   >
-                    <Text style={[defaultStyles.btnText, { color: 'black' }]}>Cancel</Text>
-                  </BaseButton>
-                  <BaseButton
-                    style={[defaultStyles.btn, { backgroundColor: 'red' }]}
-                    onPress={onDelete}
-                  >
-                    <Text style={[defaultStyles.btnText, { color: 'white' }]}>Confirm</Text>
-                  </BaseButton>
+                    <BaseButton
+                      onPress={hideModal}
+                      style={[defaultStyles.btn, { backgroundColor: COLORS.grey, height: 45 }]}
+                    >
+                      <Text style={{ color: 'white', fontFamily: FONT.bold }}>No, Keep it.</Text>
+                    </BaseButton>
+
+                    <BaseButton
+                      style={[defaultStyles.btn, { backgroundColor: COLORS.red, height: 45 }]}
+                      onPress={onDelete}
+                    >
+                      <Text style={{ color: 'white', fontFamily: FONT.bold }}>Yes, Delete!</Text>
+                    </BaseButton>
+                  </View>
                 </View>
               </Modal>
             </Portal>
@@ -164,75 +250,80 @@ const Page = (props: Props) => {
                       key={participant.userId}
                       style={{ flex: 1, flexDirection: 'row', gap: 5, alignItems: 'center' }}
                     >
-                      <MaterialIcons name="account-circle" size={24} color="gray" />
-                      <Text
-                        style={[
-                          user?.userId === activity?.hostUserId
-                            ? { color: COLORS.primary }
-                            : { color: COLORS.gray },
-                        ]}
+                      <MaterialIcons
+                        name="account-circle"
+                        size={24}
+                        color={
+                          participant?.userId === activity?.hostUserId
+                            ? COLORS.primary
+                            : COLORS.gray
+                        }
+                      />
+                      <View
+                        style={{
+                          flex: 1,
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                        }}
                       >
-                        {participant.username}
-                      </Text>
+                        <Text
+                          style={[
+                            participant?.userId === activity?.hostUserId
+                              ? { color: COLORS.primary }
+                              : { color: COLORS.gray },
+                          ]}
+                        >
+                          {participant.username}
+                        </Text>
+                        {/* {participant?.userId !== activity?.hostUserId && isOwner && (
+                          <Pressable onPress={() => handleRemoveParticipant(participant?.userId)}>
+                            <MaterialIcons name="highlight-remove" size={24} color="red" />
+                          </Pressable>
+                        )} */}
+                      </View>
                     </View>
                   ))}
                 </View>
               </View>
-              <View style={{ flex: 1, flexDirection: 'row', marginTop: 20, gap: 10 }}>
-                {/* <BaseButton
-                  onPress={showModal}
-                  style={[
-                    defaultStyles.btn,
-                    { backgroundColor: 'lightskyblue' },
-                    { borderRadius: 30 },
-                  ]}
-                >
-                  <Text style={[defaultStyles.btnText, { color: 'black' }]}>Edit</Text>
-                </BaseButton> */}
-              </View>
             </View>
-            {/* <View style={styles.hostView}>
-            <Image
-              source={{ uri: listing.host_picture_url }}
-              style={styles.host}
-            />
-
-            <View>
-              <Text style={{ fontWeight: '500', fontSize: 16 }}>
-                Hosted by {listing.host_name}
-              </Text>
-              <Text>Host since {listing.host_since}</Text>
-            </View>
-          </View> */}
-
-            {/* <View style={styles.divider} /> */}
           </View>
         </ScrollView>
-
-        {/* <View style={defaultStyles.footer}>
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 20,
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}>
-          <BaseButton>
-            <MaterialIcons name="favorite-outline" size={36} color="black" />
-          </BaseButton>
-          <BaseButton
-            style={[defaultStyles.btn, { paddingRight: 20, paddingLeft: 20 }]}>
-            <Text style={defaultStyles.btnText}>👋 Join</Text>
-          </BaseButton>
-        </View>
-      </View> */}
       </View>
-      {/* <ActivityFooter /> */}
       <View style={styles.footerContainer}>
-        {user?.userId === activity?.hostUserId ? (
-          <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
+        {isOwner ? (
+          <View style={{ flex: 1, gap: 10 }}>
+            <TouchableOpacity
+              onPress={onEdit}
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderColor: COLORS.grey,
+                borderWidth: 1,
+                borderRadius: 10,
+                padding: 12,
+                backgroundColor: COLORS.white,
+                gap: 10,
+              }}
+            >
+              <Feather name="edit" size={24} color={COLORS.gray} />
+              <Text style={{ color: COLORS.gray, fontFamily: FONT.regular }}>
+                Edit your activity
+              </Text>
+            </TouchableOpacity>
+            <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
+          </View>
         ) : (
-          <JoinButton userId={user?.userId} activityId={String(id)} isParticipant={isParticipant} />
+          <JoinButton
+            userId={user?.userId}
+            userName={user?.username}
+            activityId={activityId}
+            activityTitle={activity?.title}
+            isParticipant={isParticipant}
+            targetId={activity?.hostUserId}
+          />
         )}
       </View>
     </PaperProvider>
@@ -247,11 +338,6 @@ const styles = StyleSheet.create({
   block: {
     gap: 5,
   },
-  // participants: {
-  //   backgroundColor: 'green',
-  //   borderRadius: 20,
-  //   padding: 8,
-  // },
   infoHeader: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -352,7 +438,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
-
     elevation: 4,
   },
   footerContainer: {

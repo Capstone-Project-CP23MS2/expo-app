@@ -1,124 +1,125 @@
-import { COLORS, FONT, SIZES } from '@/constants'
-import useFetch from '@/hooks/useFetch'
-import { Link, Stack, useRouter } from 'expo-router'
-import { View, Text, StyleSheet, Pressable, ActivityIndicator, Button } from 'react-native'
+import { COLORS, FONT, SIZES } from '@/constants';
+import { Link, Stack, useRouter, Tabs } from 'expo-router';
+import { View, Text, StyleSheet, Pressable, ActivityIndicator, Button } from 'react-native';
 
-import { BaseButton, ScrollView, TextInput } from 'react-native-gesture-handler'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { useEffect, useState } from 'react'
+import { BaseButton, RefreshControl, ScrollView, TextInput } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useCallback, useEffect, useState } from 'react';
 
-import axios, { AxiosResponse } from 'axios'
+import { FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
+import { UseGetActivities, UseGetMyUserInfo } from '@/hooks/useAPI';
+import { TouchableOpacity } from 'react-native-ui-lib';
+// import ActivityCard from '../components/Card/'
+import { ActivityCard } from '../components/';
+import AppButton from '@/modules/shared/AppButton';
+import MapActivities from '../components/MapActivities';
+import ActivitySearch from '@/modules/activity-search/ActivitySearch';
+import AppTextInput from '@/modules/shared/AppTextInput';
 
-import { MaterialIcons } from '@expo/vector-icons'
-import FloatingActionButton from '@/modules/activities/components/FloatingActionButton'
-import { useNavigation } from '@react-navigation/native'
-import { UseGetActivities } from '@/hooks/useAPI'
-import { FAB, Icon } from 'react-native-paper'
-import { FloatingButton, TouchableOpacity } from 'react-native-ui-lib'
-import ActivityCard from '../components/Card/'
+type Props = {};
 
-type Props = {}
 type DataProp = {
-  content: any
-}
+  content: any;
+};
 
 const index = (props: Props) => {
-  const router = useRouter()
-  // const [activities, setActivities] = useState<any[]>([]);
-  // console.log(activities);
-  const { data, isLoading, isError, error, refetch } = UseGetActivities({})
-  const { content: activities, first, totalPages } = data || {}
+  const router = useRouter();
+  const { data, isLoading, isError, error, refetch } = UseGetActivities({});
+  const { content: activities, first, totalPages } = data || {};
 
-  function ActivityTitle() {
-    return (
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.headerArea}>
-          <View>
-            <Text style={styles.headerTitle}>Available Activities</Text>
-            <Text style={styles.subHeader}>found {activities?.length} activites</Text>
-          </View>
-          <Pressable onPress={() => router.push('/activities/create-form')}>
-            <MaterialIcons name="control-point" size={38} color="black" />
-          </Pressable>
-          {/* <Pressable onPress={() => refetch()}>
-              <Text style={styles.headerBtn}>Refresh</Text>
-            </Pressable> */}
-        </View>
-      </SafeAreaView>
-    )
-  }
+  const { data: userInfoData } = UseGetMyUserInfo();
+
+  const [refreshing, setRefreshing] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    refetch();
+    setRefreshing(false);
+  }, []);
 
   return (
     <View style={{ flex: 1, marginTop: 0 }}>
-      <Stack.Screen
+      <Tabs.Screen
         options={{
-          header: () => <ActivityTitle />,
-          headerShadowVisible: true,
-          headerShown: true,
-          // headerLeft: () => (
-          //   <ScreenHeaderBtn iconUrl={icons.menu} dimension="60%" />
-          // ),
-          // headerRight: () => (
-          //   <ScreenHeaderBtn iconUrl={images.profile} dimension="100%" />
-          // ),
+          header: () => (
+            <SafeAreaView style={styles.safeArea}>
+              <View style={styles.headerArea}>
+                <Pressable onPress={() => router.push('/(app)/activities/search')}>
+                  <AppTextInput
+                    placeholder="Explore available activities."
+                    icon
+                    iconName="search"
+                    disabled
+                  />
+                </Pressable>
+              </View>
+            </SafeAreaView>
+          ),
         }}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ backgroundColor: 'white' }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
         <View style={styles.container}>
+          <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Find Your Activities</Text>
+          <MapActivities />
           <View style={styles.cardsContainer}>
+            <View style={{ gap: 2 }}>
+              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Available Activities</Text>
+              <Text style={styles.subHeader}>
+                We found {activities?.length} activites. feel free to join !
+              </Text>
+            </View>
             {isLoading ? (
               <ActivityIndicator size="large" color={COLORS.gray} />
             ) : isError ? (
               <Text>Error! {error.message}</Text>
             ) : activities?.length ? (
-              activities?.map(activity => (
-                <ActivityCard
-                  key={`activity-${activity.activityId}`}
-                  activity={activity}
-                  handleNavigate={() => router.push(`/activities/${activity.activityId}`)}
-                />
-              ))
+              activities
+                ?.filter(
+                  activity =>
+                    !activity.users.some((user: any) => user.userId === userInfoData?.userId),
+                )
+                .map(activity => (
+                  <ActivityCard
+                    key={`activity-${activity.activityId}`}
+                    activity={activity}
+                    onPress={() => router.push(`/activities/${activity.activityId}`)}
+                  />
+                ))
             ) : (
               <Text>no activity</Text>
             )}
           </View>
         </View>
       </ScrollView>
-      {/* <FloatingButton
-        visible={true}
-        hideBackgroundOverlay
-        button={{ label: 'Approve', onPress: () => console.log('approved') }}
-      /> */}
+      <View style={styles.addButton}>
+        <TouchableOpacity onPress={() => router.push('/activities/create-form')}>
+          <AntDesign name="pluscircle" size={48} color={COLORS.black} />
+        </TouchableOpacity>
+      </View>
     </View>
-  )
-}
+  );
+};
 
-export default index
+export default index;
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: COLORS.lightWhite,
+    backgroundColor: 'white',
     elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
   },
   headerArea: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 10,
-    paddingTop: 10,
+    padding: 15,
   },
   container: {
-    paddingTop: 0,
+    flex: 1,
+    paddingTop: 15,
     padding: SIZES.medium,
+    gap: 10,
   },
   header: {
     flexDirection: 'row',
@@ -126,7 +127,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   subHeader: {
-    color: COLORS.gray,
+    color: COLORS.black,
+    fontWeight: 'normal',
   },
   headerTitle: {
     fontSize: SIZES.large,
@@ -140,7 +142,11 @@ const styles = StyleSheet.create({
     color: COLORS.gray,
   },
   cardsContainer: {
-    marginTop: SIZES.medium,
     gap: SIZES.small,
   },
-})
+  addButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+  },
+});

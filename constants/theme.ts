@@ -1,15 +1,10 @@
 const COLORS = {
-  // primary: '#312651',
-  // textPrimary: '#312651',
-  secondary: '#444262',
-  // textSecondary: '#312651',
+  secondary: '#6f42c1',
   tertiary: '#FF7754',
 
-  // gray: '#83829A',
-  gray2: '#C1C0C8',
-
-  white: '#F3F4F8',
+  white: '#FFF',
   lightWhite: '#FAFAFC',
+  mediumWhite: '#ededed',
 
   primary: '#3E64FF',
   gray: '#5E5D5E',
@@ -20,30 +15,20 @@ const COLORS = {
   grey: '#BABBC3',
   light: '#F3F4FB',
   darkBlue: '#7978B5',
-  red: 'red',
+  red: '#CC0000',
   danger: 'red',
-  disable: '#BABBC3'
-};
-//gradients
-// const gradients = {
-//   blueLight: {start: '#5A71FA', end: colors.blue3}, // buttons
-//   blue: {start: '#5E55FB', end: colors.blue3}, // fab
-//   blueDark: {start: '#5F45E0', end: colors.blue3}, // avis, banner
-// }
+  disable: '#BABBC3',
+}
 
 const FONT = {
-  //   regular: 'DMRegular',
-  //   medium: 'DMMedium',
-  // semiBold: 'DMMedium',
-  //   bold: 'DMBold',
-  regular: 'NunitoRegular',
-  medium: 'NunitoMedium',
-  semiBold: 'NunitoSemiBold',
-  bold: 'NunitoBold',
+  regular: 'NotoSansThaiRegular',
+  medium: 'NotoSansThaiMedium',
+  semiBold: 'NotoSansThaiSemiBold',
+  bold: 'NotoSansThaiBold',
   md: 'NunitoMedium',
   sb: 'NunitoSemiBold',
   b: 'NunitoBold',
-};
+}
 
 const SIZES = {
   xSmall: 10,
@@ -52,7 +37,7 @@ const SIZES = {
   large: 20,
   xLarge: 24,
   xxLarge: 32,
-};
+}
 
 const SHADOWS = {
   small: {
@@ -75,7 +60,7 @@ const SHADOWS = {
     shadowRadius: 5.84,
     elevation: 5,
   },
-};
+}
 
 const SPACINGS = {
   xs: 4,
@@ -84,6 +69,6 @@ const SPACINGS = {
   lg: 24,
   xl: 40,
   page: 24,
-};
+}
 
-export { COLORS, FONT, SHADOWS, SIZES, SPACINGS };
+export { COLORS, FONT, SHADOWS, SIZES, SPACINGS }

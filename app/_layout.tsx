@@ -1,27 +1,16 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome'
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native'
-import { useFonts } from 'expo-font'
-import { Stack, useRouter, Slot, SplashScreen } from 'expo-router'
-// import * as SplashScreen from 'expo-splash-screen'
-import { useEffect, useCallback } from 'react'
-import { Pressable, useColorScheme, View, Text } from 'react-native'
-import { MaterialIcons } from '@expo/vector-icons'
-import { COLORS, FONT } from '@/constants'
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query'
+import { Slot, SplashScreen } from 'expo-router'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import useAppLoading from '@/hooks/useAppLoading'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { StatusBar } from 'expo-status-bar'
-import Auth from '@/modules/auth/Auth'
-import { AuthProvider } from '@/context/auth'
 import { DesignSystem } from '@/utils/design-system'
 
 import 'utils/unistyles'
+import { AuthProvider } from '@/context/authContext'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import * as Location from 'expo-location'
+import { useContext, useEffect, useState } from 'react'
+import { UserLocationContext } from '@/context/userLocationContext'
 
 // Create a client
 const queryClient = new QueryClient({
@@ -53,7 +42,7 @@ export default function RootLayout() {
   if (!appLoaded) return null
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <StatusBar style="dark" /> */}
+      {/* <StatusBQueryClientProviderar style="dark" /> */}
       <RootLayoutNav />
     </QueryClientProvider>
   )
@@ -62,7 +51,9 @@ export default function RootLayout() {
 function RootLayoutNav() {
   return (
     <AuthProvider>
-      <Slot />
+      <BottomSheetModalProvider>
+        <Slot />
+      </BottomSheetModalProvider>
     </AuthProvider>
   )
 }

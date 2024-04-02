@@ -1,16 +1,26 @@
-import { getCategories, getCategory } from "@/api/category";
+import { CategoriesRequestParameters } from "@/api/categories/categories.type";
+import categoriesApi from "@/api/category";
 import { useQuery } from "@tanstack/react-query";
 
-export function UseGetCategories() {
+
+type CategoriesParameters = {
+    page?: number;
+    pageSize?: number;
+};
+
+export function UseGetCategories(params: CategoriesRequestParameters = { pageSize: 25 }) {
     return useQuery({
         queryKey: ['categories'],
-        queryFn: getCategories,
+        queryFn: () => categoriesApi.getCategories(params),
     });
+    // TODO
+    // return { data: categories, paginationInfo: ..., ...otherRes }
 };
+
 
 export function UseGetCategory(id: string | number | string[] | undefined) {
     return useQuery({
         queryKey: ['category', id],
-        queryFn: () => getCategory(id),
+        queryFn: () => categoriesApi.getCategoryById(id),
     });
 };

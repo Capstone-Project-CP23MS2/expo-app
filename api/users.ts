@@ -1,38 +1,74 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { User, UsersResponse } from "./type";
 
-const API_URL: string = process.env.EXPO_PUBLIC_BASE_URL_API!;
+import { UserResponse, UserUpdateRequest, UsersResponse } from "./type";
+import apiClient from "./apiClient";
+import { objToFormData } from "@/utils";
+import { UserInfoResponse, UserInterestCreateRequest } from './user/users.type';
+import { AxiosRequestConfig } from "axios";
 
-export const getUsers = async (): Promise<UsersResponse> => {
-    const { data } = await axios.get(`${API_URL}/users`, { params: { pageSize: 100 } });
+class UsersApi {
+
+  async getUsers() {
+    const { data } = await apiClient.get<UsersResponse>('/users/', { params: { pageSize: 100 } });
     return data;
-};
+  }
 
-
-export const getUser = async (id: string): Promise<UsersResponse> => {
-    const { data } = await axios.get(`${API_URL}/users/${id}`);
+  async getUserById(id: string) {
+    const { data } = await apiClient.get<UserResponse>(`/users/${id}`);
     return data;
-};
+  }
 
-
-export const getUserByEmail = async (email: any): Promise<UsersResponse> => {
-    const { data } = await axios.get(`${API_URL}/users`, { params: { email } });
+  async getMyUserInfo() {
+    // const { data } = await apiClient.get<UserResponse>('/users/me');
+    const { data } = await apiClient.post<UserInfoResponse>('/auth/login');
     return data;
-};
+  }
 
-// export const getUserByEmail = async (email: any): Promise<User> => {
-//     const { data } = await axios.get(`${API_URL}/users/getByEmail/${email}`);
-//     return data;
-// };
+  async getUserByEmail(email: any) {
+    const { data } = await apiClient.get<UsersResponse>('/users', { params: { email } });
+    return data;
+  }
 
+  async updateUser({ userId, updateRequest }: { userId: number, updateRequest: UserUpdateRequest; }) {
+    const headers = {
+      'Content-Type': 'multipart/form-data',
+    };
+    const { data } = await apiClient.patch<UserResponse>(
+      `users/${userId}`, objToFormData(updateRequest), { headers }
+    );
+    return data;
+  }
 
-export const createUser = async (users: FormData): Promise<any> => {
-    const { data } = await axios.post(`${API_URL}/users`, users, {
-        headers: {
-            'Content-Type': 'multipart/form-data',
-            // "Content-Type": "application/json"
-        },
+  async createUser(users: FormData) {
+    const { data: user } = await apiClient.post<UserResponse>('/users', users, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        // "Content-Type": "application/json"
+        // requiresToken: false
+      },
     });
+    return user;
+  }
+
+  async deleteUser(id: string | number) {
+    await apiClient.delete(`/users/${id}`);
+  }
+
+  async createUserInterest(createRequest: UserInterestCreateRequest) {
+    const config: AxiosRequestConfig = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+
+      // paramsSerializer: {
+      //   indexes: null
+      // }
+    };
+    const { data } = await apiClient.post(`/interests/create`, objToFormData(createRequest), config);
     return data;
-};
+  }
+
+}
+
+
+const usersApi = new UsersApi();
+export default usersApi;

@@ -1,61 +1,8 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import axios from "axios";
-import { requestParams, Activity, Participant, ActivitiesResponse, ParticipantsResponse } from './type';
+import { requestParams, ActivityResponse, ActivitiesResponse, ParticipantResponse, ParticipantsResponse, ActivityUpdateRequest, ActivitiesRequestParams } from './type';
+import apiClient from "./apiClient";
+import { objToFormData } from '@/utils';
+import { AxiosRequestConfig } from 'axios';
 const API_URL: string = process.env.EXPO_PUBLIC_BASE_URL_API!;
-
-
-export const getActivities = async (params: requestParams): Promise<ActivitiesResponse> => {
-  const { data } = await axios.get(`${API_URL}/activities`, { params });
-  return data;
-};
-
-export const getActivity = async (id: string | string[]): Promise<Activity> => {
-  const { data } = await axios.get(`${API_URL}/activities/${id}`,);
-  return data;
-};
-
-
-export const createActivity = async (activity: FormData): Promise<Activity> => {
-  const { data } = await axios.post(`${API_URL}/activities`, activity, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-  return data;
-};
-
-
-// export const updateActivity = async (id: number, activity: FormData): Promise<Activity> => {
-//     const { data } = await axios.put(`${API_URL}/activities/${id}`, activity, {
-//         headers: {
-//             'Content-Type': 'multipart/form-data',
-//         },
-//     });
-//     return data;
-// }
-
-// export const UseUpdateActivity = () => {
-//     return useMutation({
-//         mutationKey: ['updateActivity'],
-//         mutationFn: updateActivity,
-//         onSuccess: () => {
-
-//         },
-//         onError: () => {
-
-//         }
-//     });
-// };
-
-export const deleteActivity = async (id: string): Promise<any> => {
-  const { data } = await axios.delete(`${API_URL}/activities/${id}`);
-  return data;
-};
-
-export const getActivityParticipants = async (activityId: string | string[]): Promise<ParticipantsResponse> => {
-  const { data } = await axios.get(`${API_URL}/participants`, { params: { activityId: activityId } });
-  return data;
-};
 
 //TODO: ย้าย Formdata มาที่นี่ทั้งหมด
 type ParticipantRequestBody = {
@@ -63,23 +10,95 @@ type ParticipantRequestBody = {
   activityId: string;
   status?: string;
 };
-export const createParticipant = async (participant: FormData): Promise<Participant> => {
-  const { data } = await axios.post(`${API_URL}/participants`, participant, {
-    headers: {
+
+class ActivitiesApi {
+  async getActivities(params: ActivitiesRequestParams) {
+    const { data } = await apiClient.get<ActivitiesResponse>('/activities', { params });
+    return data;
+  }
+
+  async getActivitiesNew(params: ActivitiesRequestParams) {
+    const config: AxiosRequestConfig = {
+      params,
+      paramsSerializer: {
+        indexes: null
+      }
+    };
+    const { data: { content: activities, ...paginationData } }
+      = await apiClient.get<ActivitiesResponse>('/activities', config);
+    return { activities, paginationData };
+  }
+
+  async getActivityById(id: string | string[]) {
+    const { data } = await apiClient.get<ActivityResponse>(`/activities/${id}`);
+    return data;
+  }
+
+
+  // Example: /activities/search?categoryId=9395&locationId=1908612&sort=1&date=2024-01-05
+  // async getActivitiesBySearch(params: requestParams) {
+  //   const { data } = await apiClient.get<ActivitiesResponse>('/activities/search', { params });
+  //   return data;
+  // }
+
+  async createActivity(activity: FormData) {
+    const headers = {
       'Content-Type': 'multipart/form-data',
-    },
-  });
-  return data;
-};
+    };
+    const { data } = await apiClient.post<ActivityResponse>(
+      'activities', activity, { headers }
+    );
+    return data;
+  }
 
-// export const updateParticipant = async (id: string, participant: ParticipantRequestBody): Promise<Participant> => {
-//     const { data } = await axios.put(`${API_URL}/participants/${id}`, participant);
-//     return data;
-// };  
+  async updateActivity(activityId: number, updateRequest: ActivityUpdateRequest) {
+    const headers = {
+      'Content-Type': 'multipart/form-data',
+    };
+    const { data } = await apiClient.patch<ActivityResponse>(
+      `activities/${activityId}`, objToFormData(updateRequest), { headers }
+    );
+    return data;
+  }
 
-export const deleteParticipant = async (params: any): Promise<any> => {
-  const { activityId, userId } = params;
-  // const { data } = await axios.delete(`${API_URL}/participants`, { params });
-  const { data } = await axios.delete(`${API_URL}/participants/${activityId}_${userId}`,);
-  return data;
-};
+  async deleteActivity(activityId: string | number) {
+    const url = `${API_URL}/activities/${activityId}`;
+    await apiClient.delete(url);
+  }
+
+  async deleteUser(id: string | number) {
+    await apiClient.delete(`/users/${id}`);
+  }
+
+  async getActivityParticipants(activityId: string | string[]) {
+    const url = `${API_URL}/participants`;
+    const { data } = await apiClient.get<ParticipantsResponse>(
+      url,
+      { params: { activityId: activityId } }
+    );
+    return data;
+  }
+
+  async createActivityParticipant(participant: FormData) {
+    const url = `${API_URL}/participants`;
+    const { data } = await apiClient.post<ParticipantResponse>(
+      url, participant,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
+    return data;
+  };
+
+  async deleteActivityParticipant(params: any) {
+    const { activityId, userId } = params;
+    const url = `${API_URL}/participants/${activityId}_${userId}`;
+    // const { data } = await axios.delete(`${API_URL}/participants`, { params });
+    const { data } = await apiClient.delete(url);
+    return data;
+  };
+}
+const activitiesApi = new ActivitiesApi();
+export default activitiesApi;

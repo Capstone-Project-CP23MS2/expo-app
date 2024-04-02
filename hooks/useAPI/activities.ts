@@ -1,20 +1,43 @@
-import { createActivity, createParticipant, deleteActivity, deleteParticipant, getActivities, getActivity, getActivityParticipants } from "@/api/activities";
-import { requestParams } from "@/api/type";
+import activitiesApi from "@/api/activities";
+import { ActivityUpdateRequest, requestParams } from "@/api/type";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export function UseGetActivities(params: requestParams) {
+export function UseGetActivities(params: ActivitiesRequestParameters) {
   return useQuery({
     queryKey: ['activities'],
-    queryFn: () => getActivities(params),
-    // refetchInterval: 1000, // 1 second
+    queryFn: () => activitiesApi.getActivities(params),
   });
+};
+
+type ActivitiesSortBy = 'activityId' | 'createdAt' | 'dateTime' | 'noOfMembers' | 'title';
+
+type ActivitiesRequestParameters = {
+  page?: number;
+  pageSize?: number;
+  sortBy?: ActivitiesSortBy;
+  categoryIds?: [number];
+  //TODO: change name later
+  title?: string;
+};
+
+export function UseSearchActivities(params: ActivitiesRequestParameters = {}, test: any = '') {
+  console.log('🚚 UseSearchActivities:');
+  const { data, ...rest } = useQuery({
+    queryKey: ['activities-search'],
+    queryFn: () => activitiesApi.getActivities(params),
+  });
+
+  const { content: activities, ...paginationData } = data!;
+  console.log(activities);
+
+  return { activities, paginationData, ...rest };
 };
 
 export function UseGetActivity(activityId: string | string[]) {
   return useQuery({
-    queryKey: ['activity', activityId],
-    queryFn: () => getActivity(activityId),
+    queryKey: ['activities', activityId],
+    queryFn: () => activitiesApi.getActivityById(activityId),
   });
 };
 
@@ -22,19 +45,36 @@ export function UseCreateActivity() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['activities'],
-    mutationFn: createActivity,
+    mutationKey: ['createActivity'],
+    mutationFn: activitiesApi.createActivity,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["activities"] });
     },
   });
 };
 
+export function UseUpdateActivity() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['updateActivity'],
+    mutationFn: ({
+      activityId, updateRequest
+    }: {
+      activityId: number, updateRequest: ActivityUpdateRequest;
+    }) => activitiesApi.updateActivity(activityId, updateRequest),
+
+    onSuccess: async (activity) => {
+      await queryClient.invalidateQueries({ queryKey: ['activities'] });
+    },
+  });
+}
+
 export function UseDeleteActivity() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: deleteActivity,
+    mutationFn: activitiesApi.deleteActivity,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["activities"] });
     },
@@ -44,7 +84,7 @@ export function UseDeleteActivity() {
 export function UseGetActivityParticipants(activityId: string | string[]) {
   return useQuery({
     queryKey: ['activityParticipants', activityId],
-    queryFn: () => getActivityParticipants(activityId),
+    queryFn: () => activitiesApi.getActivityParticipants(activityId),
   });
 };
 
@@ -52,9 +92,10 @@ export function UseCreateParticipant() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    // mutationKey: ['activityParticipants'],
-    mutationFn: createParticipant,
+    mutationKey: ['createActivityParticipants'],
+    mutationFn: activitiesApi.createActivityParticipant,
     onSuccess: async (data) => {
+
       await queryClient.invalidateQueries({ queryKey: ['activityParticipants', String(data.activityId)] });
     },
   });
@@ -64,7 +105,7 @@ export function UseDeleteParticipant() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: deleteParticipant,
+    mutationFn: activitiesApi.deleteActivityParticipant,
     onSuccess: async (data, variables) => {
       await queryClient.invalidateQueries({ queryKey: ['activityParticipants', String(variables.activityId)] });
     },
