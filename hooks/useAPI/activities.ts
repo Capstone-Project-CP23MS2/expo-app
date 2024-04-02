@@ -3,7 +3,7 @@ import { ActivityUpdateRequest, requestParams } from "@/api/type";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export function UseGetActivities(params: ActivitiesRequestParameters) {
+export function UseGetActivities(params = { pageSize: 50 } as ActivitiesRequestParameters) {
   return useQuery({
     queryKey: ['activities'],
     queryFn: () => activitiesApi.getActivities(params),

@@ -12,6 +12,7 @@ import usersApi from '@/api/users';
 import { AxiosError, isAxiosError } from 'axios';
 import { UseUpdateMyUserInfo } from '@/hooks/useAPI';
 import { set } from 'react-hook-form';
+import { ToastAndroid } from 'react-native';
 
 const TOKEN_KEY = 'my-jwt';
 
@@ -91,32 +92,37 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   const login = async ({ redirectToRegister = true } = {}) => {
-    const isSignedInWithGoogle = await GoogleSignin.isSignedIn();
-    if (isSignedInWithGoogle) await logout();
+    try {
+      const isSignedInWithGoogle = await GoogleSignin.isSignedIn();
+      if (isSignedInWithGoogle) await logout();
 
-    const { email, idToken }: any = await googleAuthentication();
-    setSession({
-      authenticated: true,
-      idToken: idToken,
-    });
+      const { email, idToken }: any = await googleAuthentication();
+      setSession({
+        authenticated: true,
+        idToken: idToken,
+      });
 
-    setIsLoading(true);
-    await SecureStore.setItemAsync(TOKEN_KEY, idToken!);
+      setIsLoading(true);
+      await SecureStore.setItemAsync(TOKEN_KEY, idToken!);
 
-    loginMutation.mutate(undefined, {
-      onError: async (error: Error | AxiosError) => {
-        if (!isAxiosError(error)) return;
-        if (error.response?.status === 404) {
-          router.push({
-            pathname: '/(auth)/register',
-            params: { email },
-          });
-        }
-      },
-      onSettled: async () => {
-        setIsLoading(false);
-      },
-    });
+      loginMutation.mutate(undefined, {
+        onError: async (error: Error | AxiosError) => {
+          if (!isAxiosError(error)) return;
+          if (error.response?.status === 404) {
+            router.push({
+              pathname: '/(auth)/register',
+              params: { email },
+            });
+          }
+        },
+        onSettled: async () => {
+          setIsLoading(false);
+        },
+      });
+    } catch (error: any) {
+      ToastAndroid.show('เกิดข้อผิดพลาดบางอย่างที่เซิฟเวอร์', ToastAndroid.SHORT);
+      logout();
+    }
   };
 
   const logout = async () => {
