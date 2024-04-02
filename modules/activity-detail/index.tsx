@@ -64,7 +64,7 @@ const Page = (props: Props) => {
     deleteMutation.mutate(activityId, {
       onSuccess() {
         ToastAndroid.show('Activity deleted', ToastAndroid.SHORT);
-        router.push('/(app)/(tabs)');
+        router.push('/(app)/(tabs)/home');
       },
     });
   };
@@ -146,7 +146,7 @@ const Page = (props: Props) => {
   };
 
   const handleConfirmDetele = async () => {
-    console.log('Sign Out');
+    console.log('delete');
     onDelete();
     setShowSignOutModal(false);
   };
@@ -174,7 +174,7 @@ const Page = (props: Props) => {
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
           <View style={styles.infoContainer}>
-            <Portal>
+            {/* <Portal>
               <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                 <View style={{ justifyContent: 'center', alignItems: 'center', gap: 10 }}>
                   <AntDesign name="warning" size={60} color={COLORS.red} />
@@ -218,7 +218,7 @@ const Page = (props: Props) => {
                   </View>
                 </View>
               </Modal>
-            </Portal>
+            </Portal> */}
 
             <View style={styles.infoHeader}>
               <Text style={styles.name}>{activity?.title}</Text>
@@ -348,10 +348,11 @@ const Page = (props: Props) => {
       <AppConfirmModal
         visible={showSignOutModal}
         transparent
-        title="ยืนยันการออกจากระบบ"
-        subheading="คุณจะย้อนกลับไปยังหน้าล็อคอิน"
+        title="ยืนยันเพื่อทำการลบกิจกรรม"
+        subheading='หลังจาก "ยืนยัน" จะไม่สามารถนำกิจกรรมกลับมาได้'
         onConfirm={handleConfirmDetele}
         onCancel={handleCancelDetele}
+        btnColor="red"
       />
     </PaperProvider>
   );
