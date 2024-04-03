@@ -1,5 +1,5 @@
 import { StyleSheet, Pressable, View, Text } from 'react-native';
-import { TouchableOpacity, Chip } from 'react-native-ui-lib';
+import { TouchableOpacity, Chip, Text as RNUIText } from 'react-native-ui-lib';
 import React from 'react';
 import dayjs from 'dayjs';
 import { ActivityResponse } from '@/api/type';
@@ -19,6 +19,8 @@ const ActivityCard = ({ activity, onPress }: ActivityCardProps) => {
           {dayjs(activity.dateTime).format('ddd, MMMM D, YYYY h:mm')}
         </Text>
         <Text style={styles.title}>{activity.title}</Text>
+        {/* <RNUIText md-b>{activity.title}</RNUIText> */}
+
         {/* <Text sm>{activity.description}</Text> */}
         <View style={styles.chipsList}>
           <Chip label={activity.categoryName} />

@@ -47,6 +47,15 @@ const Page = (props: Props) => {
         router.push('/profile/manage-account');
       },
     },
+    {
+      id: 'dev-test',
+      title: 'Dev',
+      icon: 'dev',
+      onPress: () => {
+        console.log('👤 Dev');
+        router.push('/dev/');
+      },
+    },
   ];
 
   const [showSignOutModal, setShowSignOutModal] = useState(false);
