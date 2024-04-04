@@ -25,7 +25,7 @@ export default function ActivityCreateForm() {
 
   const { data: userInfo } = UseGetMyUserInfo();
   const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories();
-  const { content: categories } = categoriesData || {};
+  const { categories, paginationData } = categoriesData;
 
   const { data: placesData, isLoading: isLoadingPlaces } = UseGetPlaces();
   const { content: places } = placesData || {};

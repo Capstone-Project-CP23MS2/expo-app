@@ -22,8 +22,8 @@ export default function ActivityEditScreen() {
   const router = useRouter()
   const { activityId } = useLocalSearchParams<{ activityId: string }>()
   const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories()
-  const { content: categories } = categoriesData || {}
-
+  const { categories, paginationData } = categoriesData;
+  
   const { user } = useAuth()
 
   const { data: activity } = UseGetActivity(activityId)
