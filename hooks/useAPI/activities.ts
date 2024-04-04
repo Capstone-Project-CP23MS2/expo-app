@@ -12,7 +12,6 @@ export function UseGetActivities(params = { pageSize: 50 } as ActivitiesRequestP
       const { content, ...paginationData } = data;
       return { activities: content, paginationData };
     },
-    initialData: initialDataAPIPagination,
   });
 };
 
@@ -26,7 +25,7 @@ type ActivitiesRequestParameters = {
   //TODO: change name later
   title?: string;
 };
-
+//ใช้ initialData 
 export function UseSearchActivities(params: ActivitiesRequestParameters = {}, test: any = '') {
   console.log('🚚 UseSearchActivities:');
   const { data, ...rest } = useQuery({
@@ -40,6 +39,9 @@ export function UseSearchActivities(params: ActivitiesRequestParameters = {}, te
   return { activities, paginationData, ...rest };
 };
 
+// TODO: https://tkdodo.eu/blog/placeholder-and-initial-data-in-react-query
+// https://tanstack.com/query/latest/docs/framework/react/guides/initial-query-data
+// https://tanstack.com/query/latest/docs/framework/react/guides/placeholder-query-data
 export function UseGetActivity(activityId: string | string[]) {
   return useQuery({
     queryKey: ['activities', activityId],

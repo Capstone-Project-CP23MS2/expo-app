@@ -13,7 +13,7 @@ export default function ActivitiesScreen(props: Props) {
   const { styles } = useStyles(stylesheet);
 
   const { data, isLoading, isError, error, refetch } = UseGetActivities();
-  const { activities } = data;
+  const { activities, paginationData } = data || {};
   console.log('activities', activities);
 
   return (

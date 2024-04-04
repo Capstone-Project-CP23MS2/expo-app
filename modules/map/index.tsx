@@ -18,7 +18,7 @@ const INITIAL_REGION = {
 
 const index = () => {
   const { data } = UseGetActivities({});
-  const { activities } = data;
+  const { activities, paginationData } = data || {};
 
   const [selectedMarker, setSelectedMarker] = useState([]);
   const [region, setRegion] = useState(INITIAL_REGION);

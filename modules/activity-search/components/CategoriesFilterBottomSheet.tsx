@@ -21,7 +21,7 @@ const CategoriesFilterBottomSheet = ({ onApplyPress }: Props) => {
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
 
   const { data: categoriesData } = UseGetCategories();
-  const { categories, paginationData } = categoriesData;
+  const { categories, paginationData } = categoriesData || {};
 
   const handleApplyPress = () => {
     // onApplyPress({ selectedCategoryIds })

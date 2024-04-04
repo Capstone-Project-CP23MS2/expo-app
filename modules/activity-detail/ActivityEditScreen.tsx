@@ -1,34 +1,33 @@
-import { StyleSheet, Text, View, ToastAndroid } from 'react-native'
-import React from 'react'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { Card, Colors, Picker } from 'react-native-ui-lib'
-import { useLocalSearchParams, useRouter } from 'expo-router'
-import { Controller, FieldValues, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { UpdateActivityInfo, UpdateActivityInfoSchema } from './updateActivity.schema'
-import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper'
-import { ScrollView } from 'react-native-gesture-handler'
-import AppTextInput from '../shared/AppTextInput'
-import FormDatetimePicker from '../activity-create-form/components/form-datetime-picker'
-import AppButton from '../shared/AppButton'
-import { UseGetActivity, UseGetCategories, UseUpdateActivity } from '@/hooks/useAPI'
-import { filterChangedFormFields, objToFormData } from '@/utils'
-import { ActivityUpdateRequest } from '@/api/type'
-import { d } from '@tanstack/react-query-devtools/build/legacy/devtools-dKCOqp9Q'
-import { useAuth } from '@/context/authContext'
+import { StyleSheet, Text, View, ToastAndroid } from 'react-native';
+import React from 'react';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { Card, Colors, Picker } from 'react-native-ui-lib';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Controller, FieldValues, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { UpdateActivityInfo, UpdateActivityInfoSchema } from './updateActivity.schema';
+import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper';
+import { ScrollView } from 'react-native-gesture-handler';
+import AppTextInput from '../shared/AppTextInput';
+import FormDatetimePicker from '../activity-create-form/components/form-datetime-picker';
+import AppButton from '../shared/AppButton';
+import { UseGetActivity, UseGetCategories, UseUpdateActivity } from '@/hooks/useAPI';
+import { filterChangedFormFields, objToFormData } from '@/utils';
+import { ActivityUpdateRequest } from '@/api/type';
+import { d } from '@tanstack/react-query-devtools/build/legacy/devtools-dKCOqp9Q';
+import { useAuth } from '@/context/authContext';
 
 export default function ActivityEditScreen() {
-  const { styles, breakpoint } = useStyles(stylesheet)
-  const router = useRouter()
-  const { activityId } = useLocalSearchParams<{ activityId: string }>()
-  const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories()
-  const { categories, paginationData } = categoriesData;
-  
-  const { user } = useAuth()
+  const { styles, breakpoint } = useStyles(stylesheet);
+  const router = useRouter();
+  const { activityId } = useLocalSearchParams<{ activityId: string }>();
+  const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories();
+  const { categories, paginationData } = categoriesData || {};
+  const { user } = useAuth();
 
-  const { data: activity } = UseGetActivity(activityId)
+  const { data: activity } = UseGetActivity(activityId);
 
-  const updateActivityMutation = UseUpdateActivity()
+  const updateActivityMutation = UseUpdateActivity();
 
   const {
     formState: { isValid, isSubmitting, errors, isDirty, dirtyFields },
@@ -48,25 +47,25 @@ export default function ActivityEditScreen() {
       categoryId: activity?.categoryId,
       locationId: activity?.location?.locationId,
     },
-  })
+  });
 
   const onSummit = handleSubmit(async updateData => {
-    const filterChangedActivity = filterChangedFormFields(updateData, dirtyFields)
+    const filterChangedActivity = filterChangedFormFields(updateData, dirtyFields);
     updateActivityMutation.mutate(
       { activityId: Number(activityId), updateRequest: filterChangedActivity },
       {
         onSuccess: () => {
-          console.log('onSuccess in UpdateActivityPage')
-          ToastAndroid.show('Activity updated', ToastAndroid.SHORT)
-          router.back()
+          console.log('onSuccess in UpdateActivityPage');
+          ToastAndroid.show('Activity updated', ToastAndroid.SHORT);
+          router.back();
         },
         onError: error => {
-          console.log('error')
-          console.log(error)
+          console.log('error');
+          console.log(error);
         },
       },
-    )
-  })
+    );
+  });
 
   return (
     <KeyboardAvoidingWrapper>
@@ -124,7 +123,7 @@ export default function ActivityEditScreen() {
               control={control}
               name="dateTime"
               render={({ field: { onChange, onBlur, value } }) => {
-                return <FormDatetimePicker value={value} onChangeDatetime={onChange} />
+                return <FormDatetimePicker value={value} onChangeDatetime={onChange} />;
               }}
             />
           </View>
@@ -189,7 +188,7 @@ export default function ActivityEditScreen() {
         />
       </View>
     </KeyboardAvoidingWrapper>
-  )
+  );
 }
 
 const stylesheet = createStyleSheet(theme => ({
@@ -217,4 +216,4 @@ const stylesheet = createStyleSheet(theme => ({
     justifyContent: 'center',
     paddingLeft: 15,
   },
-}))
+}));

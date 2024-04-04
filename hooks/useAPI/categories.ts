@@ -20,7 +20,6 @@ export function UseGetCategories(params: CategoriesRequestParameters = { pageSiz
             const { content, ...paginationData } = data;
             return { categories: content, paginationData };
         },
-        initialData: initialDataAPIPagination,
     });
     // TODO
     // return { data: categories, paginationInfo: ..., ...otherRes }

@@ -21,7 +21,7 @@ export default function userInterests(props: Props) {
   const { user } = useAuth();
 
   const { data, refetch } = UseGetCategories();
-  const { categories, paginationData } = data;
+  const { categories, paginationData } = data || {};
 
   const createUserInterestMutation = UseCreateUserInterests();
 

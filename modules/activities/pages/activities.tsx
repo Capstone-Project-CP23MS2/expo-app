@@ -26,7 +26,9 @@ const index = (props: Props) => {
   const router = useRouter();
   const { data, isLoading, isError, error, refetch } = UseGetActivities();
 
-  const { activities, paginationData } = data;
+  const { activities, paginationData } = data || {};
+
+  console.log('activities', data);
 
   const { data: userInfoData } = UseGetMyUserInfo();
 

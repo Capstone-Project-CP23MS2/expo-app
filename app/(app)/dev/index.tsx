@@ -1,6 +1,6 @@
 import { View, Text, Alert, Image, Platform, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { UseDeleteUser, UseGetCategories } from '@/hooks/useAPI';
+import { UseDeleteUser } from '@/hooks/useAPI';
 import AppButton from '@/modules/shared/AppButton';
 import { useAuth } from '@/context/authContext';
 import { useRouter } from 'expo-router';

@@ -39,7 +39,7 @@ const CreateActivity = (props: Props) => {
   const router = useRouter();
 
   const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories();
-  const { categories, paginationData } = categoriesData;
+  const { categories, paginationData } = categoriesData || {};
 
   const { data: usersData, isLoading: isLoadingUsers } = UseGetUsers();
   const { content: users } = usersData || {};

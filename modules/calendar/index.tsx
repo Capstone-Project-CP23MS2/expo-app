@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 
 export default function ActivityCalendar() {
   const { data } = UseGetActivities({});
-  const { activities } = data;
+  const { activities, paginationData } = data || {};
   const router = useRouter();
 
   const inputData = activities;
