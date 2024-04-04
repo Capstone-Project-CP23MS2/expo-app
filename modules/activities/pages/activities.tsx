@@ -28,8 +28,6 @@ const index = (props: Props) => {
 
   const { activities, paginationData } = data || {};
 
-  console.log('activities', data);
-
   const { data: userInfoData } = UseGetMyUserInfo();
 
   const [refreshing, setRefreshing] = useState(false);
