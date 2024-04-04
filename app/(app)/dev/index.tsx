@@ -66,6 +66,27 @@ export default function dev() {
         },
       ],
     },
+    {
+      id: 'lib',
+      title: 'Library',
+      content: [
+        {
+          id: 'lib-react-query',
+          title: 'React Query',
+          onPress: () => router.push('/dev/library/DevReactQuery'),
+        },
+        {
+          id: 'lib-expo-location',
+          title: 'Map',
+          onPress: () => router.push('/dev/library/DevReactQuery'),
+        },
+        {
+          id: 'lib-expo-image-picker',
+          title: 'Image Picker',
+          onPress: () => router.push('/dev/library/DevReactQuery'),
+        },
+      ],
+    },
   ];
 
   const [image, setImage]: any = useState(null);

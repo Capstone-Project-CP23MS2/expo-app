@@ -35,6 +35,13 @@ export default function DevButtonView(props: Props) {
         <Text style={styles.header2}>App Button</Text>
         <AppButton label="Contained" variant="primary" />
       </View>
+
+      <View style={styles.listContainer}>
+        <View style={{ flexDirection: 'row' }}>
+          <RNUIButton label="Contained" type="contained" />
+          <RNUIButton label="Contained" type="contained" />
+        </View>
+      </View>
     </ScrollView>
   );
 }

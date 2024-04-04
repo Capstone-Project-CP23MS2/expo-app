@@ -1,6 +1,6 @@
 import { APIPaginationResponse } from "../type";
 
-export type PlaceRequestParameters = {
+export type PlacesRequestParameters = {
   page?: number;
   pageSize?: number;
   sortBy?: string;
@@ -14,3 +14,5 @@ export type PlaceResponseBody = {
 };
 
 export type PlacesResponseBody = APIPaginationResponse<PlaceResponseBody>;
+
+// export type PlacesRequestParameters = PlaceRequestParameters;
