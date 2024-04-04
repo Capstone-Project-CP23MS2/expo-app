@@ -18,7 +18,7 @@ const Page = (props: Props) => {
   const router = useRouter();
 
   const { data, isLoading, isError, error, refetch } = UseGetActivities({});
-  const { content: activities } = data || {};
+  const { activities } = data;
 
   const { user: userInfo } = useAuth();
 

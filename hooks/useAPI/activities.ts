@@ -2,11 +2,17 @@ import activitiesApi from "@/api/activities";
 import { ActivityUpdateRequest, requestParams } from "@/api/type";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { initialDataAPIPagination } from "./type";
 
 export function UseGetActivities(params = { pageSize: 50 } as ActivitiesRequestParameters) {
   return useQuery({
     queryKey: ['activities'],
     queryFn: () => activitiesApi.getActivities(params),
+    select: (data) => {
+      const { content, ...paginationData } = data;
+      return { activities: content, paginationData };
+    },
+    initialData: initialDataAPIPagination,
   });
 };
 

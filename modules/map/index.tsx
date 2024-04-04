@@ -1,49 +1,50 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { StyleSheet, View, Text } from 'react-native';
 
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
-import PlaceListView from './placeListView'
-import { UseGetActivities } from '@/hooks/useAPI'
-import { SelectMarkerContext } from '@/context/selectMarkerContext'
-import Markers from './markers'
-import * as Location from 'expo-location'
-import MapViewStyle from '@/assets/data/map-view-style.json'
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import PlaceListView from './placeListView';
+import { UseGetActivities } from '@/hooks/useAPI';
+import { SelectMarkerContext } from '@/context/selectMarkerContext';
+import Markers from './markers';
+import * as Location from 'expo-location';
+import MapViewStyle from '@/assets/data/map-view-style.json';
 
 const INITIAL_REGION = {
   latitude: 13.75633,
   longitude: 100.501765,
   latitudeDelta: 0.0422,
   longitudeDelta: 0.0421,
-}
+};
 
 const index = () => {
-  const { data } = UseGetActivities({})
-  const { content: activities }: any = data || {}
-  const [selectedMarker, setSelectedMarker] = useState([])
-  const [region, setRegion] = useState(INITIAL_REGION)
-  const mapRef = useRef<any>(null)
+  const { data } = UseGetActivities({});
+  const { activities } = data;
+
+  const [selectedMarker, setSelectedMarker] = useState([]);
+  const [region, setRegion] = useState(INITIAL_REGION);
+  const mapRef = useRef<any>(null);
 
   useEffect(() => {
-    onLocateMe()
-  }, [])
+    onLocateMe();
+  }, []);
 
   const handleRegionChange = (newRegion: any) => {
-    setRegion(newRegion)
-  }
+    setRegion(newRegion);
+  };
 
   const onLocateMe = async () => {
-    let location = await Location.getCurrentPositionAsync({})
-    console.log(location)
+    let location = await Location.getCurrentPositionAsync({});
+    console.log(location);
 
     const region = {
       latitude: location.coords.latitude ?? 13.75633,
       longitude: location.coords.longitude ?? 100.501765,
       latitudeDelta: 0.2,
       longitudeDelta: 0.2,
-    }
+    };
 
-    mapRef.current?.animateToRegion(region)
-  }
+    mapRef.current?.animateToRegion(region);
+  };
 
   return (
     <SelectMarkerContext.Provider value={{ selectedMarker, setSelectedMarker }}>
@@ -66,10 +67,10 @@ const index = () => {
         </View>
       </View>
     </SelectMarkerContext.Provider>
-  )
-}
+  );
+};
 
-export default index
+export default index;
 
 const styles = StyleSheet.create({
   map: {
@@ -82,4 +83,4 @@ const styles = StyleSheet.create({
     bottom: 0,
     width: '100%',
   },
-})
+});
