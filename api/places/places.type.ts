@@ -6,13 +6,13 @@ export type PlacesRequestParameters = {
   sortBy?: string;
 };
 
-export type PlaceResponseBody = {
+export type Place = {
   locationId: number,
   name: string,
   latitude: number,
   longitude: number;
 };
 
-export type PlacesResponseBody = APIPaginationResponse<PlaceResponseBody>;
+export type PlacesResponseBody = APIPaginationResponse<Place>;
 
 // export type PlacesRequestParameters = PlaceRequestParameters;

@@ -1,5 +1,5 @@
 import { CategoriesRequestParameters } from "@/api/categories/categories.type";
-import categoriesApi from "@/api/category";
+import categoriesApi from "@/api/categories";
 import categories from "@/modules/test/demo/components/ExploreHeader/categories";
 import { useQuery } from "@tanstack/react-query";
 import { initialDataAPIPagination } from "./type";

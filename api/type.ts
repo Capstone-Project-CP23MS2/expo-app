@@ -9,6 +9,23 @@ export type APIPaginationResponse<Data extends object> = {
   first: boolean;
 };
 
+export type PaginateParams = {
+  page?: number;
+  pageSize?: number;
+  sortBy?: ActivitiesSortBy;
+};
+
+export type PaginateResponse<Data extends object> = {
+  content: Data[];
+  number: number;
+  size: number;
+  totalPages: number;
+  numberOfElements: number;
+  totalElements: number;
+  last: boolean;
+  first: boolean;
+};
+
 export type requestParams =
   | {
     page?: number;

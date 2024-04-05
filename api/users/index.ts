@@ -1,30 +1,30 @@
 
-import { UserResponse, UserUpdateRequest, UsersResponse } from "./type";
-import apiClient from "./apiClient";
+import { PaginateResponse, UserUpdateRequest } from "../type";
+import apiClient from "../apiClient";
 import { objToFormData } from "@/utils";
-import { UserInfoResponse, UserInterestCreateRequest } from './user/users.type';
+import { User, UserInterestCreateRequest } from './users.type';
 import { AxiosRequestConfig } from "axios";
 
 class UsersApi {
 
   async getUsers() {
-    const { data } = await apiClient.get<UsersResponse>('/users/', { params: { pageSize: 100 } });
+    const { data } = await apiClient.get<PaginateResponse<User>>('/users/', { params: { pageSize: 100 } });
     return data;
   }
 
-  async getUserById(id: string) {
-    const { data } = await apiClient.get<UserResponse>(`/users/${id}`);
+  async getUserById(id: number | string) {
+    const { data } = await apiClient.get<User>(`/users/${id}`);
     return data;
   }
 
   async getMyUserInfo() {
     // const { data } = await apiClient.get<UserResponse>('/users/me');
-    const { data } = await apiClient.post<UserInfoResponse>('/auth/login');
+    const { data } = await apiClient.post<User>('/auth/login');
     return data;
   }
 
   async getUserByEmail(email: any) {
-    const { data } = await apiClient.get<UsersResponse>('/users', { params: { email } });
+    const { data } = await apiClient.get<PaginateResponse<User>>('/users', { params: { email } });
     return data;
   }
 
@@ -32,14 +32,14 @@ class UsersApi {
     const headers = {
       'Content-Type': 'multipart/form-data',
     };
-    const { data } = await apiClient.patch<UserResponse>(
+    const { data } = await apiClient.patch<User>(
       `users/${userId}`, objToFormData(updateRequest), { headers }
     );
     return data;
   }
 
   async createUser(users: FormData) {
-    const { data: user } = await apiClient.post<UserResponse>('/users', users, {
+    const { data: user } = await apiClient.post<User>('/users', users, {
       headers: {
         'Content-Type': 'multipart/form-data',
         // "Content-Type": "application/json"
@@ -58,10 +58,6 @@ class UsersApi {
       headers: {
         'Content-Type': 'multipart/form-data',
       }
-
-      // paramsSerializer: {
-      //   indexes: null
-      // }
     };
     const { data } = await apiClient.post(`/interests/create`, objToFormData(createRequest), config);
     return data;
