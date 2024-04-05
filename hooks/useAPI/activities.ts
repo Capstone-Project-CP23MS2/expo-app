@@ -1,8 +1,8 @@
 import activitiesApi from "@/api/activities";
-import { ActivityUpdateRequest, requestParams } from "@/api/type";
+import { ActivitiesResponse, ActivityResponse, ActivityUpdateRequest, requestParams } from "@/api/type";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { initialDataAPIPagination } from "./type";
+import { removeObjectFromArrayById } from "@/utils";
 
 export function UseGetActivities(params = { pageSize: 50 } as ActivitiesRequestParameters) {
   return useQuery({
@@ -82,9 +82,13 @@ export function UseDeleteActivity() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: activitiesApi.deleteActivity,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["activities"] });
+    mutationKey: ['deleteActivity'],
+    mutationFn: (activityId: string) => activitiesApi.deleteActivity(activityId),
+    onSuccess: async (data, activityId) => {
+      queryClient.setQueryData(['activities'], (oldData: ActivitiesResponse) => ({
+        ...oldData,
+        content: removeObjectFromArrayById(oldData.content, Number(activityId), 'activityId')
+      }));
     },
   });
 }
@@ -93,6 +97,7 @@ export function UseGetActivityParticipants(activityId: string | string[]) {
   return useQuery({
     queryKey: ['activityParticipants', activityId],
     queryFn: () => activitiesApi.getActivityParticipants(activityId),
+    enabled: !!activityId,
   });
 };
 

@@ -62,12 +62,11 @@ class ActivitiesApi {
   }
 
   async deleteActivity(activityId: string | number) {
-    const url = `${API_URL}/activities/${activityId}`;
-    await apiClient.delete(url);
+    await apiClient.delete<void>(`activities/${activityId}`);
   }
 
   async deleteUser(id: string | number) {
-    await apiClient.delete(`/users/${id}`);
+    await apiClient.delete<void>(`/users/${id}`);
   }
 
   async getActivityParticipants(activityId: string | string[]) {

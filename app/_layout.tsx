@@ -1,16 +1,16 @@
-import { Slot, SplashScreen } from 'expo-router'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import useAppLoading from '@/hooks/useAppLoading'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { StatusBar } from 'expo-status-bar'
-import { DesignSystem } from '@/utils/design-system'
+import { Slot, SplashScreen } from 'expo-router';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import useAppLoading from '@/hooks/useAppLoading';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { StatusBar } from 'expo-status-bar';
+import { DesignSystem } from '@/utils/design-system';
 
-import 'utils/unistyles'
-import { AuthProvider } from '@/context/authContext'
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
-import * as Location from 'expo-location'
-import { useContext, useEffect, useState } from 'react'
-import { UserLocationContext } from '@/context/userLocationContext'
+import 'utils/unistyles';
+import { AuthProvider } from '@/context/authContext';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import * as Location from 'expo-location';
+import { useContext, useEffect, useState } from 'react';
+import { UserLocationContext } from '@/context/userLocationContext';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -20,32 +20,32 @@ const queryClient = new QueryClient({
       // refetchOnWindowFocus: false,
     },
   },
-})
+});
 
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
-} from 'expo-router'
+} from 'expo-router';
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(app)/(tabs)',
-}
+};
 
-DesignSystem.setup()
+DesignSystem.setup();
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync()
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const appLoaded = useAppLoading()
-  if (!appLoaded) return null
+  const appLoaded = useAppLoading();
+  if (!appLoaded) return null;
   return (
     <QueryClientProvider client={queryClient}>
       {/* <StatusBQueryClientProviderar style="dark" /> */}
       <RootLayoutNav />
     </QueryClientProvider>
-  )
+  );
 }
 
 function RootLayoutNav() {
@@ -55,5 +55,5 @@ function RootLayoutNav() {
         <Slot />
       </BottomSheetModalProvider>
     </AuthProvider>
-  )
+  );
 }
