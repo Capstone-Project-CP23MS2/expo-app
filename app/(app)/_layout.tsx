@@ -1,18 +1,20 @@
-import React, { useEffect } from 'react'
-import { Redirect, Stack, useRouter } from 'expo-router'
-import { useAuth } from '@/context/authContext'
-import { LoaderScreen } from 'react-native-ui-lib'
+import React, { useEffect } from 'react';
+import { Redirect, Stack, useRouter } from 'expo-router';
+import { useAuth } from '@/context/authContext';
+import { LoaderScreen } from 'react-native-ui-lib';
+import AppLoaderScreen from '@/components/AppLoaderScreen';
 
-type Props = {}
+type Props = {};
 
 const AppEntry = (props: Props) => {
-  const { user, isLoading } = useAuth()
+  const { user, isLoading } = useAuth();
 
   if (isLoading) {
-    return <LoaderScreen />
+    return <AppLoaderScreen />;
+    return <LoaderScreen />;
   }
   if (!user) {
-    return <Redirect href="/(auth)/login" />
+    return <Redirect href="/(auth)/login" />;
   }
   return (
     <Stack
@@ -56,7 +58,7 @@ const AppEntry = (props: Props) => {
 
       {/* <Stack.Screen name="notification/notification" options={{ headerTitle: 'Notification' }} /> */}
     </Stack>
-  )
-}
+  );
+};
 
-export default AppEntry
+export default AppEntry;

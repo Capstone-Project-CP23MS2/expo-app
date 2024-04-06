@@ -1,6 +1,6 @@
 import { View, Text, Alert, Image, Platform, Pressable } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { UseDeleteUser, UseGetCategories } from '@/hooks/useAPI';
+import { UseDeleteUser } from '@/hooks/useAPI';
 import AppButton from '@/modules/shared/AppButton';
 import { useAuth } from '@/context/authContext';
 import { useRouter } from 'expo-router';
@@ -63,6 +63,27 @@ export default function dev() {
           id: 'component-wizard',
           title: 'Wizard',
           onPress: () => router.push('/dev/DevWizard'),
+        },
+      ],
+    },
+    {
+      id: 'lib',
+      title: 'Library',
+      content: [
+        {
+          id: 'lib-react-query',
+          title: 'React Query',
+          onPress: () => router.push('/dev/library/DevReactQuery'),
+        },
+        {
+          id: 'lib-expo-location',
+          title: 'Map',
+          onPress: () => router.push('/dev/library/DevReactQuery'),
+        },
+        {
+          id: 'lib-expo-image-picker',
+          title: 'Image Picker',
+          onPress: () => router.push('/dev/library/DevReactQuery'),
         },
       ],
     },

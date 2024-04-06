@@ -1,22 +1,22 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native'
-import React from 'react'
-import { Agenda, AgendaEntry } from 'react-native-calendars'
-import { UseGetActivities } from '@/hooks/useAPI'
-import { useRouter } from 'expo-router'
+import { View, Text, StyleSheet, Pressable } from 'react-native';
+import React from 'react';
+import { Agenda, AgendaEntry } from 'react-native-calendars';
+import { UseGetActivities } from '@/hooks/useAPI';
+import { useRouter } from 'expo-router';
 
 export default function ActivityCalendar() {
-  const { data } = UseGetActivities({})
-  const { content: activities } = data || {}
-  const router = useRouter()
+  const { data } = UseGetActivities({});
+  const { activities, paginationData } = data || {};
+  const router = useRouter();
 
-  const inputData = activities
+  const inputData = activities;
 
   const transformedData = inputData?.reduce((acc, event) => {
-    const { dateTime, ...eventData } = event
-    const eventDate = dateTime.split('T')[0]
+    const { dateTime, ...eventData } = event;
+    const eventDate = dateTime.split('T')[0];
 
     if (!acc[eventDate]) {
-      acc[eventDate] = []
+      acc[eventDate] = [];
     }
 
     const newEvent = {
@@ -24,16 +24,16 @@ export default function ActivityCalendar() {
       name: event.title,
       day: event.dateTime.split('T')[0],
       height: 50,
-    }
+    };
 
-    acc[eventDate].push(newEvent)
+    acc[eventDate].push(newEvent);
 
-    return acc
-  }, {})
+    return acc;
+  }, {});
 
   const renderItem = (reservation: AgendaEntry, isFirst: boolean) => {
-    const fontSize = isFirst ? 16 : 14
-    const color = isFirst ? 'black' : '#43515c'
+    const fontSize = isFirst ? 16 : 14;
+    const color = isFirst ? 'black' : '#43515c';
 
     return (
       <Pressable
@@ -43,8 +43,8 @@ export default function ActivityCalendar() {
         <Text style={{ fontSize, color }}>{reservation.name}</Text>
         <Text style={{ fontSize, color }}>{reservation.day}</Text>
       </Pressable>
-    )
-  }
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -55,7 +55,7 @@ export default function ActivityCalendar() {
         showClosingKnob={true}
       />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -76,4 +76,4 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 30,
   },
-})
+});

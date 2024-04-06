@@ -1,71 +1,73 @@
-import { View, Pressable, Text, StyleSheet, ToastAndroid } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
-import { useLocalSearchParams, useRouter } from 'expo-router'
+import { View, Pressable, Text, StyleSheet, ToastAndroid } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import Animated, {
   interpolate,
   useAnimatedRef,
   useAnimatedStyle,
   useScrollViewOffset,
-} from 'react-native-reanimated'
-import { AntDesign, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons'
-import { COLORS, FONT, SIZES } from '@/constants'
-import Colors from '@/constants/Colors'
-import dayjs from 'dayjs'
-import { defaultStyles } from '@/constants/Styles'
+} from 'react-native-reanimated';
+import { AntDesign, Feather, Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { COLORS, FONT, SIZES } from '@/constants';
+import Colors from '@/constants/Colors';
+import dayjs from 'dayjs';
+import { defaultStyles } from '@/constants/Styles';
 import {
   TouchableOpacity,
   BaseButton,
   ScrollView,
   RefreshControl,
-} from 'react-native-gesture-handler'
-import ActivityFooter from '@/modules/activity-detail/components/ActivityFooter'
-import { Button, Chip, Modal, Portal, PaperProvider, Icon, Card } from 'react-native-paper'
+} from 'react-native-gesture-handler';
+import ActivityFooter from '@/modules/activity-detail/components/ActivityFooter';
+import { Button, Chip, Modal, Portal, PaperProvider, Icon, Card } from 'react-native-paper';
 import {
   UseDeleteActivity,
   UseDeleteParticipant,
   UseGetActivity,
   UseGetActivityParticipants,
-} from '@/hooks/useAPI'
+} from '@/hooks/useAPI';
 
-import AppButton from '@/modules/shared/AppButton'
-import JoinButton from './components/JoinButton'
-import { useAuth } from '@/context/authContext'
-import AppConfirmModal from '@/components/AppConfirmModal'
-type Props = {}
+import AppButton from '@/modules/shared/AppButton';
+import JoinButton from './components/JoinButton';
+import { useAuth } from '@/context/authContext';
+import AppConfirmModal from '@/components/AppConfirmModal';
+type Props = {};
 
 const Page = (props: Props) => {
-  const router = useRouter()
-  const { id: activityId } = useLocalSearchParams<{ id: string }>()
-  const { user } = useAuth()
+  const router = useRouter();
+  const { id: activityId } = useLocalSearchParams<{ id: string }>();
+  const { user } = useAuth();
   const {
     data: activity,
     isLoading,
     isError,
     error,
     refetch: activityRefetch,
-  } = UseGetActivity(activityId)
+  } = UseGetActivity(activityId);
 
-  const [userParticipant, setUserParticipant] = useState(0)
+  const [userParticipant, setUserParticipant] = useState(0);
 
-  const isOwner = user?.userId === activity?.hostUserId
+  const isOwner = user?.userId === activity?.hostUserId;
 
   const { data: participantsData, refetch: participantsRefetch } =
-    UseGetActivityParticipants(activityId)
-  const { content: participants } = participantsData || {}
+    UseGetActivityParticipants(activityId);
+  const { content: participants } = participantsData || {};
 
-  const scrollRef = useAnimatedRef<Animated.ScrollView>()
+  const scrollRef = useAnimatedRef<Animated.ScrollView>();
 
-  const deleteMutation = UseDeleteActivity()
+  const deleteMutation = UseDeleteActivity();
   // const deleteParticipantMutation = UseDeleteParticipant()
 
   const onDelete = () => {
+    console.log(activityId);
+
     deleteMutation.mutate(activityId, {
       onSuccess() {
-        ToastAndroid.show('Activity deleted', ToastAndroid.SHORT)
-        router.push('/(app)/(tabs)')
+        ToastAndroid.show('Activity deleted', ToastAndroid.SHORT);
+        router.push('/(app)/(tabs)/home');
       },
-    })
-  }
+    });
+  };
 
   // const onDeleteParticipant = () => {
   //   const message = `remove ${userParticipant} from ${activity?.title}`
@@ -92,32 +94,32 @@ const Page = (props: Props) => {
   //   })
   // }
 
-  const [visible, setVisible] = React.useState(false)
+  const [visible, setVisible] = React.useState(false);
 
-  const showModal = () => setVisible(true)
-  const hideModal = () => setVisible(false)
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
   const containerStyle = {
     backgroundColor: 'white',
     padding: 20,
     margin: 20,
     borderRadius: 15,
-  }
+  };
 
-  const isParticipant = participants?.some(participant => participant.userId === user?.userId)
-  const [refreshing, setRefreshing] = useState(false)
+  const isParticipant = participants?.some(participant => participant.userId === user?.userId);
+  const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = useCallback(async () => {
-    setRefreshing(true)
-    await activityRefetch()
-    await participantsRefetch()
-    setRefreshing(false)
-  }, [])
+    setRefreshing(true);
+    await activityRefetch();
+    await participantsRefetch();
+    setRefreshing(false);
+  }, []);
 
   const onEdit = () => {
-    console.log(activityId)
+    console.log(activityId);
 
-    router.push({ pathname: '/(app)/activities/edit', params: { activityId } })
-  }
+    router.push({ pathname: '/(app)/activities/edit', params: { activityId } });
+  };
 
   // const [showSignOutModal, setShowSignOutModal] = useState(false)
 
@@ -136,6 +138,22 @@ const Page = (props: Props) => {
   // const handleCancelParticipant = () => {
   //   setShowSignOutModal(false)
   // }
+
+  const [showSignOutModal, setShowSignOutModal] = useState(false);
+
+  const handleDetele = () => {
+    setShowSignOutModal(true);
+  };
+
+  const handleConfirmDetele = async () => {
+    console.log('delete');
+    onDelete();
+    setShowSignOutModal(false);
+  };
+
+  const handleCancelDetele = () => {
+    setShowSignOutModal(false);
+  };
 
   return (
     <PaperProvider>
@@ -156,7 +174,7 @@ const Page = (props: Props) => {
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         >
           <View style={styles.infoContainer}>
-            <Portal>
+            {/* <Portal>
               <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>
                 <View style={{ justifyContent: 'center', alignItems: 'center', gap: 10 }}>
                   <AntDesign name="warning" size={60} color={COLORS.red} />
@@ -200,7 +218,7 @@ const Page = (props: Props) => {
                   </View>
                 </View>
               </Modal>
-            </Portal>
+            </Portal> */}
 
             <View style={styles.infoHeader}>
               <Text style={styles.name}>{activity?.title}</Text>
@@ -210,7 +228,7 @@ const Page = (props: Props) => {
                 </Text>
               </View>
             </View>
-            <Text style={styles.location}>{activity?.place}</Text>
+            <Text style={styles.location}>{activity?.location.name}</Text>
             <View
               style={{
                 borderBottomColor: 'gray',
@@ -313,7 +331,7 @@ const Page = (props: Props) => {
                 Edit your activity
               </Text>
             </TouchableOpacity>
-            <AppButton label="Delete" variant="danger" onPress={showModal} fullWidth />
+            <AppButton label="Delete" variant="danger" onPress={handleDetele} fullWidth />
           </View>
         ) : (
           <JoinButton
@@ -326,9 +344,19 @@ const Page = (props: Props) => {
           />
         )}
       </View>
+
+      <AppConfirmModal
+        visible={showSignOutModal}
+        transparent
+        title="ยืนยันเพื่อทำการลบกิจกรรม"
+        subheading='หลังจาก "ยืนยัน" จะไม่สามารถนำกิจกรรมกลับมาได้'
+        onConfirm={handleConfirmDetele}
+        onCancel={handleCancelDetele}
+        btnColor="red"
+      />
     </PaperProvider>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -450,6 +478,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
   },
-})
+});
 
-export default Page
+export default Page;

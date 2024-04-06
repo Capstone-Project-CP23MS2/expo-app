@@ -1,52 +1,49 @@
-import { View, Text } from 'react-native'
-import React, { ReactNode, forwardRef, useMemo, useState } from 'react'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet'
-import { UseGetCategories } from '@/hooks/useAPI'
-import { FlashList } from '@shopify/flash-list'
+import { View, Text } from 'react-native';
+import React, { ReactNode, forwardRef, useMemo, useState } from 'react';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import { UseGetCategories } from '@/hooks/useAPI';
+import { FlashList } from '@shopify/flash-list';
 import CategoryFilterListItem, {
   CategoryFilterListItemPressHandler,
-} from './CategoryFilterListItem'
-import { ScrollView } from 'react-native-gesture-handler'
-import AppButton from '@/modules/shared/AppButton'
-import { Chip } from 'react-native-paper'
+} from './CategoryFilterListItem';
+import { ScrollView } from 'react-native-gesture-handler';
+import AppButton from '@/modules/shared/AppButton';
+import { Chip } from 'react-native-paper';
 type Props = {
-  children?: ReactNode
-  onApplyPress: (categoryIds: number[]) => void
-}
-type Ref = BottomSheetModal
+  children?: ReactNode;
+  onApplyPress: (categoryIds: number[]) => void;
+};
+type Ref = BottomSheetModal;
 
 const CategoriesFilterBottomSheet = ({ onApplyPress }: Props) => {
-  const { styles } = useStyles(stylesheet)
-  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([])
+  const { styles } = useStyles(stylesheet);
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
 
-  const { data: categoriesData } = UseGetCategories()
-  const { categories, paginationData } = useMemo(() => {
-    const { content: categories, ...paginationData } = categoriesData || {}
-    return { categories, paginationData }
-  }, [categoriesData])
+  const { data: categoriesData } = UseGetCategories();
+  const { categories, paginationData } = categoriesData || {};
 
   const handleApplyPress = () => {
     // onApplyPress({ selectedCategoryIds })
-    onApplyPress(selectedCategoryIds)
-  }
+    onApplyPress(selectedCategoryIds);
+  };
 
   const handleFilterSelect: CategoryFilterListItemPressHandler = category => {
     setSelectedCategoryIds(prevSelectedCategoryIds => {
-      const newSelectedCategoryIds = [...prevSelectedCategoryIds]
-      const index = newSelectedCategoryIds.indexOf(category.categoryId)
+      const newSelectedCategoryIds = [...prevSelectedCategoryIds];
+      const index = newSelectedCategoryIds.indexOf(category.categoryId);
 
       if (index === -1) {
         // Add category ID
-        newSelectedCategoryIds.push(category.categoryId)
+        newSelectedCategoryIds.push(category.categoryId);
       } else {
         // Remove category ID
-        newSelectedCategoryIds.splice(index, 1)
+        newSelectedCategoryIds.splice(index, 1);
       }
 
-      return newSelectedCategoryIds
-    })
-  }
+      return newSelectedCategoryIds;
+    });
+  };
 
   return (
     <BottomSheetView style={styles.container}>
@@ -70,8 +67,8 @@ const CategoriesFilterBottomSheet = ({ onApplyPress }: Props) => {
       )}
       <AppButton label="Apply" variant="primary" onPress={handleApplyPress} />
     </BottomSheetView>
-  )
-}
+  );
+};
 
 const stylesheet = createStyleSheet((theme, runtime) => ({
   container: {
@@ -98,6 +95,6 @@ const stylesheet = createStyleSheet((theme, runtime) => ({
     height: 200,
     flexGrow: 1,
   },
-}))
+}));
 
-export default CategoriesFilterBottomSheet
+export default CategoriesFilterBottomSheet;

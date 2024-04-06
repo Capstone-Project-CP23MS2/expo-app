@@ -1,48 +1,48 @@
-import { StyleSheet, Text, View, ToastAndroid } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
-import { COLORS, FONT, SIZES } from '@/constants'
-import AppTextInput from '@/modules/shared/AppTextInput'
-import { MaterialIcons } from '@expo/vector-icons'
+import { StyleSheet, Text, View, ToastAndroid } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { COLORS, FONT, SIZES } from '@/constants';
+import AppTextInput from '@/modules/shared/AppTextInput';
+import { MaterialIcons } from '@expo/vector-icons';
 
-import { useRouter } from 'expo-router'
-import { UseCreateActivity, UseGetCategories, UseGetUsers } from '@/hooks/useAPI'
-import FormDatetimePicker from './components/form-datetime-picker'
+import { useRouter } from 'expo-router';
+import { UseCreateActivity, UseGetCategories, UseGetUsers } from '@/hooks/useAPI';
+import FormDatetimePicker from './components/form-datetime-picker';
 
-import { objToFormData } from '@/utils'
-import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper'
-import { Controller, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { ActivityInfoSchema, ActivityInfo } from './activity.schema'
+import { objToFormData } from '@/utils';
+import KeyboardAvoidingWrapper from '@/modules/shared/KeyboardAvoidingWrapper';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ActivityInfoSchema, ActivityInfo } from './activity.schema';
 
-import { Colors, Picker } from 'react-native-ui-lib'
-import AppButton from '../shared/AppButton'
-import { useAuth } from '@/context/authContext'
-import { RNUIButton } from '@/components'
+import { Colors, Picker } from 'react-native-ui-lib';
+import AppButton from '../shared/AppButton';
+import { useAuth } from '@/context/authContext';
+import { RNUIButton } from '@/components';
 
-const dropdownIcon = <MaterialIcons name="arrow-drop-down" size={30} color="black" />
+const dropdownIcon = <MaterialIcons name="arrow-drop-down" size={30} color="black" />;
 
-type Props = {}
+type Props = {};
 type ActivityData = {
-  hostUserId: number
-  categoryId: number
-  title: string
-  description: string
-  place: string
-  dateTime: any
-  duration: number
-  noOfMembers: number
+  hostUserId: number;
+  categoryId: number;
+  title: string;
+  description: string;
+  place: string;
+  dateTime: any;
+  duration: number;
+  noOfMembers: number;
   // maxParticipants: number;
-}
+};
 
 const CreateActivity = (props: Props) => {
-  const { user } = useAuth()
-  const router = useRouter()
+  const { user } = useAuth();
+  const router = useRouter();
 
-  const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories()
-  const { content: categories } = categoriesData || {}
+  const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories();
+  const { categories, paginationData } = categoriesData || {};
 
-  const { data: usersData, isLoading: isLoadingUsers } = UseGetUsers()
-  const { content: users } = usersData || {}
+  const { data: usersData, isLoading: isLoadingUsers } = UseGetUsers();
+  const { content: users } = usersData || {};
 
   const {
     formState: { isValid, isSubmitting, errors, isDirty },
@@ -57,36 +57,36 @@ const CreateActivity = (props: Props) => {
       hostUserId: user?.userId,
       locationId: 1,
     },
-  })
+  });
   // const test: FieldErrors = null
   const handleInputChange = (name: string, value: string) => {
     // formData.set(name, value);
-  }
-  const createMutation = UseCreateActivity()
+  };
+  const createMutation = UseCreateActivity();
 
   // ฟังก์ชั่นเมื่อกดปุ่ม "เพิ่มกิจกรรม"
   const onSummit = handleSubmit(async activityData => {
     createMutation.mutate(objToFormData(activityData), {
       onSuccess: () => {
-        console.log('onSuccess in CreateActivityPage')
-        ToastAndroid.show('New activity created', ToastAndroid.SHORT)
-        router.push('/(app)/(tabs)/home')
+        console.log('onSuccess in CreateActivityPage');
+        ToastAndroid.show('New activity created', ToastAndroid.SHORT);
+        router.push('/(app)/(tabs)/home');
       },
       onError: error => {
-        console.log('error')
-        console.log(error)
+        console.log('error');
+        console.log(error);
       },
-    })
-  })
+    });
+  });
 
   const usePreset = () => {
-    setValue('categoryId', 1)
-    setValue('title', 'test_title-' + Math.random().toString())
-    setValue('description', 'test_description')
-    setValue('dateTime', '2024-03-10T16:20:44.431667Z')
-    setValue('duration', 30)
-    setValue('noOfMembers', 10)
-  }
+    setValue('categoryId', 1);
+    setValue('title', 'test_title-' + Math.random().toString());
+    setValue('description', 'test_description');
+    setValue('dateTime', '2024-03-10T16:20:44.431667Z');
+    setValue('duration', 30);
+    setValue('noOfMembers', 10);
+  };
 
   return (
     <KeyboardAvoidingWrapper>
@@ -146,7 +146,7 @@ const CreateActivity = (props: Props) => {
               control={control}
               name="dateTime"
               render={({ field: { onChange, onBlur, value } }) => {
-                return <FormDatetimePicker value={value} onChangeDatetime={onChange} />
+                return <FormDatetimePicker value={value} onChangeDatetime={onChange} />;
               }}
             />
           </View>
@@ -207,10 +207,10 @@ const CreateActivity = (props: Props) => {
         <RNUIButton color="primary" label="Create activity" onPress={() => onSummit()} />
       </View>
     </KeyboardAvoidingWrapper>
-  )
-}
+  );
+};
 
-export default CreateActivity
+export default CreateActivity;
 
 const styles = StyleSheet.create({
   container: {
@@ -268,4 +268,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingLeft: 15,
   },
-})
+});

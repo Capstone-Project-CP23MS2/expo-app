@@ -1,20 +1,20 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React, { useState, useEffect } from 'react'
-import { Tabs } from 'expo-router'
-import { COLORS, FONT } from '@/constants'
-import { FontAwesome5, AntDesign, Entypo, MaterialIcons, Ionicons } from '@expo/vector-icons'
+import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Tabs } from 'expo-router';
+import { COLORS, FONT } from '@/constants';
+import { FontAwesome5, AntDesign, Entypo, MaterialIcons, Ionicons } from '@expo/vector-icons';
 
-import { UseGetNotificationById } from '@/hooks/useAPI'
-import { useAuth } from '@/context/authContext'
+import { UseGetNotificationById } from '@/hooks/useAPI';
+import { useAuth } from '@/context/authContext';
 
-type Props = {}
+type Props = {};
 
 const TabsLayout = (props: Props) => {
-  const { user } = useAuth()
-  const { data } = UseGetNotificationById(user?.userId)
-  const { content: notifications } = data || {}
+  const { user } = useAuth();
+  const { data } = UseGetNotificationById(user?.userId);
+  const { content: notifications } = data || {};
 
-  const unreadCount = notifications?.filter(notification => notification.unRead).length
+  const unreadCount = notifications?.filter(notification => notification.unRead).length;
 
   return (
     <Tabs
@@ -79,18 +79,9 @@ const TabsLayout = (props: Props) => {
           headerTitle: 'Profile',
         }}
       />
-
-      <Tabs.Screen
-        name="dev"
-        options={{
-          tabBarIcon: ({ size, color }) => <FontAwesome5 name="dev" size={size} color={color} />,
-          headerTitle: 'Development',
-          headerShadowVisible: true,
-        }}
-      />
     </Tabs>
-  )
-}
+  );
+};
 
 const NotificationIcon = ({ size, color, unreadCount }: any) => (
   <View>
@@ -113,9 +104,9 @@ const NotificationIcon = ({ size, color, unreadCount }: any) => (
       </View>
     )}
   </View>
-)
+);
 
-export default TabsLayout
+export default TabsLayout;
 
 const styles = StyleSheet.create({
   tabBar: {
@@ -126,4 +117,4 @@ const styles = StyleSheet.create({
   header: {
     shadowColor: '#000',
   },
-})
+});

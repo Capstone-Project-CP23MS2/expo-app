@@ -24,8 +24,9 @@ type DataProp = {
 
 const index = (props: Props) => {
   const router = useRouter();
-  const { data, isLoading, isError, error, refetch } = UseGetActivities({});
-  const { content: activities, first, totalPages } = data || {};
+  const { data, isLoading, isError, error, refetch } = UseGetActivities();
+
+  const { activities, paginationData } = data || {};
 
   const { data: userInfoData } = UseGetMyUserInfo();
 
