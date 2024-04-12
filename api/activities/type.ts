@@ -11,6 +11,7 @@ export type Activity = {
   dateTime: string;
   duration: number;
   noOfMembers: number;
+  memberCounts?: number;
   categoryName?: string;
   users: {
     userId: number;

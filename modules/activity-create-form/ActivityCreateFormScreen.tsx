@@ -45,7 +45,7 @@ export default function ActivityCreateForm() {
   const createMutation = UseCreateActivity();
 
   const onSummit = handleSubmit(async activityData => {
-    createMutation.mutate(objToFormData(activityData), {
+    createMutation.mutate(activityData, {
       onSuccess: () => {
         console.log('onSuccess in CreateActivityPage');
         ToastAndroid.show('New activity created', ToastAndroid.SHORT);

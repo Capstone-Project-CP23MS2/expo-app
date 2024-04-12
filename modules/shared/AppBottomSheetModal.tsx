@@ -87,8 +87,8 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   handleIndicator: {
     variants: {
       indicatorHidden: {
-        false: {
-          backgroundColor: colors.primary,
+        true: {
+          height: 0,
         },
       },
     },

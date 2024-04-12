@@ -42,7 +42,7 @@ export function UseSearchActivities(params: ActivitiesRequestParameters = {}, te
 // TODO: https://tkdodo.eu/blog/placeholder-and-initial-data-in-react-query
 // https://tanstack.com/query/latest/docs/framework/react/guides/initial-query-data
 // https://tanstack.com/query/latest/docs/framework/react/guides/placeholder-query-data
-export function UseGetActivity(activityId: string | string[]) {
+export function UseGetActivity(activityId: number | string | string[]) {
   return useQuery({
     queryKey: ['activities', activityId],
     queryFn: () => activitiesApi.getActivityById(activityId),
