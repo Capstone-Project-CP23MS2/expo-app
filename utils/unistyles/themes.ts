@@ -43,10 +43,12 @@ const sharedTheme = {
     md: {
       fontSize: 16,
       fontFamily: 'NotoSansThaiRegular',
+      lineHeight: 24,
     },
     mdB: {
       fontSize: 16,
       fontFamily: 'NotoSansThaiSemiBold',
+      lineHeight: 24,
     },
     sm: {
       fontSize: 14,
@@ -66,6 +68,16 @@ const sharedTheme = {
     },
   },
   component: {
+    footer: {
+      // backgroundColor: '#fff',
+      padding: 16,
+      borderTopColor: '#000',
+      borderTopWidth: 1,
+    },
+    test: {
+      fontSize: 12,
+      fontFamily: 'NotoSansThaiSemiBold',
+    },
     button: {
       contained: {
         // borderRadius: 20,
@@ -82,6 +94,7 @@ const sharedTheme = {
     },
     utils: {},
   },
+
 };
 
 const sharedColors = {
