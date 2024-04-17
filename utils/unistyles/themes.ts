@@ -9,7 +9,7 @@ const sharedTheme = {
     xxl: 32,
     xxxl: 48,
     // xxxxl: 72,
-    page: 20,
+    page: 16,
   },
   typography: {
     h1: {

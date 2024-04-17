@@ -58,7 +58,7 @@ const TabsLayout = (props: Props) => {
         name="wishLists"
         options={{
           tabBarIcon: ({ size, color }) => <AntDesign name="star" size={size} color={color} />,
-          headerTitle: 'Review',
+          headerTitle: 'Wish Lists',
         }}
       />
 
