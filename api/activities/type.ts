@@ -22,9 +22,14 @@ export type Activity = {
   updatedAt: string;
 };
 
+type ActivitiesSortBy = 'activityId' | 'createdAt' | 'dateTime' | 'noOfMembers' | 'title';
+
 export type ActivitiesParams = PaginateParams & {
+  sortBy?: ActivitiesSortBy;
   categoryIds?: number[];
-  title?: string;
+  title?: string; //TODO: change name later
+  hostId?: number;
+  userId?: number;
 };
 
 export type ActivityCreateRequest = {

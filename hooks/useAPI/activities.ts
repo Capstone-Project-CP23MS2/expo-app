@@ -3,8 +3,10 @@ import { ActivitiesResponse, ActivityResponse, ActivityUpdateRequest, requestPar
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { removeObjectFromArrayById } from "@/utils";
+import { UseGetMyUserInfo } from "./users";
+import { ActivitiesParams } from "@/api/activities/type";
 
-export function UseGetActivities(params = { pageSize: 50 } as ActivitiesRequestParameters) {
+export function UseGetActivities(params = { pageSize: 50 } as ActivitiesParams) {
   return useQuery({
     queryKey: ['activities'],
     queryFn: () => activitiesApi.getActivities(params),
@@ -15,18 +17,34 @@ export function UseGetActivities(params = { pageSize: 50 } as ActivitiesRequestP
   });
 };
 
-type ActivitiesSortBy = 'activityId' | 'createdAt' | 'dateTime' | 'noOfMembers' | 'title';
+export function UseGetMyActivities(params = { pageSize: 50 } as ActivitiesParams) {
+  const { data: user } = UseGetMyUserInfo();
 
-type ActivitiesRequestParameters = {
-  page?: number;
-  pageSize?: number;
-  sortBy?: ActivitiesSortBy;
-  categoryIds?: [number];
-  //TODO: change name later
-  title?: string;
+  return useQuery({
+    queryKey: ['activities', 'my-activities'],
+    queryFn: () => activitiesApi.getActivities({ ...params, hostId: user?.userId, }),
+    select: (data) => {
+      const { content, ...paginationData } = data;
+      return { activities: content, paginationData };
+    },
+  });
 };
+
+export function UseGetJoinedActivities(params = { pageSize: 50 } as ActivitiesParams) {
+  const { data: user } = UseGetMyUserInfo();
+
+  return useQuery({
+    queryKey: ['activities', 'my-activities'],
+    queryFn: () => activitiesApi.getActivities({ ...params, userId: user?.userId, }),
+    select: (data) => {
+      const { content, ...paginationData } = data;
+      return { activities: content, paginationData };
+    },
+  });
+};
+
 //ใช้ initialData 
-export function UseSearchActivities(params: ActivitiesRequestParameters = {}, test: any = '') {
+export function UseSearchActivities(params: ActivitiesParams = {}, test: any = '') {
   console.log('🚚 UseSearchActivities:');
   const { data, ...rest } = useQuery({
     queryKey: ['activities-search'],
@@ -48,6 +66,7 @@ export function UseGetActivity(activityId: number | string | string[]) {
     queryFn: () => activitiesApi.getActivityById(activityId),
   });
 };
+
 
 export function UseCreateActivity() {
   const queryClient = useQueryClient();
