@@ -81,6 +81,11 @@ export default function dev() {
           onPress: () => router.push('/dev/library/DevReactQuery'),
         },
         {
+          id: 'lib-unistyles',
+          title: 'Unistyles',
+          onPress: () => router.push('/dev/library/DevUnistyles'),
+        },
+        {
           id: 'lib-expo-location',
           title: 'Map',
           onPress: () => router.push('/dev/library/DevReactQuery'),
