@@ -11,6 +11,7 @@ import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import * as Location from 'expo-location';
 import { useContext, useEffect, useState } from 'react';
 import { UserLocationContext } from '@/context/userLocationContext';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -43,7 +44,9 @@ export default function RootLayout() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* <StatusBQueryClientProviderar style="dark" /> */}
-      <RootLayoutNav />
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <RootLayoutNav />
+      </GestureHandlerRootView>
     </QueryClientProvider>
   );
 }
