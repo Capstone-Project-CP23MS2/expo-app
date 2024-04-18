@@ -1,1 +1,1 @@
-export { default } from '@/modules/activities/pages/wishListsScreen';
+export { default } from '@/modules/activities/screens/wishListsScreenen';

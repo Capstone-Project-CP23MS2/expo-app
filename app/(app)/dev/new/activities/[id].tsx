@@ -1,1 +1,1 @@
-export { default } from '@/modules/activities/pages/ActivityDetail';
+export { default } from '@/modules/activities/screens/ActivityDetail';

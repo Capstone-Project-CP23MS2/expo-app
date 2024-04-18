@@ -1,2 +1,2 @@
 // export { default } from '@/modules/activity-detail';
-export { default } from '@/modules/activities/pages/ActivityDetail';
+export { default } from '@/modules/activities/screens/ActivityDetailil';
