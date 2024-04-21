@@ -5,12 +5,13 @@ import React, { useState } from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { TabController, TabControllerItemProps } from 'react-native-ui-lib';
 import ActivityOwnTab from '../components/whshLists/ActivityOwnTab';
+import ActivityPastTab from '../components/whshLists/ActivityPastTab';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Tabs } from 'expo-router';
 
 type Props = {};
 
-const wishListsScreen = (props: Props) => {
+const WishListsScreen = (props: Props) => {
   const { styles } = useStyles(stylesheet);
   const [key, setKey] = useState<string | number>(0);
 
@@ -30,7 +31,7 @@ const wishListsScreen = (props: Props) => {
     },
     {
       // key: 'favorite',
-      label: '📦 เคยเข้าร่วม',
+      label: '📦 ผ่านไปแล้ว',
     },
   ];
 
@@ -52,7 +53,7 @@ const wishListsScreen = (props: Props) => {
         </TabController.TabPage>
         <TabController.TabPage index={2} lazy>
           <View style={{ flex: 1 }}>
-            <Text>test</Text>
+            <ActivityPastTab />
           </View>
         </TabController.TabPage>
       </TabController.PageCarousel>
@@ -111,4 +112,4 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   },
 }));
 
-export default wishListsScreen;
+export default WishListsScreen;

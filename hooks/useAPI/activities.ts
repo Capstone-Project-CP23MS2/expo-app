@@ -6,9 +6,11 @@ import { removeObjectFromArrayById } from "@/utils";
 import { UseGetMyUserInfo } from "./users";
 import { ActivitiesParams } from "@/api/activities/type";
 
-export function UseGetActivities(params = { pageSize: 50 } as ActivitiesParams) {
+
+type UseGetActivitiesType = 'all' | 'my-activities' | 'joined-activities' | 'past-activities' | undefined;
+export function UseGetActivities(params = { pageSize: 50 } as ActivitiesParams, type: UseGetActivitiesType = undefined) {
   return useQuery({
-    queryKey: ['activities'],
+    queryKey: ['activities', type],
     queryFn: () => activitiesApi.getActivities(params),
     select: (data) => {
       const { content, ...paginationData } = data;

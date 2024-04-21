@@ -30,6 +30,8 @@ export type ActivitiesParams = PaginateParams & {
   title?: string; //TODO: change name later
   hostId?: number;
   userId?: number;
+  dateStatus?: 'all' | 'upcoming' | 'past';
+  date?: string;
 };
 
 export type ActivityCreateRequest = {

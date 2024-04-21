@@ -14,10 +14,10 @@ const ActivityOwnTab = (props: Props) => {
   const { data, refetch } = UseGetActivities(
     {
       hostId: user?.userId,
-      dateStatus: 'upcoming',
       sortBy: 'dateTime',
+      dateStatus: 'past',
     },
-    'my-activities',
+    'past-activities',
   );
   const { activities, paginationData } = data || { activities: [] };
 
