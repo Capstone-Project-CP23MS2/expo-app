@@ -1,45 +1,45 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import { StyleSheet, View, Text, Pressable } from 'react-native'
-import { COLORS, SIZES } from '@/constants'
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
-import { FontAwesome5 } from '@expo/vector-icons'
-import * as Location from 'expo-location'
-import { useRouter } from 'expo-router'
-import MapViewStyle from '@/assets/data/map-view-style.json'
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { COLORS, SIZES } from '@/constants';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { FontAwesome5 } from '@expo/vector-icons';
+import * as Location from 'expo-location';
+import { useRouter } from 'expo-router';
+import MapViewStyle from '@/assets/data/map-view-style.json';
 
 const INITIAL_REGION = {
   latitude: 13.75633,
   longitude: 100.501765,
   latitudeDelta: 0.0422,
   longitudeDelta: 0.0421,
-}
+};
 
 const MapActivities = () => {
-  const router = useRouter()
-  const mapRef = useRef<any>(null)
+  const router = useRouter();
+  const mapRef = useRef<any>(null);
 
   useEffect(() => {
-    onLocateMe()
-  }, [])
+    onLocateMe();
+  }, []);
 
   const onLocateMe = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync()
+    let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
-      return
+      return;
     }
 
-    let location = await Location.getCurrentPositionAsync({})
-    console.log(location)
+    let location = await Location.getCurrentPositionAsync({});
+    console.log(location);
 
     const region = {
       latitude: location.coords.latitude ?? 13.75633,
       longitude: location.coords.longitude ?? 100.501765,
       latitudeDelta: 0.2,
       longitudeDelta: 0.2,
-    }
+    };
 
-    mapRef.current?.animateToRegion(region)
-  }
+    mapRef.current?.animateToRegion(region);
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -73,10 +73,10 @@ const MapActivities = () => {
         </View>
       </Pressable>
     </View>
-  )
-}
+  );
+};
 
-export default MapActivities
+export default MapActivities;
 
 const styles = StyleSheet.create({
   map: {
@@ -84,4 +84,4 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
   },
-})
+});

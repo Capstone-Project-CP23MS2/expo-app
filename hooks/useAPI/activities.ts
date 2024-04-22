@@ -4,7 +4,7 @@ import { ActivitiesResponse, ActivityResponse, ActivityUpdateRequest, requestPar
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { removeObjectFromArrayById } from "@/utils";
 import { UseGetMyUserInfo } from "./users";
-import { ActivitiesParams } from "@/api/activities/type";
+import { ActivitiesParams, GetActivitiesByLocationParams } from "@/api/activities/type";
 
 
 type UseGetActivitiesType = 'all' | 'my-activities' | 'joined-activities' | 'past-activities' | undefined;
@@ -18,6 +18,27 @@ export function UseGetActivities(params = { pageSize: 50 } as ActivitiesParams, 
     },
   });
 };
+
+//TODO: รอ backend
+// export function UseGetActivitiesByPlaceId(params = { pageSize: 50, } as ActivitiesParams,) {
+//   return useQuery({
+//     queryKey: ['activities', 'place', params.placeId],
+//     queryFn: () => activitiesApi.getActivities(params),
+//     select: (data) => {
+//       const { content, ...paginationData } = data;
+//       return { activities: content, paginationData };
+//     },
+//   });
+// };
+
+
+export function UseGetActivitiesByLocation(params = {} as GetActivitiesByLocationParams) {
+  return useQuery({
+    queryKey: ['activities', 'user-location'],
+    queryFn: () => activitiesApi.getActivitiesByLocation(params),
+  });
+};
+
 
 export function UseGetMyActivities(params = { pageSize: 50 } as ActivitiesParams) {
   const { data: user } = UseGetMyUserInfo();

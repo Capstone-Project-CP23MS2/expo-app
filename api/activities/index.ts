@@ -2,7 +2,7 @@ import { ActivitiesResponse, ParticipantResponse, ParticipantsResponse, Activity
 import apiClient from "../apiClient";
 import { objToFormData } from '@/utils';
 import { AxiosRequestConfig } from 'axios';
-import { ActivitiesParams, Activity, ActivityCreateRequest } from './type';
+import { ActivitiesParams, Activity, ActivityCreateRequest, GetActivitiesByLocationParams } from './type';
 
 class ActivitiesApi {
   async getActivities(params: ActivitiesParams) {
@@ -12,6 +12,11 @@ class ActivitiesApi {
 
   async getActivityById(id: number | string | string[]) {
     const { data } = await apiClient.get<Activity>(`/activities/${id}`);
+    return data;
+  }
+
+  async getActivitiesByLocation(params: GetActivitiesByLocationParams) {
+    const { data } = await apiClient.get<Activity[]>('/location/getList', { params });
     return data;
   }
 

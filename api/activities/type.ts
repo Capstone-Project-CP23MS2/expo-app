@@ -34,6 +34,12 @@ export type ActivitiesParams = PaginateParams & {
   date?: string;
 };
 
+export type GetActivitiesByLocationParams = {
+  lat: number;
+  lng: number;
+  radius: number;
+};
+
 export type ActivityCreateRequest = {
   hostUserId: number;
   categoryId: number;
@@ -44,3 +50,4 @@ export type ActivityCreateRequest = {
   duration: number;
   noOfMembers: number;
 };
+

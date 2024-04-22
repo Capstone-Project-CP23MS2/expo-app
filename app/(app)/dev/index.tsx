@@ -86,9 +86,19 @@ export default function dev() {
           onPress: () => router.push('/dev/library/DevUnistyles'),
         },
         {
-          id: 'lib-expo-location',
+          id: 'lib-map',
           title: 'Map',
-          onPress: () => router.push('/dev/library/DevReactQuery'),
+          onPress: () => router.push('/dev/library/DevMapView'),
+        },
+        {
+          id: 'lib-rn-map',
+          title: 'React Native Map',
+          onPress: () => router.push('/dev/library/DevRNMap'),
+        },
+        {
+          id: 'lib-expo-location',
+          title: 'Expo Location',
+          onPress: () => router.push('/dev/library/DevExpoLocation'),
         },
         {
           id: 'lib-expo-image-picker',
