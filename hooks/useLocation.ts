@@ -16,17 +16,26 @@ export function useLocation() {
       throw new Error('Permission to access location was denied');
     }
     console.log('♻ Getting location');
-    const location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Lowest, });
+
+    const location = await Promise.race([
+      Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Lowest }) as Promise<Location.LocationObject>,
+      new Promise<Location.LocationObject>((resolve, reject) => {
+        setTimeout(() => reject(new Error('Timeout error')), 5000);
+      }),
+    ]);
+    // const location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Lowest });
     // const location = await Location.getLastKnownPositionAsync();
     console.log(`✔ Got location: {lat: ${location?.coords.latitude}, lng: ${location?.coords.longitude}}`);
-    setLocation(location);
+
     return location;
   };
 
   useEffect(() => {
-    getCurrentLocation().then(setLocation).catch(setError).finally(() => setIsLoading(false));
+    getCurrentLocation().then(setLocation).catch((error) => {
+      setError(error.message);
+      return null;
+    }).finally(() => setIsLoading(false));
   }, []);
-
 
   return { location, isLoading, error };
 }
