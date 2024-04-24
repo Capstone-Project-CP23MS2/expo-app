@@ -2,7 +2,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Tabs } from 'expo-router';
 import { COLORS, FONT } from '@/constants';
-import { FontAwesome5, AntDesign, Entypo, MaterialIcons, Ionicons } from '@expo/vector-icons';
+import {
+  FontAwesome5,
+  AntDesign,
+  Entypo,
+  MaterialIcons,
+  Ionicons,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons';
 
 import { UseGetNotificationById } from '@/hooks/useAPI';
 import { useAuth } from '@/context/authContext';
@@ -27,6 +34,14 @@ const TabsLayout = (props: Props) => {
         headerTitleAlign: 'center',
       }}
     >
+      <Tabs.Screen
+        name="explore"
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <MaterialCommunityIcons name="magnify" size={24} color="black" />
+          ),
+        }}
+      />
       <Tabs.Screen
         name="index"
         options={{
