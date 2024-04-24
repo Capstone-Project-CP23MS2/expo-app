@@ -1,23 +1,27 @@
 import activitiesApi from "@/api/activities";
 import { ActivitiesResponse, ActivityResponse, ActivityUpdateRequest, requestParams } from "@/api/type";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { removeObjectFromArrayById } from "@/utils";
 import { UseGetMyUserInfo } from "./users";
 import { ActivitiesParams, GetActivitiesByLocationParams } from "@/api/activities/type";
 
 
 type UseGetActivitiesType = 'all' | 'my-activities' | 'joined-activities' | 'past-activities' | undefined;
-export function UseGetActivities(params = { pageSize: 50 } as ActivitiesParams, type: UseGetActivitiesType = undefined) {
-  return useQuery({
+export function UseGetActivities(params = { pageSize: 1 } as ActivitiesParams, type: UseGetActivitiesType = undefined) {
+  return useInfiniteQuery({
     queryKey: ['activities', type],
-    queryFn: () => activitiesApi.getActivities(params),
-    select: (data) => {
-      const { content, ...paginationData } = data;
-      return { activities: content, paginationData };
+    queryFn: ({ pageParam }) => activitiesApi.getActivities({ ...params, page: pageParam }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      return lastPage.last ? undefined : lastPage.number + 1;
     },
+    select: (data) => {
+      const activities = data.pages.flatMap(page => page.content);
+      return { activities, ...data };
+    }
   });
-};
+}
 
 //TODO: รอ backend
 // export function UseGetActivitiesByPlaceId(params = { pageSize: 50, } as ActivitiesParams,) {

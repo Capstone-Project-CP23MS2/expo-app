@@ -1,5 +1,5 @@
-export type APIPaginationResponse<Data extends object> = {
-  content: Data[];
+export type APIPaginationResponse<T extends object> = {
+  content: T[];
   number: number;
   size: number;
   totalPages: number;
