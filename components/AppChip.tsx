@@ -5,18 +5,19 @@ import { Chip, ChipProps } from 'react-native-ui-lib';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 // export type ChipType = 'contained' | 'outlined' | 'text' | 'disable';
-// export type ButtonColor = 'primary' | 'secondary' | 'tertiary' | 'danger' | 'disable';
+export type ChipColor = 'primary' | 'secondary';
+// | 'tertiary' | 'danger' | 'disable'
 // export type ButtonSize = 'sm' | 'md' | 'lg';
 type Props = ChipProps & {
-  // type?: ChipType;
+  color?: ChipColor;
   leftIcon?: keyof typeof MaterialCommunityIcons.glyphMap;
   RightIcon?: keyof typeof MaterialCommunityIcons.glyphMap;
 };
 
 const AppChip = (props: Props) => {
-  const { leftIcon, RightIcon, ...RNUIProps } = props;
+  const { color, leftIcon, RightIcon, ...RNUIProps } = props;
   const { styles } = useStyles(stylesheet, {
-    hasIcon: !!props.leftElement,
+    color: color,
     hasLeftIcon: !!props.leftIcon,
     hasRightIcon: !!props.RightIcon,
   });
@@ -28,12 +29,20 @@ const AppChip = (props: Props) => {
       {...RNUIProps}
       leftElement={
         props.leftIcon && (
-          <MaterialCommunityIcons style={styles.leftIcon} name={props.leftIcon} size={20} />
+          <MaterialCommunityIcons
+            style={[styles.icon, styles.leftIcon]}
+            name={props.leftIcon}
+            size={20}
+          />
         )
       }
       rightElement={
         props.RightIcon && (
-          <MaterialCommunityIcons style={styles.rightIcon} name={props.RightIcon} size={20} />
+          <MaterialCommunityIcons
+            style={[styles.icon, styles.rightIcon]}
+            name={props.RightIcon}
+            size={20}
+          />
         )
       }
       activeOpacity={0.5}
@@ -43,28 +52,39 @@ const AppChip = (props: Props) => {
 
 const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   container: {
-    borderColor: colors.secondaryContainer,
     borderWidth: 0,
     borderRadius: spacings.lg,
-    backgroundColor: colors.secondaryContainer,
     variants: {
-      hasIcon: {
-        true: {
-          // paddingLeft: spacings.xs,
+      color: {
+        default: {
+          backgroundColor: colors.primaryContainer,
         },
-        false: {
-          // paddingLeft: spacings.sm,
+        primary: {
+          backgroundColor: colors.primaryContainer,
+        },
+        secondary: {
+          backgroundColor: colors.secondaryContainer,
         },
       },
     },
   },
   label: {
     ...typography.smB,
-    color: colors.onSecondaryContainer,
     lineHeight: 24,
     marginVertical: spacings.xs,
     marginLeft: spacings.md,
     variants: {
+      color: {
+        default: {
+          color: colors.onPrimaryContainer,
+        },
+        primary: {
+          color: colors.onPrimaryContainer,
+        },
+        secondary: {
+          color: colors.onSecondaryContainer,
+        },
+      },
       hasLeftIcon: {
         true: {
           marginLeft: spacings.xs,
@@ -79,6 +99,21 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
         },
         false: {
           marginRight: spacings.md,
+        },
+      },
+    },
+  },
+  icon: {
+    variants: {
+      color: {
+        default: {
+          color: colors.onPrimary,
+        },
+        primary: {
+          color: colors.onPrimary,
+        },
+        secondary: {
+          color: colors.onSecondary,
         },
       },
     },

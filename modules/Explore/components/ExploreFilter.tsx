@@ -35,45 +35,13 @@ export default function ExploreFilter({ searchQuery, onSearchChanged, onFilterPr
           <AppChip
             label="ตัวเลือก"
             onPress={() => console.log('pressed')}
+            color="secondary"
             // leftElement={<MaterialCommunityIcons name="tune" size={20} color="black" />}
             leftIcon="tune"
             RightIcon="chevron-down"
             onPressOut={onFilterPress}
-            iconStyle={{ padding: 40 }}
           />
-          <AppChip
-            label="ตัวเลือก"
-            onPress={() => console.log('pressed')}
-            // leftElement={<MaterialIcons name="tune" size={20} color="black" />}
-            onPressOut={onFilterPress}
-          />
-          <ChipPaper
-            style={{ borderRadius: 24 }}
-            icon={props => <MaterialCommunityIcons {...props} name="chevron-down" size={24} />}
-            onPress={() => console.log('Pressed')}
-            textStyle={styles.label}
-          >
-            Sort
-          </ChipPaper>
         </ScrollView>
-        <View style={{ flexDirection: 'row' }}>
-          <ChipPaper
-            style={{ borderRadius: 24, borderWidth: 0 }}
-            icon="tune"
-            closeIcon={props => <MaterialCommunityIcons {...props} name="close" size={24} />}
-            onPress={() => console.log('Pressed')}
-            textStyle={{ fontSize: 12 }}
-          >
-            Example Chip
-          </ChipPaper>
-          <ChipPaper
-            style={{ borderRadius: 24, borderWidth: 0 }}
-            onPress={() => console.log('Pressed')}
-            textStyle={{ fontSize: 12 }}
-          >
-            Example Chip
-          </ChipPaper>
-        </View>
       </View>
     </SafeAreaView>
   );
@@ -81,7 +49,7 @@ export default function ExploreFilter({ searchQuery, onSearchChanged, onFilterPr
 
 const stylesheet = createStyleSheet(({ spacings, typography, colors }) => ({
   container: {
-    // padding: theme.spacings.md,
+    // padding: spacings.md,
     // backgroundColor: theme.colors.background,
     // backgroundColor: '#fff',
     elevation: 4,

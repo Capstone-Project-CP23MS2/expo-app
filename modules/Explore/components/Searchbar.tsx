@@ -61,7 +61,7 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   field: {
     ...typography.md,
     // paddingHorizontal: spacings.lg,
-    backgroundColor: '#edd2be',
+    backgroundColor: colors.primaryContainer,
     borderRadius: spacings.xl,
     flexGrow: 1,
     maxWidth: '100%',
@@ -78,6 +78,7 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
     ...typography.md,
     textAlign: 'left',
     alignSelf: 'stretch',
+    color: colors.onPrimaryContainer,
   },
   iconContainer: {
     height: 40,

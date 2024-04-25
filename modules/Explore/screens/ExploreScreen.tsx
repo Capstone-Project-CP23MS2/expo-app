@@ -1,5 +1,5 @@
 import { View, Text, ActivityIndicator } from 'react-native';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import Listings from '../components/Listings';
 import { UseGetActivities, UseGetActivity } from '@/hooks/useAPI';
@@ -12,13 +12,13 @@ import { useCounterStore } from '@/modules/dev-test/stores/counter-store';
 import { RNUIButton } from '@/components';
 
 import { RefreshControl } from 'react-native-gesture-handler';
+import { useFilterStore } from '../stores/filter-store';
 
 type Props = {};
 
 const ExploreScreen = (props: Props) => {
   const { styles } = useStyles(stylesheet);
   const router = useRouter();
-
   const {
     data,
     fetchNextPage,
@@ -44,12 +44,22 @@ const ExploreScreen = (props: Props) => {
   };
   // const [searchQuery, setSearchQuery] = useState<string>('');
 
+  const { filters } = useFilterStore(state => ({
+    filters: state.filters,
+    setFilters: state.setFilters,
+  }));
+
   const { count, increase } = useCounterStore(state => ({
     count: state.count,
     increase: state.increase,
   }));
 
   const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    setSelectedCategoryIds(filters.categoryIds!);
+    console.log('filters', filters);
+  }, [filters]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);

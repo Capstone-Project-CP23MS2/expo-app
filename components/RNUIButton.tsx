@@ -39,8 +39,9 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   container: {
     paddingVertical: spacings.md,
     // width: '100%',
-    // flexGrow: 1,
+    flexGrow: 1,
     borderRadius: spacings.md,
+    maxHeight: 48,
     // variants: {},
   },
   extraStyle: (color: ButtonColor = 'primary') => ({
