@@ -39,9 +39,9 @@ const ExploreScreen = (props: Props) => {
   );
   const { activities } = data || {};
 
-  // const handleFilterPress = () => {
-  //   router.push('/explore/filter');
-  // };
+  const handleFilterPress = () => {
+    router.push('/explore/filter');
+  };
   // const [searchQuery, setSearchQuery] = useState<string>('');
 
   const { count, increase } = useCounterStore(state => ({
@@ -66,7 +66,7 @@ const ExploreScreen = (props: Props) => {
             <ExploreFilter
               searchQuery={searchQuery}
               onSearchChanged={setSearchQuery}
-              // onFilterPress={handleFilterPress}
+              onFilterPress={handleFilterPress}
             />
           ),
         }}

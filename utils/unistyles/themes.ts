@@ -53,10 +53,12 @@ const sharedTheme = {
     sm: {
       fontSize: 14,
       fontFamily: 'NotoSansThaiRegular',
+      lineHeight: 24,
     },
     smB: {
       fontSize: 14,
       fontFamily: 'NotoSansThaiSemiBold',
+      lineHeight: 24,
     },
     xs: {
       fontSize: 12,
@@ -112,8 +114,16 @@ export const lightTheme = {
   ...sharedTheme,
   colors: {
     ...sharedColors,
-    primary: '#3E64FF',
-    secondary: '#03dac6',
+
+    "primary": "rgb(104, 71, 192)",
+    "onPrimary": "rgb(255, 255, 255)",
+    "primaryContainer": "rgb(232, 221, 255)",
+    "onPrimaryContainer": "rgb(33, 0, 93)",
+    "secondary": "rgb(97, 91, 113)",
+    "onSecondary": "rgb(255, 255, 255)",
+    "secondaryContainer": "rgb(232, 222, 248)",
+    "onSecondaryContainer": "rgb(29, 25, 43)",
+
     typography: '#000000',
     background: '#ffffff',
 
@@ -136,8 +146,15 @@ export const darkTheme = {
   colors: {
     ...sharedColors,
 
-    primary: '#bb86fc',
-    secondary: '#03dac6',
+    "primary": "rgb(206, 189, 255)",
+    "onPrimary": "rgb(57, 5, 144)",
+    "primaryContainer": "rgb(80, 43, 167)",
+    "onPrimaryContainer": "rgb(232, 221, 255)",
+    "secondary": "rgb(203, 195, 220)",
+    "onSecondary": "rgb(51, 45, 65)",
+    "secondaryContainer": "rgb(73, 68, 88)",
+    "onSecondaryContainer": "rgb(232, 222, 248)",
+
     typography: '#ffffff',
     background: '#000000',
 
@@ -195,4 +212,10 @@ const test = {
     onSurfaceDisabled: 'rgba(29, 27, 30, 0.38)',
     backdrop: 'rgba(51, 47, 55, 0.4)',
   },
+};
+
+
+const oldColor = {
+  primary: '#3E64FF',
+  secondary: '#03dac6',
 };
