@@ -107,13 +107,13 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
     variants: {
       color: {
         default: {
-          color: colors.onPrimary,
+          color: colors.primary,
         },
         primary: {
-          color: colors.onPrimary,
+          color: colors.primary,
         },
         secondary: {
-          color: colors.onSecondary,
+          color: colors.secondary,
         },
       },
     },
