@@ -1,28 +1,48 @@
 import { View, Text, ActivityIndicator } from 'react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import { List } from 'react-native-paper';
 import Listings from '../components/Listings';
 import { UseGetActivities, UseGetActivity } from '@/hooks/useAPI';
 import { FlashList } from '@shopify/flash-list';
 import { ActivityCard } from '@/modules/activities/components';
 import ExploreFilter from '../components/ExploreFilter';
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import ExploreHeader from '@/modules/dev-test/ExploreHeader';
 import { useCounterStore } from '@/modules/dev-test/stores/counter-store';
 import { RNUIButton } from '@/components';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import activitiesApi from '@/api/activities';
+
 import { RefreshControl } from 'react-native-gesture-handler';
 
 type Props = {};
 
 const ExploreScreen = (props: Props) => {
   const { styles } = useStyles(stylesheet);
-  const { data, fetchNextPage, hasNextPage, refetch, isFetching } = UseGetActivities();
+  const router = useRouter();
+
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    refetch,
+    isFetching,
+    searchQuery,
+    setSearchQuery,
+    selectedCategoryIds,
+    setSelectedCategoryIds,
+    debouncedSearchQuery,
+  } = UseGetActivities(
+    {
+      // categoryIds: [1],
+      pageSize: 5,
+    },
+    'all',
+  );
   const { activities } = data || {};
 
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  // const handleFilterPress = () => {
+  //   router.push('/explore/filter');
+  // };
+  // const [searchQuery, setSearchQuery] = useState<string>('');
 
   const { count, increase } = useCounterStore(state => ({
     count: state.count,
@@ -43,7 +63,11 @@ const ExploreScreen = (props: Props) => {
         options={{
           // header: () => <ExploreHeader onCategoryChanged={() => {}} />,
           header: () => (
-            <ExploreFilter searchQuery={searchQuery} onSearchChanged={setSearchQuery} />
+            <ExploreFilter
+              searchQuery={searchQuery}
+              onSearchChanged={setSearchQuery}
+              // onFilterPress={handleFilterPress}
+            />
           ),
         }}
       />
@@ -73,6 +97,7 @@ const ExploreScreen = (props: Props) => {
             }
           />
         </View>
+
         {/* <Listings /> */}
       </View>
     </>

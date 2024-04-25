@@ -6,9 +6,16 @@ import { ActivitiesParams, Activity, ActivityCreateRequest, GetActivitiesByLocat
 
 class ActivitiesApi {
   async getActivities(params: ActivitiesParams) {
-    const { data } = await apiClient.get<PaginateResponse<Activity>>('/activities', { params });
+    const config: AxiosRequestConfig = {
+      params,
+      paramsSerializer: {
+        indexes: null
+      }
+    };
+    const { data } = await apiClient.get<PaginateResponse<Activity>>('/activities', config);
     return data;
   }
+
 
   async getActivityById(id: number | string | string[]) {
     const { data } = await apiClient.get<Activity>(`/activities/${id}`);
@@ -45,17 +52,7 @@ class ActivitiesApi {
   }
 
 
-  async getActivitiesNew(params: ActivitiesRequestParams) {
-    const config: AxiosRequestConfig = {
-      params,
-      paramsSerializer: {
-        indexes: null
-      }
-    };
-    const { data: { content: activities, ...paginationData } }
-      = await apiClient.get<ActivitiesResponse>('/activities', config);
-    return { activities, paginationData };
-  }
+
 
 
 
@@ -100,6 +97,20 @@ class ActivitiesApi {
     const { data } = await apiClient.delete(url);
     return data;
   };
+
+  // deprecated
+
+  async getActivitiesNew(params: ActivitiesRequestParams) {
+    const config: AxiosRequestConfig = {
+      params,
+      paramsSerializer: {
+        indexes: null
+      }
+    };
+    const { data: { content: activities, ...paginationData } }
+      = await apiClient.get<ActivitiesResponse>('/activities', config);
+    return { activities, paginationData };
+  }
 }
 
 const activitiesApi = new ActivitiesApi();

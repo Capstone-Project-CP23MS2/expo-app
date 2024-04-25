@@ -39,7 +39,10 @@ const Searchbar = ({ searchQuery, onSearchChanged }: Props) => {
         />
         <View style={styles.iconContainer}>
           <Pressable
-            style={[styles.iconWrapper, { opacity: searchQuery.length ? 100 : 0 }]}
+            style={[
+              styles.iconWrapper,
+              { opacity: searchQuery.length && searchQuery.length ? 100 : 0 },
+            ]}
             android_ripple={{ color: 'gray' }}
             onPress={handleClearQuery}
           >
