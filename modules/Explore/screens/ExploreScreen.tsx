@@ -67,6 +67,8 @@ const ExploreScreen = (props: Props) => {
     setRefreshing(false);
   }, []);
 
+  const handleActivityPress = (activityId: number) => router.push(`/activities/${activityId}`);
+
   return (
     <>
       <Stack.Screen
@@ -87,7 +89,12 @@ const ExploreScreen = (props: Props) => {
             refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
             data={activities}
             // extraData={selectedCategoryIds}
-            renderItem={({ item: activity, index }) => <ActivityCard activity={activity} />}
+            renderItem={({ item: activity, index }) => (
+              <ActivityCard
+                activity={activity}
+                onPress={() => handleActivityPress(activity.activityId)}
+              />
+            )}
             estimatedItemSize={100}
             numColumns={1}
             showsVerticalScrollIndicator={false}

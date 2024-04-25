@@ -7,24 +7,24 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 type Props = {
   category: Category;
-  index: number;
-  onSelect?: FiltersCategoryListItemPressHandler;
-  categoryFilterState: (number | undefined)[];
+  onSelect: (categoryId: number) => void;
+  selectedCategoryIds: number[];
 };
 export type FiltersCategoryListItemPressHandler = (args: {
   categoryId: number;
   index: number;
 }) => void;
 
-const FiltersCategoryListItem = ({ category, index, categoryFilterState, onSelect }: Props) => {
+const FiltersCategoryListItem = ({ category, onSelect, selectedCategoryIds }: Props) => {
+  const isCategorySelected = selectedCategoryIds.includes(category.categoryId);
   const { styles } = useStyles(stylesheet, {
-    isSelected: !!categoryFilterState[index],
+    isSelected: isCategorySelected,
     // isSelected: !categoryFilterState.findIndex(item => item === category.categoryId),
   });
 
   const handlePress = () => {
-    onSelect?.({ categoryId: category.categoryId, index });
-    // console.log(category.test);
+    // onSelect?.({ categoryId: category.categoryId, index });
+    onSelect(category.categoryId);
   };
   return (
     <TouchableOpacity style={styles.container} onPress={handlePress}>

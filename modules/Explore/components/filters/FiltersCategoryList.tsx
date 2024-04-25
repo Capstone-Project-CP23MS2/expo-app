@@ -9,20 +9,22 @@ import FiltersCategoryListItem, {
 import { Category } from '@/api/categories/categories.type';
 
 type Props = {
-  onCategorySelect: FiltersCategoryListItemPressHandler;
-  categoryFilterState: (number | undefined)[];
+  selectedCategoryIds: number[];
+  onSelectedCategoryIdsChange: (selectedItemsChange: number[]) => void;
 };
-type CategoryFilterState = {
-  categoryId: number;
-  select: boolean;
-};
-const FiltersCategoryList = ({ onCategorySelect, categoryFilterState }: Props) => {
+
+const FiltersCategoryList = ({ selectedCategoryIds, onSelectedCategoryIdsChange }: Props) => {
   const { styles } = useStyles(stylesheet);
   const { data } = UseGetCategories();
   const { categories } = data || {};
-  // console.log(
-  //   categories?.map((category: Category) => ({ categoryId: category.categoryId, select: false })),
-  // );
+
+  function selectOption(category: number) {
+    if (selectedCategoryIds.includes(category)) {
+      onSelectedCategoryIdsChange(selectedCategoryIds.filter(o => o !== category));
+    } else {
+      onSelectedCategoryIdsChange([...selectedCategoryIds, category]);
+    }
+  }
 
   return (
     <>
@@ -41,13 +43,12 @@ const FiltersCategoryList = ({ onCategorySelect, categoryFilterState }: Props) =
         ItemSeparatorComponent={() => <View style={styles.listGap} />}
       /> */}
       <View style={styles.container}>
-        {categories?.map((category: Category, index: number) => (
+        {categories?.map((category: Category) => (
           <FiltersCategoryListItem
             key={category.categoryId}
             category={category}
-            index={index}
-            categoryFilterState={categoryFilterState}
-            onSelect={onCategorySelect}
+            onSelect={selectOption}
+            selectedCategoryIds={selectedCategoryIds}
           />
         ))}
       </View>

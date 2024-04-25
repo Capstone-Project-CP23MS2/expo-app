@@ -18,37 +18,27 @@ type Props = {};
 
 const FilterScreen = (props: Props) => {
   const { styles } = useStyles(stylesheet);
-
   const router = useRouter();
-  const { data } = UseGetCategories();
-  const { categories } = data || {};
-
   const { filters, setFilters, onFiltersReset } = useFilterStore(state => ({
     filters: state.filters,
     setFilters: state.setFilters,
     onFiltersReset: state.reset,
   }));
 
+  const { data } = UseGetCategories();
+  const { categories } = data || {};
+
   const sliderRef = React.useRef<SliderRef>(null);
   const [distance, setDistance] = React.useState<number>(filters.distance || 5);
   const initialSliderValue = filters.distance;
 
-  const [categoryFilterState, setCategoryFilterState] = useState<(number | undefined)[]>(
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>(
     filters.categoryIds || [],
   );
 
-  const handleCategorySelect: FiltersCategoryListItemPressHandler = ({ categoryId, index }) => {
-    setCategoryFilterState(prevState => {
-      const newState = [...prevState];
-      const isSelected = newState[index];
-      newState[index] = isSelected ? undefined : categoryId;
-      return newState;
-    });
-  };
-
   const handleSearch = () => {
     setFilters({
-      categoryIds: categoryFilterState.filter(x => x !== undefined) as number[],
+      categoryIds: selectedCategoryIds,
       distance,
     });
     router.push('/explore');
@@ -56,8 +46,8 @@ const FilterScreen = (props: Props) => {
 
   const handleReset = () => {
     onFiltersReset();
-    setCategoryFilterState([]);
     setDistance(5);
+    setSelectedCategoryIds([]);
     sliderRef.current?.reset();
   };
 
@@ -75,15 +65,15 @@ const FilterScreen = (props: Props) => {
           containerStyle={styles.sliderContainer}
           // disableRTL={forceLTR}
           // ref={this.slider}
-          onReset={this.onSliderReset}
+          // onReset={this.onSliderReset}
         />
 
         <Text style={styles.heading}>ประเภท</Text>
 
         <View style={{ height: '100%' }}>
           <FiltersCategoryList
-            onCategorySelect={handleCategorySelect}
-            categoryFilterState={categoryFilterState}
+            onSelectedCategoryIdsChange={setSelectedCategoryIds}
+            selectedCategoryIds={selectedCategoryIds}
           />
         </View>
       </ScrollView>
