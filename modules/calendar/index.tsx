@@ -1,9 +1,8 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text } from 'react-native';
 import React from 'react';
 import { Agenda, AgendaEntry } from 'react-native-calendars';
 import { UseGetActivities } from '@/hooks/useAPI';
 import { useRouter } from 'expo-router';
-import { SIZES } from '@/constants';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { TouchableOpacity, Chip } from 'react-native-ui-lib';
 
@@ -14,8 +13,6 @@ export default function ActivityCalendar() {
   const router = useRouter();
 
   const inputData = activities;
-
-  console.log(inputData);
 
   const transformedData = inputData?.reduce((acc, event) => {
     const { dateTime, ...eventData } = event;
@@ -67,7 +64,7 @@ export default function ActivityCalendar() {
         renderEmptyData={() => (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <Text style={styles.emptyTitle}>ไม่พบกิจกรรมวันนี้</Text>
-            <Text style={styles.emptySub}>สร้างกิจกรรมของคุณหรือเข้าร่วมของคนอื่น !</Text>
+            <Text style={styles.emptySub}>สร้างกิจกรรมของคุณหรือเข้าร่วมของคนอื่น</Text>
           </View>
         )}
       />
