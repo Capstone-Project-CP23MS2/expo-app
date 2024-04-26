@@ -46,7 +46,7 @@ const index = (props: Props) => {
           header: () => (
             <SafeAreaView style={styles.safeArea}>
               <View style={styles.headerArea}>
-                <Pressable onPress={() => router.push('/(app)/activities/search')}>
+                <Pressable onPress={() => router.push('/(app)/(tabs)/explore')}>
                   <AppTextInput
                     placeholder="Explore available activities."
                     icon

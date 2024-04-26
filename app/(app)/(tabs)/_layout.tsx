@@ -38,7 +38,7 @@ const TabsLayout = (props: Props) => {
         name="explore"
         options={{
           tabBarIcon: ({ size, color }) => (
-            <MaterialCommunityIcons name="magnify" size={24} color="black" />
+            <MaterialCommunityIcons name="magnify" size={size} color={color} />
           ),
         }}
       />
