@@ -18,7 +18,9 @@ const ActivityCard = ({ activity, onPress }: ActivityCardProps) => {
         <Text style={styles.textDatetime}>
           {dayjs(activity.dateTime).format('ddd, MMMM D, YYYY h:mm')}
         </Text>
-        <Text style={styles.title}>{activity.title}</Text>
+        <Text style={styles.title} numberOfLines={1}>
+          {activity.title}
+        </Text>
         {/* <RNUIText md-b>{activity.title}</RNUIText> */}
 
         {/* <Text sm>{activity.description}</Text> */}
