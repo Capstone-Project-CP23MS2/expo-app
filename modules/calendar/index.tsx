@@ -66,8 +66,8 @@ export default function ActivityCalendar() {
         showClosingKnob={true}
         renderEmptyData={() => (
           <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text style={{ fontSize: SIZES.large, fontWeight: 'bold' }}>No acitivity today.</Text>
-            <Text>Host your own activity or join others!</Text>
+            <Text style={styles.emptyTitle}>ไม่พบกิจกรรมวันนี้</Text>
+            <Text style={styles.emptySub}>สร้างกิจกรรมของคุณหรือเข้าร่วมของคนอื่น !</Text>
           </View>
         )}
       />
@@ -108,5 +108,11 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacings.xs,
+  },
+  emptyTitle: {
+    ...typography.lgB,
+  },
+  emptySub: {
+    ...typography.md,
   },
 }));

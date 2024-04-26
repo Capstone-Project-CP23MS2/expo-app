@@ -1,31 +1,35 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import React, { useRef, useState } from 'react'
-import { COLORS } from '@/constants'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { COLORS } from '@/constants';
+import typography from 'react-native-ui-lib/src/style/typography';
 
 const status = [
   {
     name: 'ALL',
+    label: 'ทั้งหมด',
   },
   {
     name: 'GOING',
+    label: 'กำลังเริ่ม',
   },
   {
     name: 'PAST',
+    label: 'ผ่านไปแล้ว',
   },
-]
+];
 
 interface Props {
-  onStatusChanged: (category: string) => void
+  onStatusChanged: (category: string) => void;
 }
 
 export default function StatusListView({ onStatusChanged }: Props) {
-  const itemsRef = useRef<Array<TouchableOpacity | null>>([])
-  const [activeIndex, setActiveIndex] = useState(0)
+  const itemsRef = useRef<Array<TouchableOpacity | null>>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const selectStatus = (index: number) => {
-    setActiveIndex(index)
-    onStatusChanged(status[index].name)
-  }
+    setActiveIndex(index);
+    onStatusChanged(status[index].name);
+  };
 
   return (
     <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -37,12 +41,12 @@ export default function StatusListView({ onStatusChanged }: Props) {
           onPress={() => selectStatus(index)}
         >
           <Text style={activeIndex === index ? styles.categoryTextActive : styles.categoryText}>
-            {item.name}
+            {item.label}
           </Text>
         </TouchableOpacity>
       ))}
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -92,13 +96,11 @@ const styles = StyleSheet.create({
     borderRadius: 24,
   },
   categoryText: {
-    fontSize: 14,
-    fontFamily: 'mon-sb',
+    ...typography.sm,
     color: COLORS.gray,
   },
   categoryTextActive: {
-    fontSize: 14,
-    fontFamily: 'mon-sb',
+    ...typography.sm,
     color: '#000',
   },
   categoriesBtn: {
@@ -115,4 +117,4 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     paddingBottom: 8,
   },
-})
+});
