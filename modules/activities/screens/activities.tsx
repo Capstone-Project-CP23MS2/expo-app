@@ -1,12 +1,12 @@
-import { COLORS, FONT, SIZES } from '@/constants';
-import { Link, Stack, useRouter, Tabs } from 'expo-router';
-import { View, Text, StyleSheet, Pressable, ActivityIndicator, Button } from 'react-native';
+import { COLORS } from '@/constants';
+import { useRouter, Tabs } from 'expo-router';
+import { View, Text, Pressable, ActivityIndicator } from 'react-native';
 
-import { BaseButton, RefreshControl, ScrollView, TextInput } from 'react-native-gesture-handler';
+import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
-import { FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { UseGetActivities, UseGetMyUserInfo } from '@/hooks/useAPI';
 import { TouchableOpacity } from 'react-native-ui-lib';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
@@ -65,7 +65,7 @@ const index = (props: Props) => {
             <View>
               <Text style={styles.headerTitle}>กิจกรรมที่เข้าร่วมได้</Text>
               <Text style={styles.subHeader}>
-                เจอ {activities?.length} กิจกรรม เลือกเข้าร่วมกันเลย !
+                เจอแล้ว {activities?.length} กิจกรรม เลือกเข้าร่วมกันเลย !
               </Text>
             </View>
             {isLoading ? (

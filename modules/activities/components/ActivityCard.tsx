@@ -29,9 +29,6 @@ const ActivityCard = ({ activity, onPress }: ActivityCardProps) => {
         <Text style={styles.title} numberOfLines={1}>
           {activity.title}
         </Text>
-        {/* <RNUIText md-b>{activity.title}</RNUIText> */}
-
-        {/* <Text sm>{activity.description}</Text> */}
         <View style={styles.chipsList}>
           <Chip label={activity.categoryName} />
           <Chip label={`${activity.users.length}/${activity.noOfMembers}`} />
