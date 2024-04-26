@@ -41,7 +41,8 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
     // width: '100%',
     flexGrow: 1,
     borderRadius: spacings.md,
-    variants: {},
+    maxHeight: 48,
+    // variants: {},
   },
   extraStyle: (color: ButtonColor = 'primary') => ({
     variants: {

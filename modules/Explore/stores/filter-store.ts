@@ -6,36 +6,35 @@ type Time = 'all' | 'morning' | 'afternoon' | 'evening' | 'night';
 // จังหวัด
 
 type Filters = {
-  categoryIds: string[],
+  categoryIds?: number[],
   date?: Date,
   timeRangeStart?: string,
   timeRangeEnd?: string,
   distance?: number,
   sortBy?: 'relevance' | 'distance' | 'price' | 'rating',
 };
-const initialFilters = {
+const initialFilters: Filters = {
   categoryIds: [],
   date: 'all',
   timeRangeStart: '',
   timeRangeEnd: '',
-  distance: 3,
+  distance: 5,
   sortBy: 'relevance',
 };
 
 type FilterStore = {
-  setting: any,
+  filters: Filters,
   count: number,
   inc: () => void,
+  setFilters: (filters: Filters) => void,
+  reset: () => void,
 };
 
-const useFilterStore = create<FilterStore>((set) => ({
-  setting: {
-    category: 'all',
-    price: 'all',
-    rating: 'all',
-
-  },
+export const useFilterStore = create<FilterStore>((set) => ({
+  filters: { ...initialFilters },
   count: 1,
   inc: () => set((state) => ({ count: state.count + 1 })),
+  setFilters: (filters) => set(() => ({ filters })),
+  reset: () => set(() => ({ filters: initialFilters })),
 }))
 

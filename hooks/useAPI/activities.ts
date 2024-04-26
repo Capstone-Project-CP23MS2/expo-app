@@ -1,17 +1,34 @@
+import { set } from 'react-hook-form';
 import activitiesApi from "@/api/activities";
-import { ActivitiesResponse, ActivityResponse, ActivityUpdateRequest, requestParams } from "@/api/type";
+import { ActivitiesResponse, ActivityResponse, ActivityUpdateRequest, PaginateResponse, requestParams } from "@/api/type";
 
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { removeObjectFromArrayById } from "@/utils";
 import { UseGetMyUserInfo } from "./users";
 import { ActivitiesParams, GetActivitiesByLocationParams } from "@/api/activities/type";
+import { useCallback, useState } from 'react';
+import { useDebounce } from '@/modules/Explore/hooks/useDebounce';
 
+//default option
+// const getNextPageParam = useCallback((lastPage: PaginateResponse<object>) => {
+//   return lastPage.last ? undefined : lastPage.number + 1;
+// }, []);
 
 type UseGetActivitiesType = 'all' | 'my-activities' | 'joined-activities' | 'past-activities' | undefined;
-export function UseGetActivities(params = { pageSize: 1 } as ActivitiesParams, type: UseGetActivitiesType = undefined) {
-  return useInfiniteQuery({
-    queryKey: ['activities', type],
-    queryFn: ({ pageParam }) => activitiesApi.getActivities({ ...params, page: pageParam }),
+export function UseGetActivities(params = {} as ActivitiesParams, type: UseGetActivitiesType = undefined) {
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
+  const query = useInfiniteQuery({
+    queryKey: ['activities', type, debouncedSearchQuery, selectedCategoryIds],
+    queryFn: ({ pageParam }) => activitiesApi.getActivities({
+      ...params,
+      page: pageParam,
+      title: searchQuery,
+      categoryIds: selectedCategoryIds,
+    }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       return lastPage.last ? undefined : lastPage.number + 1;
@@ -21,6 +38,15 @@ export function UseGetActivities(params = { pageSize: 1 } as ActivitiesParams, t
       return { activities, ...data };
     }
   });
+
+  return {
+    ...query,
+    searchQuery,
+    setSearchQuery,
+    debouncedSearchQuery,
+    selectedCategoryIds,
+    setSelectedCategoryIds,
+  };
 }
 
 //TODO: รอ backend

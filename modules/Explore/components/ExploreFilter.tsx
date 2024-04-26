@@ -4,7 +4,7 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import AppTextInput from '@/modules/shared/AppTextInputOld';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import { Chip, TextField } from 'react-native-ui-lib';
 import { Chip as ChipPaper, Searchbar as SearchbarPaper } from 'react-native-paper';
 import AppChip from '@/components/AppChip';
@@ -14,8 +14,9 @@ import Searchbar from './Searchbar';
 type Props = {
   searchQuery: string;
   onSearchChanged: (terms: string) => void;
+  onFilterPress?: () => void;
 };
-export default function ExploreFilter({ searchQuery, onSearchChanged }: Props) {
+export default function ExploreFilter({ searchQuery, onSearchChanged, onFilterPress }: Props) {
   const { styles } = useStyles(stylesheet);
   return (
     <SafeAreaView style={styles.container}>
@@ -34,20 +35,12 @@ export default function ExploreFilter({ searchQuery, onSearchChanged }: Props) {
           <AppChip
             label="ตัวเลือก"
             onPress={() => console.log('pressed')}
-            leftElement={<MaterialCommunityIcons name="chevron-down" size={24} color="black" />}
+            color="secondary"
+            // leftElement={<MaterialCommunityIcons name="tune" size={20} color="black" />}
+            leftIcon="tune"
+            RightIcon="chevron-down"
+            onPressOut={onFilterPress}
           />
-          <AppChip label="ตัวเลือก" onPress={() => console.log('pressed')} />
-          <ChipPaper
-            style={{ borderRadius: 24 }}
-            icon={props => <MaterialCommunityIcons {...props} name="chevron-down" size={24} />}
-            onPress={() => console.log('Pressed')}
-            textStyle={styles.label}
-          >
-            Sort
-          </ChipPaper>
-          <ChipPaper icon="information" onPress={() => console.log('Pressed')}>
-            Example Chip
-          </ChipPaper>
         </ScrollView>
       </View>
     </SafeAreaView>
@@ -56,7 +49,7 @@ export default function ExploreFilter({ searchQuery, onSearchChanged }: Props) {
 
 const stylesheet = createStyleSheet(({ spacings, typography, colors }) => ({
   container: {
-    // padding: theme.spacings.md,
+    // padding: spacings.md,
     // backgroundColor: theme.colors.background,
     // backgroundColor: '#fff',
     elevation: 4,
