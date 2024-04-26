@@ -4,6 +4,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { ActivityResponse } from '@/api/type';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { useRouter } from 'expo-router';
 
 type ActivityCardProps = {
   activity: ActivityResponse;
@@ -11,9 +12,16 @@ type ActivityCardProps = {
 };
 const ActivityCard = ({ activity, onPress }: ActivityCardProps) => {
   const { styles } = useStyles(stylesheet);
+  const router = useRouter();
+
+  const handlePress = () => {
+    if (onPress) return onPress();
+    //default behavior
+    router.push(`/activities/${activity.activityId}`);
+  };
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container} activeOpacity={0.6}>
+    <TouchableOpacity onPress={handlePress} style={styles.container} activeOpacity={0.6}>
       <View style={styles.content}>
         <Text style={styles.textDatetime}>
           {dayjs(activity.dateTime).format('ddd, MMMM D, YYYY h:mm')}
