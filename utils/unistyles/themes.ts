@@ -3,9 +3,11 @@ const sharedTheme = {
     xxs: 2,
     xs: 4,
     sm: 8,
+    //TODO: ต้องลบออก
     ssm: 10,
     md: 12,
     lg: 16,
+    //TODO: ต้องลบออก
     llg: 15,
     xl: 24,
     xxl: 32,
@@ -115,18 +117,18 @@ export const lightTheme = {
   colors: {
     ...sharedColors,
 
-    primary: '#3E64FF',
-    onPrimary: 'rgb(255, 255, 255)',
-    primaryContainer: 'rgb(50, 82, 210)',
-    onPrimaryContainer: 'rgb(173, 191, 255)',
-    secondary: 'rgb(0, 99, 154)',
-    onSecondary: 'rgb(255, 255, 255)',
-    secondaryContainer: 'rgb(206, 229, 255)',
-    onSecondaryContainer: 'rgb(0, 29, 50)',
-    tertiary: 'rgb(96, 97, 52)',
-    onTertiary: 'rgb(255, 255, 255)',
-    tertiaryContainer: 'rgb(229, 230, 173)',
-    onTertiaryContainer: 'rgb(28, 29, 0)',
+    "primary": "rgb(150, 73, 0)",
+    "onPrimary": "rgb(255, 255, 255)",
+    "primaryContainer": "rgb(255, 220, 198)",
+    "onPrimaryContainer": "rgb(49, 19, 0)",
+    "secondary": "rgb(0, 99, 154)",
+    "onSecondary": "rgb(255, 255, 255)",
+    "secondaryContainer": "rgb(206, 229, 255)",
+    "onSecondaryContainer": "rgb(0, 29, 50)",
+    "tertiary": "rgb(96, 97, 52)",
+    "onTertiary": "rgb(255, 255, 255)",
+    "tertiaryContainer": "rgb(229, 230, 173)",
+    "onTertiaryContainer": "rgb(28, 29, 0)",
 
     typography: '#000000',
     background: '#ffffff',
@@ -150,18 +152,18 @@ export const darkTheme = {
   colors: {
     ...sharedColors,
 
-    primary: 'rgb(62, 100, 255)',
-    onPrimary: 'rgb(38, 62, 160)', // Adjusted shade of primary
-    primaryContainer: 'rgb(50, 82, 210)', // Adjusted tint of primary
-    onPrimaryContainer: 'rgb(173, 191, 255)', // Adjusted light shade of primary
-    secondary: 'rgb(150, 204, 255)',
-    onSecondary: 'rgb(0, 51, 83)',
-    secondaryContainer: 'rgb(0, 74, 117)',
-    onSecondaryContainer: 'rgb(206, 229, 255)',
-    tertiary: 'rgb(201, 202, 147)',
-    onTertiary: 'rgb(49, 50, 10)',
-    tertiaryContainer: 'rgb(72, 73, 31)',
-    onTertiaryContainer: 'rgb(229, 230, 173)',
+    "primary": "rgb(255, 183, 134)",
+    "onPrimary": "rgb(80, 36, 0)",
+    "primaryContainer": "rgb(114, 54, 0)",
+    "onPrimaryContainer": "rgb(255, 220, 198)",
+    "secondary": "rgb(150, 204, 255)",
+    "onSecondary": "rgb(0, 51, 83)",
+    "secondaryContainer": "rgb(0, 74, 117)",
+    "onSecondaryContainer": "rgb(206, 229, 255)",
+    "tertiary": "rgb(201, 202, 147)",
+    "onTertiary": "rgb(49, 50, 10)",
+    "tertiaryContainer": "rgb(72, 73, 31)",
+    "onTertiaryContainer": "rgb(229, 230, 173)",
 
     typography: '#ffffff',
     background: '#000000',
@@ -221,6 +223,7 @@ const test = {
     backdrop: 'rgba(51, 47, 55, 0.4)',
   },
 };
+
 
 const oldColor = {
   primary: '#3E64FF',
