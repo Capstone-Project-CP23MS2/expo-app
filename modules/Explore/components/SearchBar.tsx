@@ -27,7 +27,7 @@ const SearchBar = ({ searchQuery, onSearchChanged }: Props) => {
         </View>
         <TextInput
           style={[styles.textInput, styles.label]}
-          placeholder="Search"
+          placeholder="ค้นหากิจกรรม"
           onChangeText={onSearchChanged}
           value={searchQuery}
           // autoCorrect={false}

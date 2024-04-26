@@ -1,14 +1,9 @@
 import { View, Text } from 'react-native';
 import React from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
-import AppTextInput from '@/modules/shared/AppTextInputOld';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
-import { Chip, TextField } from 'react-native-ui-lib';
-import { Chip as ChipPaper, Searchbar as SearchbarPaper } from 'react-native-paper';
 import AppChip from '@/components/AppChip';
-import Search from '@/app/(app)/activities/search';
 import SearchBar from './SearchBar';
 
 type Props = {
@@ -49,10 +44,21 @@ export default function ExploreFilter({ searchQuery, onSearchChanged, onFilterPr
 
 const stylesheet = createStyleSheet(({ spacings, typography, colors }) => ({
   container: {
+    // padding: spacings.md,
+    // backgroundColor: theme.colors.background,
+    // backgroundColor: '#fff',
     elevation: 4,
+    // shadowColor: '#000',
+    // shadowOpacity: 0.1,
+    // shadowRadius: 6,
+    // shadowOffset: {
+    //   width: 1,
+    //   height: 10,
+    // },
     flexDirection: 'row',
     alignItems: 'center',
-    padding: spacings.llg,
+
+    padding: spacings.md,
     backgroundColor: colors.background, // Adjust background color as needed
   },
   filterBar: {

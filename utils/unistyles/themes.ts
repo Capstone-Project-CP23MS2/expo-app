@@ -5,8 +5,6 @@ const sharedTheme = {
     sm: 8,
     md: 12,
     lg: 16,
-    //TODO: ต้องลบออก
-    llg: 15,
     xl: 24,
     xxl: 32,
     xxxl: 48,
