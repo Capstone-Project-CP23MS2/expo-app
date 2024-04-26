@@ -10,7 +10,7 @@ import { FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-ic
 import { UseGetActivities, UseGetMyUserInfo } from '@/hooks/useAPI';
 import { TouchableOpacity } from 'react-native-ui-lib';
 // import ActivityCard from '../components/Card/'
-import { ActivityCard } from '../components/';
+import { ActivityCard } from '../components';
 import AppButton from '@/modules/shared/AppButton';
 import MapActivities from '../components/MapActivities';
 import ActivitySearch from '@/modules/activity-search/ActivitySearch';

@@ -1,3 +1,5 @@
+import { Place } from "../places/places.type";
+
 export type UserInterestCreateRequest = {
   userId: number;
   categoryIds: number[];
@@ -5,7 +7,7 @@ export type UserInterestCreateRequest = {
 
 export type Gender = 'Male' | 'Female' | 'Other' | 'NotApplicable' | 'Unknown';
 
-export type UserInfoResponse = {
+export type UserBase = {
   userId: number;
   username: string;
   email: string;
@@ -15,7 +17,12 @@ export type UserInfoResponse = {
   dateOfBirth: string;
   phoneNumber: string;
   lineId: string;
-  userInterests: number[];
-  lastLogin: string;
-  registrationDate: string;
+};
+
+export type User = UserBase & {
+  lastLogin?: string;
+  registrationDate?: string;
+  userInterests?: number[];
+  location?: Place;
+  locationId?: number;
 };

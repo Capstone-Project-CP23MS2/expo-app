@@ -5,7 +5,7 @@ import { UseGetActivities } from '@/hooks/useAPI';
 import { ScrollView } from 'react-native-gesture-handler';
 import { RNUIButton } from '@/components';
 import { FlashList } from '@shopify/flash-list';
-import { ActivityCard } from '../components/';
+import { ActivityCard } from '../components';
 
 type Props = {};
 

@@ -2,7 +2,14 @@ import { StyleSheet, Text, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { Tabs } from 'expo-router';
 import { COLORS, FONT } from '@/constants';
-import { FontAwesome5, AntDesign, Entypo, MaterialIcons, Ionicons } from '@expo/vector-icons';
+import {
+  FontAwesome5,
+  AntDesign,
+  Entypo,
+  MaterialIcons,
+  Ionicons,
+  MaterialCommunityIcons,
+} from '@expo/vector-icons';
 
 import { UseGetNotificationById } from '@/hooks/useAPI';
 import { useAuth } from '@/context/authContext';
@@ -28,15 +35,19 @@ const TabsLayout = (props: Props) => {
       }}
     >
       <Tabs.Screen
-        name="home"
+        name="explore"
         options={{
           tabBarIcon: ({ size, color }) => (
-            <MaterialIcons name="home-filled" size={size} color={color} />
+            <MaterialCommunityIcons name="magnify" size={24} color="black" />
           ),
-          headerTitle: 'Home',
         }}
       />
-
+      <Tabs.Screen
+        name="index"
+        options={{
+          tabBarIcon: ({ size, color }) => <Entypo name="list" size={size} color={color} />,
+        }}
+      />
       <Tabs.Screen
         name="calendar"
         options={{
@@ -48,17 +59,10 @@ const TabsLayout = (props: Props) => {
       />
 
       <Tabs.Screen
-        name="index"
-        options={{
-          tabBarIcon: ({ size, color }) => <Entypo name="list" size={size} color={color} />,
-        }}
-      />
-
-      <Tabs.Screen
-        name="whishlists"
+        name="wishLists"
         options={{
           tabBarIcon: ({ size, color }) => <AntDesign name="star" size={size} color={color} />,
-          headerTitle: 'Review',
+          headerTitle: 'Wish Lists',
         }}
       />
 
@@ -77,6 +81,15 @@ const TabsLayout = (props: Props) => {
         options={{
           tabBarIcon: ({ size, color }) => <Ionicons name="person" size={size} color={color} />,
           headerTitle: 'Profile',
+        }}
+      />
+      <Tabs.Screen
+        name="home-old"
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <MaterialIcons name="home-filled" size={size} color={color} />
+          ),
+          headerTitle: 'Home',
         }}
       />
     </Tabs>

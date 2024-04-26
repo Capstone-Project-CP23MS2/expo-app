@@ -38,6 +38,11 @@ export default function dev() {
           title: 'New Activities Form Screen',
           onPress: () => router.push('/activities/activity-create'),
         },
+        {
+          id: 'screen-new-activities-detail',
+          title: 'New Activities Detail Screen',
+          onPress: () => router.push('/dev/new/activities/1'),
+        },
       ],
     },
     {
@@ -76,9 +81,24 @@ export default function dev() {
           onPress: () => router.push('/dev/library/DevReactQuery'),
         },
         {
-          id: 'lib-expo-location',
+          id: 'lib-unistyles',
+          title: 'Unistyles',
+          onPress: () => router.push('/dev/library/DevUnistyles'),
+        },
+        {
+          id: 'lib-map',
           title: 'Map',
-          onPress: () => router.push('/dev/library/DevReactQuery'),
+          onPress: () => router.push('/dev/library/DevMapView'),
+        },
+        {
+          id: 'lib-rn-map',
+          title: 'React Native Map',
+          onPress: () => router.push('/dev/library/DevRNMap'),
+        },
+        {
+          id: 'lib-expo-location',
+          title: 'Expo Location',
+          onPress: () => router.push('/dev/library/DevExpoLocation'),
         },
         {
           id: 'lib-expo-image-picker',

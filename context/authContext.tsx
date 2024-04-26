@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       console.log(`😀 You are already logged in with Google.`);
 
-      const { email, idToken }: any = await googleAuthentication();
+      const { email, idToken }: any = await googleAuthentication(logout);
       if (email === undefined || !email) return logout();
 
       setSession({
@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const isSignedInWithGoogle = await GoogleSignin.isSignedIn();
       if (isSignedInWithGoogle) await logout();
 
-      const { email, idToken }: any = await googleAuthentication();
+      const { email, idToken }: any = await googleAuthentication(logout);
       setSession({
         authenticated: true,
         idToken: idToken,
@@ -193,7 +193,7 @@ const configureGoogleSignIn = async () => {
   });
 };
 
-const googleAuthentication = async () => {
+const googleAuthentication = async (onError: () => void) => {
   try {
     await GoogleSignin.hasPlayServices();
 
@@ -227,6 +227,7 @@ const googleAuthentication = async () => {
       // some other error happened
       console.log('🚨 ~ googleSignIn ~ some other error happened');
     }
+    onError();
   }
 };
 

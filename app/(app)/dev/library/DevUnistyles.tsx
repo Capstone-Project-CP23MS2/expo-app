@@ -1,13 +1,8 @@
 import { Image, StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { useEffect } from 'react';
 import { FlatList, ScrollView } from 'react-native-gesture-handler';
-import categories from '@/modules/test/demo/components/ExploreHeader/categories';
 import { Stack, Link, useNavigation, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { COLORS, SIZES } from '@/constants';
-import ActivityCard from '@/modules/activities/components/Card';
-import { Button, FAB } from 'react-native-paper';
 import { UnistylesRuntime, createStyleSheet, useStyles } from 'react-native-unistyles';
 import AppButton from '@/modules/shared/AppButton';
 import { RNUIButton } from '@/components';
@@ -51,9 +46,6 @@ export default function Page(props: Props) {
               UnistylesRuntime.setTheme(UnistylesRuntime.themeName === 'light' ? 'dark' : 'light')
             }
           />
-          <Button icon="camera" mode="contained" onPress={() => console.log('Pressed')}>
-            Press me
-          </Button>
         </View>
       </ScrollView>
     </SafeAreaView>

@@ -1,34 +1,36 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import { COLORS, FONT, SIZES } from '@/constants'
-import { createStyleSheet, useStyles } from 'react-native-unistyles'
-import { BaseButton, BaseButtonProps } from 'react-native-gesture-handler'
+import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { COLORS, FONT, SIZES } from '@/constants';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { BaseButton, BaseButtonProps } from 'react-native-gesture-handler';
+import { RNUIButton } from '@/components';
 
-export type Color = 'primary' | 'secondary' | 'tertiary' | 'danger' | 'disable'
+export type Color = 'primary' | 'secondary' | 'tertiary' | 'danger' | 'disable';
 
 type Props = BaseButtonProps & {
-  variant?: Color
-  label?: string
-  fullWidth?: boolean
-  round?: boolean
+  variant?: Color;
+  label?: string;
+  fullWidth?: boolean;
+  round?: boolean;
   // onPress: () => void
   // enabled?: boolean
-}
+};
 
 const AppButton = ({ variant, label, fullWidth, enabled, ...otherProps }: Props) => {
   const { styles, breakpoint, theme } = useStyles(stylesheet, {
     color: variant,
     fullWidth: fullWidth,
-  })
+  });
 
   return (
+    // <RNUIButton label="label" {...otherProps} />
     <BaseButton style={styles.container} enabled={enabled} {...otherProps}>
       <Text style={styles.label}>{label}</Text>
     </BaseButton>
-  )
-}
+  );
+};
 
-export default AppButton
+export default AppButton;
 
 const stylesheet = createStyleSheet(theme => ({
   container: {
@@ -65,7 +67,7 @@ const stylesheet = createStyleSheet(theme => ({
       },
       fullWidth: {
         true: {
-          flex: 1,
+          flexGrow: 1,
         },
       },
     },
@@ -74,5 +76,6 @@ const stylesheet = createStyleSheet(theme => ({
     fontSize: SIZES.medium,
     color: COLORS.white,
     fontFamily: FONT.semiBold,
+    lineHeight: 24,
   },
-}))
+}));

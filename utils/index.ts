@@ -43,3 +43,11 @@ export const filterChangedFormFields = <T extends FieldValues>(
 
     return changedFieldValues;
 };
+
+export const removeObjectFromArrayById = (arr: any[], id: number, key: string) => {
+    const index = arr.findIndex((item) => item[key] === id);
+    if (index > -1) {
+        arr.splice(index, 1);
+    }
+    return arr;
+};
