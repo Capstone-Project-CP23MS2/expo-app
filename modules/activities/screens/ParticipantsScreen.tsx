@@ -8,7 +8,7 @@ import ParticipantList from '../components/details/participants/ParticipantList'
 
 type Props = {};
 
-const ActivityParticipants = (props: Props) => {
+const ParticipantsScreen = (props: Props) => {
   const { styles } = useStyles(stylesheet);
 
   const { activityId } = useLocalSearchParams<{ activityId: string }>();
@@ -38,4 +38,4 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   },
 }));
 
-export default ActivityParticipants;
+export default ParticipantsScreen;

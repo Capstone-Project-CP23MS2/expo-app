@@ -1,5 +1,5 @@
 import { View, Text, ToastAndroid, Pressable } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Tabs, useLocalSearchParams, useRouter } from 'expo-router';
 import {
@@ -19,12 +19,13 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 type Props = {};
 // note: ต้องเห็นข้อมูลทุกอย่างที่ใช้ในการตัดสินใจใน 1 หน้าจอ
-const ActivityDetail = (props: Props) => {
+const DetailScreen = (props: Props) => {
   const { styles } = useStyles(stylesheet);
   //route
   const router = useRouter();
   const { id: activityId } = useLocalSearchParams<{ id: string }>();
-  console.log('render ActivityDetail');
+
+  console.log(`🔃 render activity detail screen (${activityId})`);
 
   const {
     data: activity,
@@ -217,4 +218,4 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography, component }
   },
 }));
 
-export default ActivityDetail;
+export default DetailScreen;
