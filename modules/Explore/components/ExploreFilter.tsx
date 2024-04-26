@@ -9,7 +9,7 @@ import { Chip, TextField } from 'react-native-ui-lib';
 import { Chip as ChipPaper, Searchbar as SearchbarPaper } from 'react-native-paper';
 import AppChip from '@/components/AppChip';
 import Search from '@/app/(app)/activities/search';
-import Searchbar from './Searchbar';
+import SearchBar from './SearchBar';
 
 type Props = {
   searchQuery: string;
@@ -22,7 +22,7 @@ export default function ExploreFilter({ searchQuery, onSearchChanged, onFilterPr
     <SafeAreaView style={styles.container}>
       <View style={{ flex: 1, gap: 8 }}>
         <View style={{ flexDirection: 'row' }}>
-          <Searchbar searchQuery={searchQuery} onSearchChanged={onSearchChanged} />
+          <SearchBar searchQuery={searchQuery} onSearchChanged={onSearchChanged} />
         </View>
 
         <ScrollView
