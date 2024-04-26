@@ -14,7 +14,7 @@ const ActivityCard = ({ activity, onPress }: ActivityCardProps) => {
 
   return (
     <TouchableOpacity onPress={onPress} style={styles.container} activeOpacity={0.6}>
-      <View style={styles.content}>
+      <View>
         <Text style={styles.textDatetime}>
           {dayjs(activity.dateTime).format('ddd, MMMM D, YYYY h:mm')}
         </Text>
