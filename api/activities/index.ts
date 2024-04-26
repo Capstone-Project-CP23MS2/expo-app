@@ -2,7 +2,7 @@ import { ActivitiesResponse, ParticipantResponse, ParticipantsResponse, Activity
 import apiClient from "../apiClient";
 import { objToFormData } from '@/utils';
 import { AxiosRequestConfig } from 'axios';
-import { ActivitiesParams, Activity, ActivityCreateRequest, GetActivitiesByLocationParams } from './type';
+import { ActivitiesParams, Activity, ActivityCreateRequest, GetActivitiesByLocationParams, Participant, ParticipantsParams } from './type';
 
 class ActivitiesApi {
   async getActivities(params: ActivitiesParams) {
@@ -74,10 +74,10 @@ class ActivitiesApi {
     await apiClient.delete<void>(`/users/${id}`);
   }
 
-  async getActivityParticipants(activityId: string | string[]) {
-    const { data } = await apiClient.get<ParticipantsResponse>(
+  async getActivityParticipants(params: ParticipantsParams) {
+    const { data } = await apiClient.get<PaginateResponse<Participant>>(
       'participants',
-      { params: { activityId: activityId } }
+      { params }
     );
     return data;
   }

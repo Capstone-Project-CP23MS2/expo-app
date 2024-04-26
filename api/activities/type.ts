@@ -51,3 +51,21 @@ export type ActivityCreateRequest = {
   noOfMembers: number;
 };
 
+export type AttendanceStatus = 'arrived' | 'not_arrived' | 'waiting' | 'none';
+export type RSVPStatus = 'going' | 'interesting' | 'unconfirmed';
+
+export type Participant = {
+  userId: number;
+  username: string;
+  activityId: number;
+  status: AttendanceStatus;
+  rsvpStatus: RSVPStatus;
+  joinedAt: string;
+};
+
+export type ParticipantsParams = PaginateParams & {
+  activityId?: number;
+  userId?: number;
+  status?: AttendanceStatus;
+  rsvpStatus?: RSVPStatus;
+};

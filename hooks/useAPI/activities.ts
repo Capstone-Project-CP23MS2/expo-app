@@ -5,7 +5,7 @@ import { ActivitiesResponse, ActivityResponse, ActivityUpdateRequest, PaginateRe
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { removeObjectFromArrayById } from "@/utils";
 import { UseGetMyUserInfo } from "./users";
-import { ActivitiesParams, GetActivitiesByLocationParams } from "@/api/activities/type";
+import { ActivitiesParams, AttendanceStatus, GetActivitiesByLocationParams, ParticipantsParams } from "@/api/activities/type";
 import { useCallback, useState } from 'react';
 import { useDebounce } from '@/modules/Explore/hooks/useDebounce';
 
@@ -165,13 +165,40 @@ export function UseDeleteActivity() {
   });
 }
 
-export function UseGetActivityParticipants(activityId: string | string[]) {
-  return useQuery({
-    queryKey: ['activityParticipants', activityId],
-    queryFn: () => activitiesApi.getActivityParticipants(activityId),
-    enabled: !!activityId,
+
+export function UseGetActivityParticipants(params = {} as ParticipantsParams) {
+  const [selectedAttendanceStatus, setSelectedAttendanceStatus] = useState<AttendanceStatus | undefined>(undefined);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+
+  const query = useInfiniteQuery({
+    queryKey: ['activities', params.activityId, selectedAttendanceStatus],
+    queryFn: ({ pageParam }) => activitiesApi.getActivityParticipants({
+      ...params,
+      page: pageParam,
+      status: selectedAttendanceStatus,
+    }),
+    enabled: !!params.activityId,
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      return lastPage.last ? undefined : lastPage.number + 1;
+    },
+    select: (data) => {
+      const participants = data.pages.flatMap(page => page.content);
+      return { participants, ...data };
+    },
   });
-};
+
+  return {
+    ...query,
+    searchQuery,
+    setSearchQuery,
+    debouncedSearchQuery,
+    selectedAttendanceStatus,
+    setSelectedAttendanceStatus
+  };
+}
 
 export function UseCreateParticipant() {
   const queryClient = useQueryClient();
