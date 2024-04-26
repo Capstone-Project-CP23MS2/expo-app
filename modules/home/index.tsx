@@ -11,14 +11,16 @@ import { ActivityIndicator } from 'react-native-paper';
 import { ActivityCard } from '../activities/components/';
 import { TouchableOpacity } from 'react-native-ui-lib';
 import StatusListView from './components/StatusListView';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 type Props = {};
 
 const Page = (props: Props) => {
+  const { styles } = useStyles(stylesheet);
   const router = useRouter();
 
   const { data, isLoading, isError, error, refetch } = UseGetActivities({});
-  const { activities, paginationData } = data || {};
+  const { activities } = data || {};
 
   const { user: userInfo } = useAuth();
 
@@ -63,7 +65,7 @@ const Page = (props: Props) => {
         <View style={styles.container}>
           <View style={styles.cardsContainer}>
             <View style={{ gap: 5, flexDirection: 'row' }}>
-              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Joined Activities</Text>
+              <Text style={styles.title}>เข้าร่วมกิจกรรม</Text>
               <Chip label={String(activityJoined)} />
             </View>
             {isLoading ? (
@@ -86,11 +88,11 @@ const Page = (props: Props) => {
                 ))
             ) : (
               <View style={styles.blank}>
-                <Text>No Join Activity.</Text>
+                <Text style={styles.blankText}>ไม่มีกิจกรรม</Text>
               </View>
             )}
             <View style={{ gap: 5, flexDirection: 'row' }}>
-              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Host Activities</Text>
+              <Text style={styles.title}>เจ้าของกิจกรรม</Text>
               <Chip label={String(activityHost)} />
             </View>
             {isLoading ? (
@@ -109,11 +111,11 @@ const Page = (props: Props) => {
                 ))
             ) : (
               <View style={styles.blank}>
-                <Text>No Host Activity.</Text>
+                <Text style={styles.blankText}>ไม่มีกิจกรรม</Text>
               </View>
             )}
             <View style={{ gap: 2 }}>
-              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Activity Status</Text>
+              <Text style={styles.title}>สถานะกิจกรรม</Text>
             </View>
             <StatusListView onStatusChanged={onDataChanged} />
             {activities?.length && (
@@ -163,26 +165,10 @@ const Page = (props: Props) => {
     </View>
   );
 };
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   safeArea: {
     backgroundColor: 'white',
     elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-  },
-  headerArea: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingLeft: 20,
-    paddingRight: 20,
-    paddingBottom: 10,
-    paddingTop: 10,
   },
   container: {
     paddingTop: 0,
@@ -192,21 +178,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  subHeader: {
-    color: COLORS.black,
-    fontWeight: 'normal',
-  },
-  headerTitle: {
-    fontSize: SIZES.large,
-    fontFamily: FONT.medium,
-    color: COLORS.black,
-    fontWeight: 'bold',
-  },
-  headerBtn: {
-    fontSize: SIZES.medium,
-    fontFamily: FONT.medium,
-    color: COLORS.gray,
   },
   cardsContainer: {
     gap: SIZES.small,
@@ -224,15 +195,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 20,
     elevation: 4,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
     borderRadius: SIZES.small,
+    borderColor: colors.lightgray,
+    borderWidth: 1,
   },
-});
+  blankText: {
+    ...typography.sm,
+  },
+  title: {
+    ...typography.lgB,
+  },
+}));
 
 export default Page;
