@@ -33,7 +33,6 @@ const ExploreScreen = (props: Props) => {
   } = UseGetActivities(
     {
       // categoryIds: [1],
-      pageSize: 5,
     },
     'all',
   );

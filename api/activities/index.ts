@@ -7,9 +7,13 @@ import { ActivitiesParams, Activity, ActivityCreateRequest, GetActivitiesByLocat
 class ActivitiesApi {
   async getActivities(params: ActivitiesParams) {
     const config: AxiosRequestConfig = {
-      params,
+      params: {
+        ...params,
+        pageSize: 10,
+
+      } as ActivitiesParams,
       paramsSerializer: {
-        indexes: null
+        indexes: null,
       }
     };
     const { data } = await apiClient.get<PaginateResponse<Activity>>('/activities', config);

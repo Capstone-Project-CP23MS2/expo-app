@@ -26,8 +26,8 @@ export function UseGetActivities(params = {} as ActivitiesParams, type: UseGetAc
     queryFn: ({ pageParam }) => activitiesApi.getActivities({
       ...params,
       page: pageParam,
-      title: searchQuery,
-      categoryIds: selectedCategoryIds,
+      title: searchQuery ? searchQuery : undefined,
+      categoryIds: selectedCategoryIds.length ? selectedCategoryIds : undefined,
     }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
