@@ -17,75 +17,68 @@ const Searchbar = ({ searchQuery, onSearchChanged }: Props) => {
     onSearchChanged('');
   };
   return (
-    <>
-      <View style={styles.field}>
-        <View style={styles.iconContainer}>
-          <View style={styles.iconWrapper}>
-            <MaterialCommunityIcons name="magnify" size={24} color="black" />
-            {/* <MaterialCommunityIcons name="arrow-left" size={24} color="black" /> */}
-          </View>
+    <View style={styles.field}>
+      <View style={styles.inputContainer}>
+        <View style={{marginRight: 10}}>
+          <MaterialIcons name="search" size={22} color="black" />
         </View>
         <TextInput
           style={[styles.textInput, styles.label]}
-          placeholder="Search"
+          placeholder="Explore available activities"
+          placeholderTextColor="#c0c0c0"
           onChangeText={onSearchChanged}
           value={searchQuery}
-          // autoCorrect={false}
-          // secureTextEntry={hidePassword}
-          // editable={!disabled}
-          // placeholderTextColor={placeholderTextColor ? `${textColor}` : '#c0c0c0'}
-          // autoFocus={autoFocus}
-          // {...props}
         />
-        <View style={styles.iconContainer}>
-          <Pressable
-            style={[
-              styles.iconWrapper,
-              { opacity: searchQuery.length && searchQuery.length ? 100 : 0 },
-            ]}
-            android_ripple={{ color: 'gray' }}
-            onPress={handleClearQuery}
-          >
-            <MaterialCommunityIcons name="close" size={24} color="black" />
-          </Pressable>
-        </View>
       </View>
-    </>
+      <View style={styles.iconContainer}>
+        <Pressable
+          style={[
+            styles.iconWrapper,
+            { opacity: searchQuery.length && searchQuery.length ? 100 : 0 },
+          ]}
+          android_ripple={{ color: 'gray' }}
+          onPress={handleClearQuery}
+        >
+          <MaterialCommunityIcons name="close" size={24} color="black" />
+        </Pressable>
+      </View>
+    </View>
   );
 };
 
 const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
-  container: {
-    //   // flex: 1,
+  inputContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingHorizontal: 15,
   },
   field: {
-    ...typography.md,
-    // paddingHorizontal: spacings.lg,
-    backgroundColor: colors.primaryContainer,
-    borderRadius: spacings.xl,
+    ...typography.sm,
+    backgroundColor: colors.onPrimary,
+    borderRadius: spacings.ssm,
     flexGrow: 1,
     maxWidth: '100%',
     alignItems: 'center',
     flexDirection: 'row',
+    borderColor: '#c0c0c0',
+    borderWidth: 1,
   },
   textInput: {
     flex: 1,
     flexGrow: 1,
     minHeight: 48,
-    marginHorizontal: spacings.xs,
   },
   label: {
-    ...typography.md,
+    ...typography.sm,
     textAlign: 'left',
     alignSelf: 'stretch',
-    color: colors.onPrimaryContainer,
   },
   iconContainer: {
     height: 40,
     width: 40,
     borderRadius: 9999,
     overflow: 'hidden',
-    margin: spacings.xs,
+    marginHorizontal: spacings.xs,
   },
   iconWrapper: {
     width: '100%',

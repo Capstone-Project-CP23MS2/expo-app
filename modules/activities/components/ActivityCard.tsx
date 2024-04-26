@@ -39,19 +39,9 @@ export default ActivityCard;
 const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   container: {
     padding: spacings.lg,
-    // gap: spacings.xs,
-    // flex: 1,
-    // justifyContent: 'space-between',
-    // alignItems: 'center',
-    // flexDirection: 'row',
     borderRadius: spacings.md,
     backgroundColor: '#FFF',
     elevation: 3,
-    // ...SHADOWS.medium,
-    // shadowColor: COLORS.white,
-  },
-  content: {
-    // gap: 4,
   },
   title: {
     ...typography.mdB,

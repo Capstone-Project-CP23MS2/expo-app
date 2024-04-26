@@ -73,7 +73,6 @@ const ExploreScreen = (props: Props) => {
     <>
       <Stack.Screen
         options={{
-          // header: () => <ExploreHeader onCategoryChanged={() => {}} />,
           header: () => (
             <ExploreFilter
               searchQuery={searchQuery}

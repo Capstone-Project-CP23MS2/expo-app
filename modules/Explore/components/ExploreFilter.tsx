@@ -49,21 +49,10 @@ export default function ExploreFilter({ searchQuery, onSearchChanged, onFilterPr
 
 const stylesheet = createStyleSheet(({ spacings, typography, colors }) => ({
   container: {
-    // padding: spacings.md,
-    // backgroundColor: theme.colors.background,
-    // backgroundColor: '#fff',
     elevation: 4,
-    // shadowColor: '#000',
-    // shadowOpacity: 0.1,
-    // shadowRadius: 6,
-    // shadowOffset: {
-    //   width: 1,
-    //   height: 10,
-    // },
     flexDirection: 'row',
     alignItems: 'center',
-
-    padding: spacings.md,
+    padding: spacings.llg,
     backgroundColor: colors.background, // Adjust background color as needed
   },
   filterBar: {
