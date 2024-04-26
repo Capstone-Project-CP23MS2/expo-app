@@ -158,24 +158,7 @@ const ActivityDetail = (props: Props) => {
             />
           </View>
 
-          <Text style={styles.description}>
-            {activity?.description} Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Recusandae excepturi, iste possimus incidunt accusantium necessitatibus minima sed quis,
-            fugit itaque harum maiores ab, voluptatum consequatur. Soluta, iure? Reiciendis, fuga
-            ducimus. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sequi id commodi quae
-            in tempora, aspernatur voluptate ut ex maiores eum error quibusdam enim vero. Maiores
-            aspernatur, molestias minus accusantium doloribus veritatis modi aperiam, vero tenetur
-            perspiciatis velit! Voluptatibus, et culpa. Lorem ipsum dolor sit amet consectetur,
-            adipisicing elit. Placeat tenetur aspernatur nemo provident officia illo iste assumenda
-            nihil fuga suscipit minus velit molestiae iure, ipsa esse cupiditate magnam quaerat
-            quae. Minima quia harum quae ut quod quo laborum repellendus nulla reiciendis officia
-            consequuntur, quasi earum, sit ea placeat animi facere vitae soluta possimus, iure
-            sapiente doloribus voluptas sequi eos? Impedit aperiam fugiat optio maxime mollitia
-            sequi enim, voluptatem velit rem tempore repellat officiis natus veniam sunt, architecto
-            veritatis eos ullam eligendi? Est cupiditate asperiores eveniet doloremque quasi, ipsam
-            voluptatum, ducimus a nam quidem, provident ratione. Eveniet enim impedit laboriosam
-            perspiciatis?
-          </Text>
+          <Text style={styles.description}>{activity?.description}</Text>
 
           {/* <RNUIButton label="แก้ไขกิจกรรม" onPress={() => router.push(`/activities/edit?id=${activityId}`)} /> */}
         </ScrollView>
