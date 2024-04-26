@@ -51,7 +51,7 @@ const index = () => {
     <SelectMarkerContext.Provider value={{ selectedMarker, setSelectedMarker }}>
       <View style={{ flex: 1 }}>
         <View style={styles.headerContainer}>
-          <SearchBarMap />
+          <SearchBarMap onSearchPlaceChange={handleRegionChange} />
         </View>
         <MapView
           style={styles.map}
