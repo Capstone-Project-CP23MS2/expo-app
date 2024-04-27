@@ -26,7 +26,6 @@ const Page = (props: Props) => {
       icon: 'edit',
       onPress: () => {
         console.log('👤 Edit Profile');
-
         router.push('/profile/edit');
       },
     },
@@ -49,7 +48,7 @@ const Page = (props: Props) => {
     },
     {
       id: 'dev-test',
-      title: 'Dev',
+      title: 'ผู้พัฒนา',
       icon: 'dev',
       onPress: () => {
         console.log('👤 Dev');

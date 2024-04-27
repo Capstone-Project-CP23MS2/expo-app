@@ -4,6 +4,7 @@ import AppButton from '@/modules/shared/AppButton';
 import { UseCreateParticipant, UseDeleteParticipant, UseCreateNotification } from '@/hooks/useAPI';
 import { objToFormData } from '@/utils';
 import { useRouter } from 'expo-router';
+import { scheduleNotification } from '@/modules/notification/schedule';
 
 type Props = {
   userId?: number;
@@ -36,6 +37,8 @@ export default function JoinButton({
     const type = 'join';
     const message = `${userName} joined ${activityTitle}`;
 
+    scheduleNotification('Join Activity', "You're just joined activty", 3);
+
     createParticipantMutation.mutate(objToFormData({ userId, activityId }), {
       onSuccess: data => {
         ToastAndroid.show("You've joined Activitiy", ToastAndroid.SHORT);
@@ -45,6 +48,7 @@ export default function JoinButton({
         console.log(error);
       },
     });
+
     createNotiMutation.mutate(objToFormData({ targetId, message, unRead, type }), {
       onSuccess: data => {
         console.log('🚀 ~ notificationMutation.mutate ~ data:', data);
