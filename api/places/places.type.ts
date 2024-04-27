@@ -15,4 +15,14 @@ export type Place = {
 
 export type PlacesResponseBody = APIPaginationResponse<Place>;
 
-// export type PlacesRequestParameters = PlaceRequestParameters;
+export type PlacesParams = PlacesRequestParameters;
+//TODO:
+// export type ActivitiesParams = PaginateParams & {
+//   sortBy?: ActivitiesSortBy;
+//   categoryIds?: number[];
+//   title?: string;
+//   hostId?: number;
+//   userId?: number;
+//   dateStatus?: ActivitiesParamsDateStatus;
+//   date?: string;
+// };

@@ -14,27 +14,27 @@ const sharedTheme = {
     h1: {
       fontSize: 32,
       fontFamily: 'NotoSansThaiBold',
-      lineHeight: 36,
+      // lineHeight: 36,
     },
     h2: {
       fontSize: 28,
       fontFamily: 'NotoSansThaiBold',
-      lineHeight: 32,
+      // lineHeight: 32,
     },
     h3: {
       fontSize: 24,
       fontFamily: 'NotoSansThaiBold',
-      lineHeight: 28,
+      // lineHeight: 28,
     },
     h4: {
       fontSize: 22,
       fontFamily: 'NotoSansThaiSemiBold',
-      lineHeight: 26,
+      // lineHeight: 26,
     },
     h5: {
       fontSize: 20,
       fontFamily: 'NotoSansThaiSemiBold',
-      lineHeight: 24,
+      // lineHeight: 24,
     },
     lg: {
       fontSize: 18,
