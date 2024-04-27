@@ -22,16 +22,13 @@ const ActivityCard = ({ activity, onPress }: ActivityCardProps) => {
 
   return (
     <TouchableOpacity onPress={handlePress} style={styles.container} activeOpacity={0.6}>
-      <View style={styles.content}>
+      <View>
         <Text style={styles.textDatetime}>
           {dayjs(activity.dateTime).format('ddd, MMMM D, YYYY h:mm')}
         </Text>
         <Text style={styles.title} numberOfLines={1}>
           {activity.title}
         </Text>
-        {/* <RNUIText md-b>{activity.title}</RNUIText> */}
-
-        {/* <Text sm>{activity.description}</Text> */}
         <View style={styles.chipsList}>
           <Chip label={activity.categoryName} />
           <Chip label={`${activity.users.length}/${activity.noOfMembers}`} />
@@ -52,6 +49,8 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
     borderRadius: spacings.md,
     backgroundColor: '#FFF',
     elevation: 3,
+    borderColor: colors.lightgray,
+    borderWidth: 1,
   },
   title: {
     ...typography.mdB,
@@ -65,7 +64,6 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
     gap: spacings.xs,
     marginBottom: spacings.xs,
   },
-  //TODO: style
   textDescription: {
     ...typography.xsB,
     color: '#888693',

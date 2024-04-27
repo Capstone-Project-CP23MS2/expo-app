@@ -1,19 +1,18 @@
-import { COLORS, FONT, SIZES } from '@/constants';
-import { Link, Stack, useRouter, Tabs } from 'expo-router';
-import { View, Text, StyleSheet, Pressable, ActivityIndicator, Button } from 'react-native';
+import { COLORS } from '@/constants';
+import { useRouter, Tabs } from 'expo-router';
+import { View, Text, Pressable, ActivityIndicator } from 'react-native';
 
-import { BaseButton, RefreshControl, ScrollView, TextInput } from 'react-native-gesture-handler';
+import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 
-import { FontAwesome, MaterialIcons, Ionicons, AntDesign } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import { UseGetActivities, UseGetMyUserInfo } from '@/hooks/useAPI';
 import { TouchableOpacity } from 'react-native-ui-lib';
-// import ActivityCard from '../components/Card/'
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
+
 import { ActivityCard } from '../components';
-import AppButton from '@/modules/shared/AppButton';
 import MapActivities from '../components/MapActivities';
-import ActivitySearch from '@/modules/activity-search/ActivitySearch';
 import AppTextInput from '@/modules/shared/AppTextInput';
 
 type Props = {};
@@ -23,15 +22,15 @@ type DataProp = {
 };
 
 const index = (props: Props) => {
+  const { styles } = useStyles(stylesheet);
   const router = useRouter();
   const { data, isLoading, isError, error, refetch } = UseGetActivities();
 
-  const { activities, paginationData } = data || {};
+  const { activities } = data || {};
 
   const { data: userInfoData } = UseGetMyUserInfo();
 
   const [refreshing, setRefreshing] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -47,12 +46,7 @@ const index = (props: Props) => {
             <SafeAreaView style={styles.safeArea}>
               <View style={styles.headerArea}>
                 <Pressable onPress={() => router.push('/(app)/(tabs)/explore')}>
-                  <AppTextInput
-                    placeholder="Explore available activities."
-                    icon
-                    iconName="search"
-                    disabled
-                  />
+                  <AppTextInput placeholder="ค้นหากิจกรรม" icon iconName="search" disabled />
                 </Pressable>
               </View>
             </SafeAreaView>
@@ -65,13 +59,13 @@ const index = (props: Props) => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         <View style={styles.container}>
-          <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Find Your Activities</Text>
+          <Text style={styles.headerTitle}>สำรวจกิจกรรม</Text>
           <MapActivities />
           <View style={styles.cardsContainer}>
-            <View style={{ gap: 2 }}>
-              <Text style={{ fontWeight: 'bold', fontSize: 18 }}>Available Activities</Text>
+            <View>
+              <Text style={styles.headerTitle}>กิจกรรมที่เข้าร่วมได้</Text>
               <Text style={styles.subHeader}>
-                We found {activities?.length} activites. feel free to join !
+                เจอแล้ว {activities?.length} กิจกรรม เลือกเข้าร่วมกันเลย !
               </Text>
             </View>
             {isLoading ? (
@@ -92,7 +86,7 @@ const index = (props: Props) => {
                   />
                 ))
             ) : (
-              <Text>no activity</Text>
+              <Text>ไม่มีกิจกรรม</Text>
             )}
           </View>
         </View>
@@ -108,7 +102,7 @@ const index = (props: Props) => {
 
 export default index;
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   safeArea: {
     backgroundColor: 'white',
     elevation: 4,
@@ -118,8 +112,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingTop: 15,
-    padding: SIZES.medium,
+    paddingTop: spacings.lg,
+    padding: spacings.lg,
     gap: 10,
   },
   header: {
@@ -128,26 +122,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   subHeader: {
-    color: COLORS.black,
-    fontWeight: 'normal',
+    ...typography.sm,
   },
   headerTitle: {
-    fontSize: SIZES.large,
-    fontFamily: FONT.medium,
-    color: COLORS.black,
-    fontWeight: 'bold',
-  },
-  headerBtn: {
-    fontSize: SIZES.medium,
-    fontFamily: FONT.medium,
-    color: COLORS.gray,
+    ...typography.lgB,
   },
   cardsContainer: {
-    gap: SIZES.small,
+    gap: spacings.md,
   },
   addButton: {
     position: 'absolute',
     bottom: 20,
     right: 20,
   },
-});
+}));

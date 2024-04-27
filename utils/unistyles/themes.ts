@@ -133,12 +133,11 @@ export const lightTheme = {
     success: '#7CDD58',
     danger: '#FF7560',
     warning: '#F7DE22',
-    tertiary: '#ff5252',
     disable: '#ff5252',
     test: '#DAF7A6',
     gray: '#505050',
     outline: 'rgb(124, 117, 126)',
-    lightgray: '#BABBC3',
+    lightgray: '#cdced4',
     red: '#CC0000',
   },
 } as const;
@@ -167,11 +166,11 @@ export const darkTheme = {
     info: '#5598FC',
     success: '#7CDD58',
     danger: '#FF7560',
-    tertiary: '#ff5252',
     disable: '#ff5252',
     test: '#DAF7A6',
     gray: '#505050',
     outline: 'rgb(124, 117, 126)',
+    lightgray: '#cdced4',
   },
 } as const;
 

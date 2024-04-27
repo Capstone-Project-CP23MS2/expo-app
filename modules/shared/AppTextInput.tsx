@@ -1,31 +1,32 @@
-import React, { ReactNode, useState } from 'react'
-import { View, Text, TextInput, StyleSheet, KeyboardType } from 'react-native'
+import React, { ReactNode, useState } from 'react';
+import { View, Text, TextInput, StyleSheet, KeyboardType } from 'react-native';
 
-import { MaterialIcons } from '@expo/vector-icons'
-import { COLORS } from '@/constants'
+import { MaterialIcons } from '@expo/vector-icons';
+import { COLORS } from '@/constants';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 type Props = {
-  value?: string
-  keyboardType?: KeyboardType
-  onFocus?: () => void
-  onBlur?: () => void
-  onChangeText?: (text: string) => void
-  placeholder?: string
-  label?: string
-  error?: { message?: string }
-  disabled?: boolean
-  errorMessage?: string
-  maxLength?: number
-  showCharCounter?: boolean
-  iconName?: keyof typeof MaterialIcons.glyphMap
-  icon?: ReactNode
-  password?: boolean
-  placeholderTextColor?: boolean
-  textColor?: string
-  autoFocus?: boolean
+  value?: string;
+  keyboardType?: KeyboardType;
+  onFocus?: () => void;
+  onBlur?: () => void;
+  onChangeText?: (text: string) => void;
+  placeholder?: string;
+  label?: string;
+  error?: { message?: string };
+  disabled?: boolean;
+  errorMessage?: string;
+  maxLength?: number;
+  showCharCounter?: boolean;
+  iconName?: keyof typeof MaterialIcons.glyphMap;
+  icon?: ReactNode;
+  password?: boolean;
+  placeholderTextColor?: boolean;
+  textColor?: string;
+  autoFocus?: boolean;
 
-  [key: string]: any
-}
+  [key: string]: any;
+};
 const Input = ({
   value,
   onChangeText,
@@ -40,9 +41,10 @@ const Input = ({
   autoFocus,
   ...props
 }: Props) => {
-  const [hidePassword, setHidePassword] = useState(password)
-  const [isFocused, setIsFocused] = useState(false)
-  const { maxLength, error } = props
+  const { styles } = useStyles(stylesheet);
+  const [hidePassword, setHidePassword] = useState(password);
+  const [isFocused, setIsFocused] = useState(false);
+  const { maxLength, error } = props;
 
   return (
     <View style={styles.container}>
@@ -78,10 +80,10 @@ const Input = ({
         </View>
       )}
     </View>
-  )
-}
+  );
+};
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   container: {
     // marginBottom: 6,
   },
@@ -98,9 +100,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   input: {
+    ...typography.sm,
     flex: 1,
     height: 48,
-    fontSize: 14,
   },
   icon: {
     fontSize: 22,
@@ -119,6 +121,6 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     flexGrow: 1,
   },
-})
+}));
 
-export default Input
+export default Input;

@@ -9,6 +9,7 @@ import { SelectMarkerContext } from '@/context/selectMarkerContext';
 import Markers from './markers';
 import * as Location from 'expo-location';
 import MapViewStyle from '@/assets/data/map-view-style.json';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 const INITIAL_REGION = {
   latitude: 13.75633,
@@ -18,8 +19,9 @@ const INITIAL_REGION = {
 };
 
 const index = () => {
+  const { styles } = useStyles(stylesheet);
   const { data } = UseGetActivities({});
-  const { activities, paginationData } = data || {};
+  const { activities } = data || {};
 
   const [selectedMarker, setSelectedMarker] = useState([]);
   const [region, setRegion] = useState(INITIAL_REGION);
@@ -62,9 +64,7 @@ const index = () => {
           region={region}
           customMapStyle={MapViewStyle}
         >
-          {activities.map((item, index) => (
-            <Markers key={index} place={item} index={index} />
-          ))}
+          {activities?.map((item, index) => <Markers key={index} place={item} index={index} />)}
         </MapView>
         <View style={styles.placelist}>
           <PlaceListView activities={activities} onRegionChange={handleRegionChange} />
@@ -76,7 +76,7 @@ const index = () => {
 
 export default index;
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   map: {
     flex: 1,
     width: '100%',
@@ -93,4 +93,4 @@ const styles = StyleSheet.create({
     padding: 10,
     width: '100%',
   },
-});
+}));
