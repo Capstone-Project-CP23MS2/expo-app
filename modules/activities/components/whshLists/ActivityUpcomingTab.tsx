@@ -13,7 +13,7 @@ type Props = {
 };
 //TODO: ทำเป็น Section List วันที่หรือกิจกรรมของวันนี้
 // https://shopify.github.io/flash-list/docs/guides/section-list/
-const ActivityOwnTab = (props: Props) => {
+const ActivityUpcomingTab = (props: Props) => {
   const { styles } = useStyles(stylesheet);
   const { data: user } = UseGetMyUserInfo();
 
@@ -61,4 +61,4 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   },
 }));
 
-export default ActivityOwnTab;
+export default ActivityUpcomingTab;
