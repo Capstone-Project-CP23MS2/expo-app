@@ -24,13 +24,14 @@ export type Activity = {
 
 type ActivitiesSortBy = 'activityId' | 'createdAt' | 'dateTime' | 'noOfMembers' | 'title';
 
+export type ActivitiesParamsDateStatus = 'all' | 'upcoming' | 'past';
 export type ActivitiesParams = PaginateParams & {
   sortBy?: ActivitiesSortBy;
   categoryIds?: number[];
   title?: string; //TODO: change name later
   hostId?: number;
   userId?: number;
-  dateStatus?: 'all' | 'upcoming' | 'past';
+  dateStatus?: ActivitiesParamsDateStatus;
   date?: string;
 };
 

@@ -5,7 +5,7 @@ import { ActivitiesResponse, ActivityResponse, ActivityUpdateRequest, PaginateRe
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { removeObjectFromArrayById } from "@/utils";
 import { UseGetMyUserInfo } from "./users";
-import { ActivitiesParams, AttendanceStatus, GetActivitiesByLocationParams, ParticipantsParams, RSVPStatus } from "@/api/activities/type";
+import { ActivitiesParams, ActivitiesParamsDateStatus, AttendanceStatus, GetActivitiesByLocationParams, ParticipantsParams, RSVPStatus } from "@/api/activities/type";
 import { useCallback, useState } from 'react';
 import { useDebounce } from '@/modules/Explore/hooks/useDebounce';
 
@@ -18,16 +18,18 @@ type UseGetActivitiesType = 'all' | 'my-activities' | 'joined-activities' | 'pas
 export function UseGetActivities(params = {} as ActivitiesParams, type: UseGetActivitiesType = undefined) {
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [dateStatus, setDateStatus] = useState<ActivitiesParamsDateStatus | undefined>(params.dateStatus);
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   const query = useInfiniteQuery({
-    queryKey: ['activities', type, debouncedSearchQuery, selectedCategoryIds],
+    queryKey: ['activities', type, debouncedSearchQuery, selectedCategoryIds, dateStatus],
     queryFn: ({ pageParam }) => activitiesApi.getActivities({
       ...params,
       page: pageParam,
       title: searchQuery ? searchQuery : undefined,
       categoryIds: selectedCategoryIds.length ? selectedCategoryIds : undefined,
+      dateStatus: dateStatus ? dateStatus : undefined,
     }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
@@ -46,6 +48,8 @@ export function UseGetActivities(params = {} as ActivitiesParams, type: UseGetAc
     debouncedSearchQuery,
     selectedCategoryIds,
     setSelectedCategoryIds,
+    dateStatus,
+    setDateStatus
   };
 }
 

@@ -37,6 +37,7 @@ const ParticipantsScreen = (props: Props) => {
     console.log(index);
     switch (index) {
       case 0:
+      default:
         setSelectedRSVPStatus(undefined);
         break;
       case 1:
@@ -44,8 +45,6 @@ const ParticipantsScreen = (props: Props) => {
         break;
       case 2:
         setSelectedRSVPStatus('interesting');
-        break;
-      default:
         break;
     }
   };
