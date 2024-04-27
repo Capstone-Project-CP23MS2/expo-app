@@ -46,13 +46,13 @@ const AppEntry = (props: Props) => {
           presentation: 'transparentModal',
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="activities/search"
         options={{
           headerTitle: 'Search Activity',
           animation: 'fade',
         }}
-      />
+      /> */}
 
       <Stack.Screen
         name="explore/filter"
