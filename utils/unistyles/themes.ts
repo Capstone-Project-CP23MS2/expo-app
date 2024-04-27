@@ -14,30 +14,37 @@ const sharedTheme = {
     h1: {
       fontSize: 32,
       fontFamily: 'NotoSansThaiBold',
+      lineHeight: 36,
     },
     h2: {
       fontSize: 28,
       fontFamily: 'NotoSansThaiBold',
+      lineHeight: 32,
     },
     h3: {
       fontSize: 24,
       fontFamily: 'NotoSansThaiBold',
+      lineHeight: 28,
     },
     h4: {
       fontSize: 22,
       fontFamily: 'NotoSansThaiSemiBold',
+      lineHeight: 26,
     },
     h5: {
       fontSize: 20,
       fontFamily: 'NotoSansThaiSemiBold',
+      lineHeight: 24,
     },
     lg: {
       fontSize: 18,
       fontFamily: 'NotoSansThaiRegular',
+      lineHeight: 24,
     },
     lgB: {
       fontSize: 18,
       fontFamily: 'NotoSansThaiBold',
+      lineHeight: 24,
     },
     md: {
       fontSize: 16,
@@ -52,20 +59,23 @@ const sharedTheme = {
     sm: {
       fontSize: 14,
       fontFamily: 'NotoSansThaiRegular',
-      lineHeight: 24,
+      lineHeight: 20,
     },
     smB: {
       fontSize: 14,
       fontFamily: 'NotoSansThaiSemiBold',
-      lineHeight: 24,
+      lineHeight: 20,
     },
     xs: {
       fontSize: 12,
       fontFamily: 'NotoSansThaiRegular',
+      lineHeight: 16,
     },
     xsB: {
       fontSize: 12,
       fontFamily: 'NotoSansThaiSemiBold',
+      lineHeight: 16,
+
     },
   },
   component: {
@@ -125,17 +135,19 @@ export const lightTheme = {
     "onTertiary": "rgb(255, 255, 255)",
     "tertiaryContainer": "rgb(229, 230, 173)",
     "onTertiaryContainer": "rgb(28, 29, 0)",
+    // tertiary
+
+    background: '#ffffff',
+    info: '#46CDFB',
+    success: '#29D697',
+    danger: '#F0635A',
+    warning: '#FDC400',
+    disable: '#D2D6D8',
 
     typography: '#000000',
-    background: '#ffffff',
 
-    info: '#5598FC',
-    success: '#7CDD58',
-    danger: '#FF7560',
-    warning: '#F7DE22',
-    disable: '#ff5252',
     test: '#DAF7A6',
-    gray: '#505050',
+    gray: '#B8B6BE',
     outline: 'rgb(124, 117, 126)',
     lightgray: '#cdced4',
     red: '#CC0000',
@@ -160,15 +172,20 @@ export const darkTheme = {
     "tertiaryContainer": "rgb(72, 73, 31)",
     "onTertiaryContainer": "rgb(229, 230, 173)",
 
-    typography: '#ffffff',
     background: '#000000',
+    info: '#46CDFB',
+    success: '#29D697',
+    danger: '#F0635A',
+    warning: '#FDC400',
+    disable: '#D2D6D8',
 
-    info: '#5598FC',
-    success: '#7CDD58',
-    danger: '#FF7560',
-    disable: '#ff5252',
+    typography: '#ffffff',
+
+
+
+
     test: '#DAF7A6',
-    gray: '#505050',
+    gray: '#B8B6BE',
     outline: 'rgb(124, 117, 126)',
     lightgray: '#cdced4',
   },
