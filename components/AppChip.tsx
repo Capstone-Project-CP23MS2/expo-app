@@ -5,7 +5,7 @@ import { Chip, ChipProps } from 'react-native-ui-lib';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 // export type ChipType = 'contained' | 'outlined' | 'text' | 'disable';
-export type ChipColor = 'primary' | 'secondary';
+export type ChipColor = 'primary' | 'secondary' | 'gray';
 // | 'tertiary' | 'danger' | 'disable'
 // export type ButtonSize = 'sm' | 'md' | 'lg';
 type Props = ChipProps & {
@@ -64,6 +64,9 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
         },
         secondary: {
           backgroundColor: colors.secondaryContainer,
+        },
+        gray: {
+          backgroundColor: colors.gray,
         },
       },
     },

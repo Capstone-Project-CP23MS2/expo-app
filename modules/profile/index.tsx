@@ -1,7 +1,7 @@
 import { useAuth } from '@/context/authContext';
 import { UseDeleteUser, UseGetMyUserInfo } from '@/hooks/useAPI';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { SafeAreaView, Modal, StyleSheet, View, Pressable } from 'react-native';
 import { Button, ListItem, Text } from 'react-native-ui-lib';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
@@ -10,7 +10,10 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { RNUIButton, AppConfirmModal } from '@/components';
 import ProfileSettingListItem from './components/ProfileSettingListItem';
-
+import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
+import InterestsEditBottomSheet, {
+  InterestsEditBottomSheetRef,
+} from './components/interests/InterestsEditBottomSheet';
 type Props = {};
 
 const Page = (props: Props) => {
@@ -35,7 +38,7 @@ const Page = (props: Props) => {
       title: 'สิ่งที่สนใจ',
       icon: 'heart',
       onPress: () => {
-        console.log('👤 Edit Interest');
+        interestsBottomSheetRef.current?.open();
       },
     },
     {
@@ -74,6 +77,8 @@ const Page = (props: Props) => {
     setShowSignOutModal(false);
   };
 
+  const interestsBottomSheetRef = useRef<InterestsEditBottomSheetRef>(null);
+
   return (
     <SafeAreaView style={styles.container}>
       <AppConfirmModal
@@ -83,6 +88,16 @@ const Page = (props: Props) => {
         subheading="คุณจะย้อนกลับไปยังหน้าล็อคอิน"
         onConfirm={handleConfirmSignOut}
         onCancel={handleCancelSignOut}
+      />
+      <InterestsEditBottomSheet
+        ref={interestsBottomSheetRef}
+        children={undefined}
+
+        // onOpenDeleteModal={handleOpenDeleteModal}
+        // onEdit={handleEdit}
+        // isOwner={isOwner}
+
+        // onDismiss={handleOptionClose}
       />
 
       <View style={styles.content}>
