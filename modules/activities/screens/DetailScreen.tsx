@@ -1,5 +1,5 @@
 import { View, Text, ToastAndroid, Pressable } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Tabs, useLocalSearchParams, useRouter } from 'expo-router';
 import {
@@ -9,13 +9,15 @@ import {
   UseGetMyUserInfo,
 } from '@/hooks/useAPI';
 import AppLoaderScreen from '@/components/AppLoaderScreen';
-import { AppConfirmModal, RNUIButton } from '@/components';
+import { AppBottomSheetModal, AppConfirmModal, RNUIButton } from '@/components';
 import { isAxiosError } from 'axios';
 import { ScrollView } from 'react-native-gesture-handler';
 import { ActivityDatetime, ActivityPlace, ActivityParticipants } from '../components';
 import { Chip } from 'react-native-ui-lib';
 import JoinButton from '@/modules/activity-detail/components/JoinButton';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import OptionsBottomSheet from '../components/details/OptionsBottomSheet';
+import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
 
 type Props = {};
 // note: ต้องเห็นข้อมูลทุกอย่างที่ใช้ในการตัดสินใจใน 1 หน้าจอ
@@ -36,8 +38,9 @@ const DetailScreen = (props: Props) => {
   } = UseGetActivity(activityId);
 
   // TODO: ย้ายการเช็ค isParticipant ไปที่ server แทนเพื่อลดโอกาสที่จะต้อง fetch participants
-  const { data: participantsData } = UseGetActivityParticipants(activityId);
-  const { content: participants } = participantsData || {};
+  const { data: participantsData } = UseGetActivityParticipants({ activityId: Number(activityId) });
+  const { participants } = participantsData || {};
+
   const { data: user } = UseGetMyUserInfo();
   const isParticipant = participants?.some(participant => participant.userId === user?.userId);
   const isOwner = user?.userId === activity?.hostUserId;
@@ -63,14 +66,20 @@ const DetailScreen = (props: Props) => {
   const handleCloseDeleteModal = () => setShowSignOutModal(false);
 
   const handleDelete = async () => {
+    console.log('delete activity');
+
     try {
-      await deleteMutateAsync(activityId, {
+      deleteMutate(activityId, {
         onSuccess() {
           console.log('delete success');
-          ToastAndroid.show('Activity deleted', ToastAndroid.SHORT);
-          router.push('/(app)/(tabs)/home');
+        },
+        onSettled() {
+          console.log('delete settled');
         },
       });
+
+      ToastAndroid.show('Activity deleted', ToastAndroid.SHORT);
+      router.push('/(app)/(tabs)');
     } catch (e) {
       if (isAxiosError(error)) {
         console.log('error test');
@@ -82,7 +91,19 @@ const DetailScreen = (props: Props) => {
   };
   const handleEdit = () => {
     router.push({ pathname: '/(app)/activities/edit', params: { activityId } });
+    dismiss();
   };
+
+  const optionBottomSheetRef = useRef<BottomSheetModal>(null);
+
+  const { dismiss } = useBottomSheetModal();
+
+  const handleOptionOpen = useCallback(() => {
+    optionBottomSheetRef.current?.present();
+  }, []);
+  const handleOptionClose = useCallback(() => {
+    optionBottomSheetRef.current?.dismiss();
+  }, []);
 
   const renderButton = () => {
     if (isParticipant) {
@@ -130,9 +151,16 @@ const DetailScreen = (props: Props) => {
         options={{
           headerRight(props) {
             return (
-              <Pressable onPress={handleEdit}>
-                <MaterialCommunityIcons name="dots-vertical" size={24} color="black" />
-              </Pressable>
+              isOwner && (
+                <Pressable
+                  onPress={() => {
+                    console.log('press');
+                    handleOptionOpen();
+                  }}
+                >
+                  <MaterialCommunityIcons name="dots-horizontal" size={24} color="black" />
+                </Pressable>
+              )
             );
           },
         }}
@@ -169,8 +197,8 @@ const DetailScreen = (props: Props) => {
             userName={user?.username}
             activityId={activityId}
             activityTitle={activity?.title}
-            isOwner={isOwner}
             isParticipant={isParticipant}
+            isOwner={isOwner}
             targetId={activity?.hostUserId}
             onDeleteActivity={handleOpenDeleteModal}
           />
@@ -186,6 +214,28 @@ const DetailScreen = (props: Props) => {
         onCancel={handleCloseDeleteModal}
         btnColor="red"
       />
+      <OptionsBottomSheet
+        ref={optionBottomSheetRef}
+        onOpenDeleteModal={handleOpenDeleteModal}
+        onEdit={handleEdit}
+        isOwner={isOwner}
+
+        // onDismiss={handleOptionClose}
+      >
+        <></>
+      </OptionsBottomSheet>
+
+      {/* <AppBottomSheetModal
+        ref={optionBottomSheetRef}
+        title="d"
+        index={1}
+        snapPoints={['30%']}
+        enablePanDownToClose
+        enableDynamicSizing
+        style={{ minHeight: 100, flex: 0 }}
+      >
+        <Text>s</Text>
+      </AppBottomSheetModal> */}
     </>
   );
 };

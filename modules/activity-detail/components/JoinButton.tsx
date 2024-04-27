@@ -80,9 +80,7 @@ export default function JoinButton({
       },
     });
   };
-  if (isOwner) {
-    return <AppButton variant="danger" label="ลบกิจกรรม" onPress={onDeleteActivity} fullWidth />;
-  }
+  if (isOwner) return;
 
   if (isParticipant) {
     return <AppButton variant="danger" label="ออกจากกิจกรรม" onPress={onLeaveActivity} fullWidth />;
