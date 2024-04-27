@@ -6,6 +6,7 @@ import { formatDate } from '@/utils/datetime';
 import { Participant } from '@/api/activities/type';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AppChip from '@/components/AppChip';
+import { router } from 'expo-router';
 
 type Props = {
   participant: Participant;
@@ -19,6 +20,7 @@ const ParticipantListItem = ({ participant, hostId, index }: Props) => {
   });
 
   const handlePress = () => {
+    router.push(`/(app)/profile/${participant.userId}`);
     console.log(participant.activityId);
 
     // onPress(participant);

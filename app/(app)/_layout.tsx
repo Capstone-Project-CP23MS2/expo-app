@@ -43,7 +43,7 @@ const AppEntry = (props: Props) => {
           headerTitle: 'Participants',
           animation: 'slide_from_right',
           animationDuration: 200,
-          presentation: 'transparentModal',
+          // presentation: 'transparentModal',
         }}
       />
       {/* <Stack.Screen
