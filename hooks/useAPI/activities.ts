@@ -1,6 +1,6 @@
 import { set } from 'react-hook-form';
 import activitiesApi from "@/api/activities";
-import { ActivitiesResponse, ActivityResponse, ActivityUpdateRequest, PaginateResponse, requestParams } from "@/api/type";
+import { ActivitiesResponse, ActivityResponse, ActivityUpdateRequest, PaginateResponse } from "@/api/type";
 
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { removeObjectFromArrayById } from "@/utils";

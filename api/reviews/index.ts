@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import apiClient from "../apiClient";
-import { APIPaginationResponse, PaginateResponse } from "../type";
+import { PaginateResponse } from "../type";
 import { ReviewUser, ReviewsUserParams } from "./type";
 class ReviewsApi {
 

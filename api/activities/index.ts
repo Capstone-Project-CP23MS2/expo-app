@@ -1,4 +1,4 @@
-import { ActivitiesResponse, ParticipantResponse, ParticipantsResponse, ActivityUpdateRequest, ActivitiesRequestParams, PaginateResponse } from '../type';
+import { ActivitiesResponse, ParticipantResponse, ParticipantsResponse, ActivityUpdateRequest, PaginateResponse } from '../type';
 import apiClient from "../apiClient";
 import { objToFormData } from '@/utils';
 import { AxiosRequestConfig } from 'axios';
@@ -104,7 +104,7 @@ class ActivitiesApi {
 
   // deprecated
 
-  async getActivitiesNew(params: ActivitiesRequestParams) {
+  async getActivitiesNew(params: ActivitiesParams) {
     const config: AxiosRequestConfig = {
       params,
       paramsSerializer: {

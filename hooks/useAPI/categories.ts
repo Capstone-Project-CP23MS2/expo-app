@@ -1,34 +1,36 @@
-import { CategoriesRequestParameters } from "@/api/categories/categories.type";
+import { CategoriesParams } from "@/api/categories/categories.type";
 import categoriesApi from "@/api/categories";
 import categories from "@/modules/test/demo/components/ExploreHeader/categories";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { initialDataAPIPagination } from "./type";
+import { useState } from "react";
 
 
-type CategoriesParameters = {
-    page?: number;
-    pageSize?: number;
-};
-
-
-
-export function UseGetCategories(params: CategoriesRequestParameters = { pageSize: 25 }) {
-    return useQuery({
+export function UseGetCategories(params: CategoriesParams = { pageSize: 25 }) {
+    // const [searchQuery, setSearchQuery] = useState<string>('');
+    // const debouncedSearchQuery = useDebounce(searchQuery, 500);
+    const res = useInfiniteQuery({
         queryKey: ['categories'],
-        queryFn: () => categoriesApi.getCategories(params),
+        queryFn: ({ pageParam }) => categoriesApi.getCategories({
+            ...params,
+            page: pageParam,
+        }),
+        initialPageParam: 0,
+        getNextPageParam: (lastPage) => {
+            return lastPage.last ? undefined : lastPage.number + 1;
+        },
         select: (data) => {
-            const { content, ...paginationData } = data;
-            return { categories: content, paginationData };
+            const categories = data.pages.flatMap(page => page.content);
+            return { categories, ...data };
         },
     });
-    // TODO
-    // return { data: categories, paginationInfo: ..., ...otherRes }
-};
+    return { ...res };
 
+};
 
 export function UseGetCategory(id: string | number | string[] | undefined) {
     return useQuery({
         queryKey: ['category', id],
-        queryFn: () => categoriesApi.getCategoryById(id),
+        queryFn: () => categoriesApi.getCategoryById(Number(id)),
     });
 };

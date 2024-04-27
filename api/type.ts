@@ -1,4 +1,4 @@
-export type APIPaginationResponse<T extends object> = {
+export type PaginateResponse<T extends object> = {
   content: T[];
   number: number;
   size: number;
@@ -12,40 +12,6 @@ export type APIPaginationResponse<T extends object> = {
 export type PaginateParams = {
   page?: number;
   pageSize?: number;
-  sortBy?: ActivitiesSortBy;
-};
-
-export type PaginateResponse<Data extends object> = {
-  content: Data[];
-  number: number;
-  size: number;
-  totalPages: number;
-  numberOfElements: number;
-  totalElements: number;
-  last: boolean;
-  first: boolean;
-};
-
-export type requestParams =
-  | {
-    page?: number;
-    pageSize?: number;
-    sortBy?: string;
-    categoryIds?: string;
-    title?: string;
-    place?: string;
-  }
-  | {};
-
-type ActivitiesSortBy = 'activityId' | 'createdAt' | 'dateTime' | 'noOfMembers' | 'title';
-
-export type ActivitiesRequestParams = {
-  page?: number;
-  pageSize?: number;
-  sortBy?: ActivitiesSortBy;
-  categoryIds?: Array<number>;
-  //TODO: change name later
-  title?: string;
 };
 
 // Activity
@@ -76,7 +42,7 @@ type Place = {
   longitude: number;
 };
 
-export type ActivitiesResponse = APIPaginationResponse<ActivityResponse>;
+export type ActivitiesResponse = PaginateResponse<ActivityResponse>;
 
 export type ActivityUpdateRequest = {
   categoryId?: number;
@@ -95,7 +61,7 @@ export type ParticipantResponse = {
   status: string;
   joinedAt: string;
 };
-export type ParticipantsResponse = APIPaginationResponse<ParticipantResponse>;
+export type ParticipantsResponse = PaginateResponse<ParticipantResponse>;
 
 // Category
 export type CategoryResponse = {
@@ -104,7 +70,7 @@ export type CategoryResponse = {
   description: string;
 };
 
-export type CategoriesResponse = APIPaginationResponse<CategoryResponse>;
+export type CategoriesResponse = PaginateResponse<CategoryResponse>;
 
 // User
 export type Gender = 'Male' | 'Female' | 'Other' | 'NotApplicable' | 'Unknown';
@@ -143,7 +109,7 @@ export type UserUpdateRequest = {
 
 // export type UserResponse = User & { registrationDate: string; };
 
-export type UsersResponse = APIPaginationResponse<UserResponse>;
+export type UsersResponse = PaginateResponse<UserResponse>;
 
 // Notification
 export type NotificationResponse = {
@@ -155,7 +121,7 @@ export type NotificationResponse = {
   createdAt: string;
 };
 
-export type NotificationsResponse = APIPaginationResponse<NotificationResponse>;
+export type NotificationsResponse = PaginateResponse<NotificationResponse>;
 
 export type NotificationUpdateRequest = {
   unRead?: boolean;
