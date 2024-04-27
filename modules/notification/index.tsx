@@ -1,4 +1,13 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Pressable } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  TouchableOpacity,
+  Pressable,
+  Button,
+  Platform,
+} from 'react-native';
 import { RefreshControl } from 'react-native-gesture-handler';
 import React, { useState, useCallback } from 'react';
 import {
@@ -11,6 +20,22 @@ import { Ionicons, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-ico
 import { COLORS, SIZES } from '@/constants';
 import { useAuth } from '@/context/authContext';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
+
+import { StatusBar } from 'expo-status-bar';
+
+// notifications imports
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants'; // Optional
+
+// Initialize the notification service
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 const NotificationScreen = () => {
   const { styles } = useStyles(stylesheet);
