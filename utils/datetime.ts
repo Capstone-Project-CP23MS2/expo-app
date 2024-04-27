@@ -2,10 +2,17 @@ import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import buddhistEra from "dayjs/plugin/buddhistEra";
 import th from 'dayjs/locale/th';
+import duration from "dayjs/plugin/duration";
+import relativeTime from "dayjs/plugin/relativeTime";
+import isBetween from "dayjs/plugin/isBetween";
 
 dayjs.extend(customParseFormat);
 dayjs.locale(th);
 dayjs.extend(buddhistEra);
+dayjs.extend(duration);
+dayjs.extend(relativeTime);
+dayjs.extend(isBetween);
+
 
 // สร้างฟังก์ชันสำหรับการจัดรูปแบบวันที่
 export function formatDate(date: string | Date, format: string = 'ddd DD MMM YYYY • H:mm'): string {
@@ -27,3 +34,4 @@ export function isWeekend(date: string | Date): boolean {
   const dayOfWeek = dayjs(date).day();
   return dayOfWeek === 6 || dayOfWeek === 0; // เสาร์ = 6, อาทิตย์ = 0
 }
+

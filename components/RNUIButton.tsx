@@ -18,9 +18,11 @@ type Props = ButtonProps & {
 
 export default function RNUIButton(props: Props) {
   const { color, type, error, ...restProps } = props;
-  const { styles } = useStyles(stylesheet, {
+  const { styles, theme } = useStyles(stylesheet, {
     type: type,
     color: color,
+    // isDisabled: true,
+    isDisabled: restProps.disabled,
     // size: size,
   });
 
@@ -42,7 +44,6 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
     flexGrow: 1,
     borderRadius: spacings.md,
     maxHeight: 48,
-    // variants: {},
   },
   extraStyle: (color: ButtonColor = 'primary') => ({
     variants: {
@@ -66,6 +67,11 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
         },
         disable: {
           backgroundColor: colors.disable,
+        },
+      },
+      isDisabled: {
+        true: {
+          backgroundColor: '#D2D6D8',
         },
       },
     },

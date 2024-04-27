@@ -11,13 +11,14 @@ import {
 import AppLoaderScreen from '@/components/AppLoaderScreen';
 import { AppBottomSheetModal, AppConfirmModal, RNUIButton } from '@/components';
 import { isAxiosError } from 'axios';
-import { ScrollView } from 'react-native-gesture-handler';
+import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 import { ActivityDatetime, ActivityPlace, ActivityParticipants } from '../components';
-import { Chip } from 'react-native-ui-lib';
+import { Button, Chip } from 'react-native-ui-lib';
 import JoinButton from '@/modules/activity-detail/components/JoinButton';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import OptionsBottomSheet from '../components/details/OptionsBottomSheet';
 import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
+import dayjs from 'dayjs';
 
 type Props = {};
 // note: ต้องเห็นข้อมูลทุกอย่างที่ใช้ในการตัดสินใจใน 1 หน้าจอ
@@ -26,8 +27,6 @@ const DetailScreen = (props: Props) => {
   //route
   const router = useRouter();
   const { id: activityId } = useLocalSearchParams<{ id: string }>();
-
-  console.log(`🔃 render activity detail screen (${activityId})`);
 
   const {
     data: activity,
@@ -45,6 +44,15 @@ const DetailScreen = (props: Props) => {
   const isParticipant = participants?.some(participant => participant.userId === user?.userId);
   const isOwner = user?.userId === activity?.hostUserId;
 
+  const diffTime = dayjs().diff(dayjs(activity?.dateTime!));
+  const remainingTime = dayjs.duration(diffTime).humanize();
+  const activityStart = dayjs(activity?.dateTime!);
+  const activityExpire = dayjs(activity?.dateTime!).add(12, 'hour');
+  const isLive = dayjs().isBetween(activityStart, activityExpire, 'm', '[)');
+  const isFuture = dayjs().isBefore(activityStart);
+  const remainingExpireTime = dayjs.duration(activityExpire.diff(dayjs())).humanize();
+  const isExpired = dayjs().isAfter(activityExpire);
+
   const handlePressParticipants = () =>
     router.push({
       pathname: '/activities/participants',
@@ -58,7 +66,6 @@ const DetailScreen = (props: Props) => {
     });
 
   const { mutate: deleteMutate, mutateAsync: deleteMutateAsync } = UseDeleteActivity();
-  // const deleteParticipantMutation = UseDeleteParticipant()
 
   const [showSignOutModal, setShowSignOutModal] = useState(false);
 
@@ -106,36 +113,38 @@ const DetailScreen = (props: Props) => {
   }, []);
 
   const renderButton = () => {
-    if (isParticipant) {
+    if (isOwner)
       return (
-        <JoinButton
-          userId={user?.userId}
-          userName={user?.username}
-          activityId={activityId}
-          activityTitle={activity?.title}
-          isParticipant={isParticipant}
-          targetId={activity?.hostUserId}
+        <RNUIButton
+          label={
+            isFuture
+              ? `กิจกรรมจะเริ่มในอีก ${remainingTime}`
+              : `จบกิจกรรม (เหลือเวลาอีก ${remainingExpireTime})`
+          }
+          disabled={!isLive}
         />
       );
-    }
-    return null;
-    // if (activity?.isOwner) {
-    //   return (
-    //     <RNUIButton
-    //       label="แก้ไขกิจกรรม"
-    //       onPress={() => router.push(`/activities/edit?id=${activityId}`)}
-    //     />
-    //   );
-    // }
-
-    // return null;
+    return (
+      <JoinButton
+        userId={user?.userId}
+        userName={user?.username}
+        activityId={activityId}
+        activityTitle={activity?.title}
+        isParticipant={isParticipant}
+        isOwner={isOwner}
+        targetId={activity?.hostUserId}
+      />
+    );
   };
+  const [refreshing, setRefreshing] = useState(false);
 
-  // const handlePressDe
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await activityRefetch();
+    setRefreshing(false);
+  }, []);
 
-  if (isLoading) {
-    return <AppLoaderScreen />;
-  }
+  if (isLoading) return <AppLoaderScreen />;
 
   if (isError) {
     return (
@@ -166,7 +175,11 @@ const DetailScreen = (props: Props) => {
         }}
       />
       <View style={styles.container}>
-        <ScrollView style={{}} contentContainerStyle={styles.content}>
+        <ScrollView
+          style={{}}
+          contentContainerStyle={styles.content}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        >
           <View style={{ flexDirection: 'row' }}>
             <Chip label={activity?.categoryName} />
           </View>
@@ -188,21 +201,8 @@ const DetailScreen = (props: Props) => {
           </View>
 
           <Text style={styles.description}>{activity?.description}</Text>
-
-          {/* <RNUIButton label="แก้ไขกิจกรรม" onPress={() => router.push(`/activities/edit?id=${activityId}`)} /> */}
         </ScrollView>
-        <View style={styles.footerWrapper}>
-          <JoinButton
-            userId={user?.userId}
-            userName={user?.username}
-            activityId={activityId}
-            activityTitle={activity?.title}
-            isParticipant={isParticipant}
-            isOwner={isOwner}
-            targetId={activity?.hostUserId}
-            onDeleteActivity={handleOpenDeleteModal}
-          />
-        </View>
+        {isExpired || <View style={styles.footerWrapper}>{renderButton()}</View>}
       </View>
 
       <AppConfirmModal
@@ -224,18 +224,6 @@ const DetailScreen = (props: Props) => {
       >
         <></>
       </OptionsBottomSheet>
-
-      {/* <AppBottomSheetModal
-        ref={optionBottomSheetRef}
-        title="d"
-        index={1}
-        snapPoints={['30%']}
-        enablePanDownToClose
-        enableDynamicSizing
-        style={{ minHeight: 100, flex: 0 }}
-      >
-        <Text>s</Text>
-      </AppBottomSheetModal> */}
     </>
   );
 };
