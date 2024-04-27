@@ -38,7 +38,11 @@ const AppBottomSheetModal = forwardRef<Ref, Props>((props, ref) => {
 
   const RenderBody = () => {
     if (children) {
-      return children;
+      return (
+        <BottomSheetView style={styles.contentContainer}>
+          <Text>{children}</Text>
+        </BottomSheetView>
+      );
     }
     return (
       <BottomSheetView style={styles.contentContainer}>
@@ -50,10 +54,10 @@ const AppBottomSheetModal = forwardRef<Ref, Props>((props, ref) => {
   return (
     <BottomSheetModal
       ref={ref}
-      index={1}
+      index={0}
       onChange={handleSheetChanges}
       // enableDynamicSizing={true}
-      snapPoints={snapPoints}
+      // snapPoints={snapPoints}
       backdropComponent={renderBackdrop}
       enablePanDownToClose
       handleIndicatorStyle={styles.handleIndicator}
@@ -68,7 +72,7 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   contentContainer: {
     // flex: 1,
     // alignItems: 'center',
-    backgroundColor: '#DAF7A6',
+    // backgroundColor: '#DAF7A6',
   },
   input: {
     marginTop: 8,

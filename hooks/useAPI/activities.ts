@@ -5,7 +5,7 @@ import { ActivitiesResponse, ActivityResponse, ActivityUpdateRequest, PaginateRe
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { removeObjectFromArrayById } from "@/utils";
 import { UseGetMyUserInfo } from "./users";
-import { ActivitiesParams, AttendanceStatus, GetActivitiesByLocationParams, ParticipantsParams } from "@/api/activities/type";
+import { ActivitiesParams, AttendanceStatus, GetActivitiesByLocationParams, ParticipantsParams, RSVPStatus } from "@/api/activities/type";
 import { useCallback, useState } from 'react';
 import { useDebounce } from '@/modules/Explore/hooks/useDebounce';
 
@@ -157,7 +157,7 @@ export function UseDeleteActivity() {
     mutationKey: ['deleteActivity'],
     mutationFn: (activityId: string) => activitiesApi.deleteActivity(activityId),
     onSuccess: async (data, activityId) => {
-      queryClient.setQueryData(['activities'], (oldData: ActivitiesResponse) => ({
+      await queryClient.setQueryData(['activities'], (oldData: ActivitiesResponse) => ({
         ...oldData,
         content: removeObjectFromArrayById(oldData.content, Number(activityId), 'activityId')
       }));
@@ -168,16 +168,18 @@ export function UseDeleteActivity() {
 
 export function UseGetActivityParticipants(params = {} as ParticipantsParams) {
   const [selectedAttendanceStatus, setSelectedAttendanceStatus] = useState<AttendanceStatus | undefined>(undefined);
+  const [selectedRSVPStatus, setSelectedRSVPStatus] = useState<RSVPStatus | undefined>(undefined);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   const query = useInfiniteQuery({
-    queryKey: ['activities', params.activityId, selectedAttendanceStatus],
+    queryKey: ['activities', params.activityId, selectedRSVPStatus],
     queryFn: ({ pageParam }) => activitiesApi.getActivityParticipants({
       ...params,
       page: pageParam,
       status: selectedAttendanceStatus,
+      rsvpStatus: selectedRSVPStatus,
     }),
     enabled: !!params.activityId,
     initialPageParam: 0,
@@ -196,7 +198,8 @@ export function UseGetActivityParticipants(params = {} as ParticipantsParams) {
     setSearchQuery,
     debouncedSearchQuery,
     selectedAttendanceStatus,
-    setSelectedAttendanceStatus
+    setSelectedAttendanceStatus,
+    selectedRSVPStatus, setSelectedRSVPStatus
   };
 }
 

@@ -38,6 +38,11 @@ export default function dev() {
           title: 'New Activities Form Screen',
           onPress: () => router.push('/activities/activity-create'),
         },
+        {
+          id: 'screen-old-search',
+          title: 'Old search',
+          onPress: () => router.push('/activities/search'),
+        },
       ],
     },
     {
