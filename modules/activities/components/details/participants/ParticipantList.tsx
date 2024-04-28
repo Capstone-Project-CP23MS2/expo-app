@@ -2,15 +2,16 @@ import { View, Text, Pressable } from 'react-native';
 import React from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { FlashList } from '@shopify/flash-list';
-import { ParticipantResponse } from '@/api/type';
 import ParticipantListItem from './ParticipantListItem';
+import { Participant } from '@/api/activities/type';
 
 type Props = {
-  participants?: ParticipantResponse[];
+  participants?: Participant[];
   onPress?: () => void;
+  hostId?: number;
 };
 
-const ParticipantList = ({ participants, onPress }: Props) => {
+const ParticipantList = ({ participants, hostId, onPress }: Props) => {
   const { styles } = useStyles(stylesheet);
 
   return (
@@ -20,7 +21,7 @@ const ParticipantList = ({ participants, onPress }: Props) => {
         data={participants}
         // extraData={selectedCategoryIds}
         renderItem={({ item: participant, index }) => (
-          <ParticipantListItem participant={participant} index={index} />
+          <ParticipantListItem participant={participant} hostId={hostId} index={index} />
         )}
         estimatedItemSize={100}
         numColumns={1}

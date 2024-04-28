@@ -7,24 +7,40 @@ import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 type Props = {};
 //TODO: ทำเป็น Section List วันที่หรือกิจกรรมของวันนี้
 // https://shopify.github.io/flash-list/docs/guides/section-list/
-const ActivityOwnTab = (props: Props) => {
+const ActivityPastTab = (props: Props) => {
   const { styles } = useStyles(stylesheet);
   const { data: user } = UseGetMyUserInfo();
 
-  const { data, refetch } = UseGetActivities(
-    {
-      hostId: user?.userId,
-      sortBy: 'dateTime',
-      dateStatus: 'past',
-    },
-    'past-activities',
-  );
-  const { activities, paginationData } = data || { activities: [] };
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    refetch,
+    isFetching,
+    searchQuery,
+    setSearchQuery,
+    selectedCategoryIds,
+    setSelectedCategoryIds,
+    debouncedSearchQuery,
+    setDateStatus,
+  } = UseGetActivities({
+    hostId: user?.userId,
+    pageSize: 5,
+    sortBy: 'dateTime',
+    dateStatus: 'past',
+  });
+  const { activities } = data || {};
 
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <ActivityList activities={activities} onRefresh={refetch} />
+        <ActivityList
+          activities={activities}
+          onRefresh={refetch}
+          fetchNextPage={fetchNextPage}
+          hasNextPage={hasNextPage}
+          isFetching={isFetching}
+        />
       </View>
     </View>
   );
@@ -39,4 +55,4 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   },
 }));
 
-export default ActivityOwnTab;
+export default ActivityPastTab;

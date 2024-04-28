@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import apiClient from "../apiClient";
-import { APIPaginationResponse } from "../type";
-import { PlacesRequestParameters, PlacesResponseBody } from "./places.type";
+import { PaginateResponse } from "../type";
+import { Place, PlacesParams } from "./places.type";
 class PlacesApi {
 
-  async getPlaces(params = {} as PlacesRequestParameters) {
-    const { data } = await apiClient.get<PlacesResponseBody>('/locations', { params });
+  async getPlaces(params = {} as PlacesParams) {
+    const { data } = await apiClient.get<PaginateResponse<Place>>('/locations', { params });
     return data;
   }
 

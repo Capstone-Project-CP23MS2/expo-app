@@ -9,7 +9,7 @@ export function UseGetUsers() {
     });
 };
 
-export function UseGetUser(userId: any) {
+export function UseGetUserById(userId: number) {
     return useQuery({
         queryKey: ['user', userId],
         queryFn: () => usersApi.getUserById(userId),

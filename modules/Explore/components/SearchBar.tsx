@@ -11,13 +11,13 @@ type Props = {
   // onClearQuery: () => void;
 };
 
-const Searchbar = ({ searchQuery, onSearchChanged }: Props) => {
+const SearchBar = ({ searchQuery, onSearchChanged }: Props) => {
   const { styles } = useStyles(stylesheet);
   const handleClearQuery = () => {
     onSearchChanged('');
   };
   return (
-    <>
+    <View style={styles.container}>
       <View style={styles.field}>
         <View style={styles.iconContainer}>
           <View style={styles.iconWrapper}>
@@ -27,7 +27,7 @@ const Searchbar = ({ searchQuery, onSearchChanged }: Props) => {
         </View>
         <TextInput
           style={[styles.textInput, styles.label]}
-          placeholder="Search"
+          placeholder="ค้นหากิจกรรม"
           onChangeText={onSearchChanged}
           value={searchQuery}
           // autoCorrect={false}
@@ -50,35 +50,35 @@ const Searchbar = ({ searchQuery, onSearchChanged }: Props) => {
           </Pressable>
         </View>
       </View>
-    </>
+    </View>
   );
 };
 
 const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   container: {
-    //   // flex: 1,
+    flexGrow: 1,
+    // minHeight: 50,
+    maxHeight: 50,
   },
   field: {
-    ...typography.md,
-    // paddingHorizontal: spacings.lg,
-    backgroundColor: colors.primaryContainer,
-    borderRadius: spacings.xl,
-    flexGrow: 1,
-    maxWidth: '100%',
-    alignItems: 'center',
+    // flexGrow: 1,
+    height: '100%',
     flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.background,
+    borderRadius: spacings.xl,
+    borderWidth: 1,
   },
   textInput: {
     flex: 1,
     flexGrow: 1,
-    minHeight: 48,
-    marginHorizontal: spacings.xs,
+    // minHeight: 50,
+    // marginHorizontal: spacings.xs,
   },
   label: {
     ...typography.md,
     textAlign: 'left',
     alignSelf: 'stretch',
-    color: colors.onPrimaryContainer,
   },
   iconContainer: {
     height: 40,
@@ -95,4 +95,4 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   },
 }));
 
-export default Searchbar;
+export default SearchBar;

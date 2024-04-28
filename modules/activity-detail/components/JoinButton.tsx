@@ -13,7 +13,6 @@ type Props = {
   isOwner?: boolean;
   isParticipant?: boolean;
   targetId?: number;
-  onDeleteActivity?: () => void;
 };
 
 export default function JoinButton({
@@ -21,10 +20,8 @@ export default function JoinButton({
   userName,
   activityId,
   activityTitle,
-  isOwner,
   isParticipant,
   targetId,
-  onDeleteActivity,
 }: Props) {
   const router = useRouter();
   const createParticipantMutation = UseCreateParticipant();
@@ -80,9 +77,6 @@ export default function JoinButton({
       },
     });
   };
-  if (isOwner) {
-    return <AppButton variant="danger" label="ลบกิจกรรม" onPress={onDeleteActivity} fullWidth />;
-  }
 
   if (isParticipant) {
     return <AppButton variant="danger" label="ออกจากกิจกรรม" onPress={onLeaveActivity} fullWidth />;

@@ -39,9 +39,9 @@ export default function dev() {
           onPress: () => router.push('/activities/activity-create'),
         },
         {
-          id: 'screen-new-activities-detail',
-          title: 'New Activities Detail Screen',
-          onPress: () => router.push('/dev/new/activities/1'),
+          id: 'screen-old-search',
+          title: 'Old search',
+          onPress: () => router.push('/activities/search'),
         },
       ],
     },

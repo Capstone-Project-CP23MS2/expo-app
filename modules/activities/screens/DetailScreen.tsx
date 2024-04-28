@@ -1,5 +1,5 @@
 import { View, Text, ToastAndroid, Pressable } from 'react-native';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Tabs, useLocalSearchParams, useRouter } from 'expo-router';
 import {
@@ -9,22 +9,24 @@ import {
   UseGetMyUserInfo,
 } from '@/hooks/useAPI';
 import AppLoaderScreen from '@/components/AppLoaderScreen';
-import { AppConfirmModal, RNUIButton } from '@/components';
+import { AppBottomSheetModal, AppConfirmModal, RNUIButton } from '@/components';
 import { isAxiosError } from 'axios';
-import { ScrollView } from 'react-native-gesture-handler';
+import { RefreshControl, ScrollView } from 'react-native-gesture-handler';
 import { ActivityDatetime, ActivityPlace, ActivityParticipants } from '../components';
-import { Chip } from 'react-native-ui-lib';
+import { Button, Chip } from 'react-native-ui-lib';
 import JoinButton from '@/modules/activity-detail/components/JoinButton';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import OptionsBottomSheet from '../components/details/OptionsBottomSheet';
+import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
+import dayjs from 'dayjs';
 
 type Props = {};
 // note: ต้องเห็นข้อมูลทุกอย่างที่ใช้ในการตัดสินใจใน 1 หน้าจอ
-const ActivityDetail = (props: Props) => {
+const DetailScreen = (props: Props) => {
   const { styles } = useStyles(stylesheet);
   //route
   const router = useRouter();
   const { id: activityId } = useLocalSearchParams<{ id: string }>();
-  console.log('render ActivityDetail');
 
   const {
     data: activity,
@@ -35,11 +37,21 @@ const ActivityDetail = (props: Props) => {
   } = UseGetActivity(activityId);
 
   // TODO: ย้ายการเช็ค isParticipant ไปที่ server แทนเพื่อลดโอกาสที่จะต้อง fetch participants
-  const { data: participantsData } = UseGetActivityParticipants(activityId);
-  const { content: participants } = participantsData || {};
+  const { data: participantsData } = UseGetActivityParticipants({ activityId: Number(activityId) });
+  const { participants } = participantsData || {};
+
   const { data: user } = UseGetMyUserInfo();
   const isParticipant = participants?.some(participant => participant.userId === user?.userId);
   const isOwner = user?.userId === activity?.hostUserId;
+
+  const diffTime = dayjs().diff(dayjs(activity?.dateTime!));
+  const remainingTime = dayjs.duration(diffTime).humanize();
+  const activityStart = dayjs(activity?.dateTime!);
+  const activityExpire = dayjs(activity?.dateTime!).add(12, 'hour');
+  const isLive = dayjs().isBetween(activityStart, activityExpire, 'm', '[)');
+  const isFuture = dayjs().isBefore(activityStart);
+  const remainingExpireTime = dayjs.duration(activityExpire.diff(dayjs())).humanize();
+  const isExpired = dayjs().isAfter(activityExpire);
 
   const handlePressParticipants = () =>
     router.push({
@@ -54,7 +66,6 @@ const ActivityDetail = (props: Props) => {
     });
 
   const { mutate: deleteMutate, mutateAsync: deleteMutateAsync } = UseDeleteActivity();
-  // const deleteParticipantMutation = UseDeleteParticipant()
 
   const [showSignOutModal, setShowSignOutModal] = useState(false);
 
@@ -62,14 +73,20 @@ const ActivityDetail = (props: Props) => {
   const handleCloseDeleteModal = () => setShowSignOutModal(false);
 
   const handleDelete = async () => {
+    console.log('delete activity');
+
     try {
-      await deleteMutateAsync(activityId, {
+      deleteMutate(activityId, {
         onSuccess() {
           console.log('delete success');
-          ToastAndroid.show('Activity deleted', ToastAndroid.SHORT);
-          router.push('/(app)/(tabs)/home');
+        },
+        onSettled() {
+          console.log('delete settled');
         },
       });
+
+      ToastAndroid.show('Activity deleted', ToastAndroid.SHORT);
+      router.push('/(app)/(tabs)');
     } catch (e) {
       if (isAxiosError(error)) {
         console.log('error test');
@@ -81,39 +98,53 @@ const ActivityDetail = (props: Props) => {
   };
   const handleEdit = () => {
     router.push({ pathname: '/(app)/activities/edit', params: { activityId } });
+    dismiss();
   };
+
+  const optionBottomSheetRef = useRef<BottomSheetModal>(null);
+
+  const { dismiss } = useBottomSheetModal();
+
+  const handleOptionOpen = useCallback(() => {
+    optionBottomSheetRef.current?.present();
+  }, []);
+  const handleOptionClose = useCallback(() => {
+    optionBottomSheetRef.current?.dismiss();
+  }, []);
 
   const renderButton = () => {
-    if (isParticipant) {
+    if (isOwner)
       return (
-        <JoinButton
-          userId={user?.userId}
-          userName={user?.username}
-          activityId={activityId}
-          activityTitle={activity?.title}
-          isParticipant={isParticipant}
-          targetId={activity?.hostUserId}
+        <RNUIButton
+          label={
+            isFuture
+              ? `กิจกรรมจะเริ่มในอีก ${remainingTime}`
+              : `จบกิจกรรม (เหลือเวลาอีก ${remainingExpireTime})`
+          }
+          disabled={!isLive}
         />
       );
-    }
-    return null;
-    // if (activity?.isOwner) {
-    //   return (
-    //     <RNUIButton
-    //       label="แก้ไขกิจกรรม"
-    //       onPress={() => router.push(`/activities/edit?id=${activityId}`)}
-    //     />
-    //   );
-    // }
-
-    // return null;
+    return (
+      <JoinButton
+        userId={user?.userId}
+        userName={user?.username}
+        activityId={activityId}
+        activityTitle={activity?.title}
+        isParticipant={isParticipant}
+        isOwner={isOwner}
+        targetId={activity?.hostUserId}
+      />
+    );
   };
+  const [refreshing, setRefreshing] = useState(false);
 
-  // const handlePressDe
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await activityRefetch();
+    setRefreshing(false);
+  }, []);
 
-  if (isLoading) {
-    return <AppLoaderScreen />;
-  }
+  if (isLoading) return <AppLoaderScreen />;
 
   if (isError) {
     return (
@@ -129,15 +160,26 @@ const ActivityDetail = (props: Props) => {
         options={{
           headerRight(props) {
             return (
-              <Pressable onPress={handleEdit}>
-                <MaterialCommunityIcons name="dots-vertical" size={24} color="black" />
-              </Pressable>
+              isOwner && (
+                <Pressable
+                  onPress={() => {
+                    console.log('press');
+                    handleOptionOpen();
+                  }}
+                >
+                  <MaterialCommunityIcons name="dots-horizontal" size={24} color="black" />
+                </Pressable>
+              )
             );
           },
         }}
       />
       <View style={styles.container}>
-        <ScrollView style={{}} contentContainerStyle={styles.content}>
+        <ScrollView
+          style={{}}
+          contentContainerStyle={styles.content}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        >
           <View style={{ flexDirection: 'row' }}>
             <Chip label={activity?.categoryName} />
           </View>
@@ -158,39 +200,9 @@ const ActivityDetail = (props: Props) => {
             />
           </View>
 
-          <Text style={styles.description}>
-            {activity?.description} Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Recusandae excepturi, iste possimus incidunt accusantium necessitatibus minima sed quis,
-            fugit itaque harum maiores ab, voluptatum consequatur. Soluta, iure? Reiciendis, fuga
-            ducimus. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sequi id commodi quae
-            in tempora, aspernatur voluptate ut ex maiores eum error quibusdam enim vero. Maiores
-            aspernatur, molestias minus accusantium doloribus veritatis modi aperiam, vero tenetur
-            perspiciatis velit! Voluptatibus, et culpa. Lorem ipsum dolor sit amet consectetur,
-            adipisicing elit. Placeat tenetur aspernatur nemo provident officia illo iste assumenda
-            nihil fuga suscipit minus velit molestiae iure, ipsa esse cupiditate magnam quaerat
-            quae. Minima quia harum quae ut quod quo laborum repellendus nulla reiciendis officia
-            consequuntur, quasi earum, sit ea placeat animi facere vitae soluta possimus, iure
-            sapiente doloribus voluptas sequi eos? Impedit aperiam fugiat optio maxime mollitia
-            sequi enim, voluptatem velit rem tempore repellat officiis natus veniam sunt, architecto
-            veritatis eos ullam eligendi? Est cupiditate asperiores eveniet doloremque quasi, ipsam
-            voluptatum, ducimus a nam quidem, provident ratione. Eveniet enim impedit laboriosam
-            perspiciatis?
-          </Text>
-
-          {/* <RNUIButton label="แก้ไขกิจกรรม" onPress={() => router.push(`/activities/edit?id=${activityId}`)} /> */}
+          <Text style={styles.description}>{activity?.description}</Text>
         </ScrollView>
-        <View style={styles.footerWrapper}>
-          <JoinButton
-            userId={user?.userId}
-            userName={user?.username}
-            activityId={activityId}
-            activityTitle={activity?.title}
-            isOwner={isOwner}
-            isParticipant={isParticipant}
-            targetId={activity?.hostUserId}
-            onDeleteActivity={handleOpenDeleteModal}
-          />
-        </View>
+        {isExpired || <View style={styles.footerWrapper}>{renderButton()}</View>}
       </View>
 
       <AppConfirmModal
@@ -202,6 +214,16 @@ const ActivityDetail = (props: Props) => {
         onCancel={handleCloseDeleteModal}
         btnColor="red"
       />
+      <OptionsBottomSheet
+        ref={optionBottomSheetRef}
+        onOpenDeleteModal={handleOpenDeleteModal}
+        onEdit={handleEdit}
+        isOwner={isOwner}
+
+        // onDismiss={handleOptionClose}
+      >
+        <></>
+      </OptionsBottomSheet>
     </>
   );
 };
@@ -234,4 +256,4 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography, component }
   },
 }));
 
-export default ActivityDetail;
+export default DetailScreen;

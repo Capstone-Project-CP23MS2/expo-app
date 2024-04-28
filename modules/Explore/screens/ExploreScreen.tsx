@@ -33,7 +33,6 @@ const ExploreScreen = (props: Props) => {
   } = UseGetActivities(
     {
       // categoryIds: [1],
-      pageSize: 5,
     },
     'all',
   );
@@ -73,7 +72,6 @@ const ExploreScreen = (props: Props) => {
     <>
       <Stack.Screen
         options={{
-          // header: () => <ExploreHeader onCategoryChanged={() => {}} />,
           header: () => (
             <ExploreFilter
               searchQuery={searchQuery}

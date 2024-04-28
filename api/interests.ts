@@ -1,4 +1,4 @@
-import { CategoryResponse, CategoriesResponse, requestParams } from './type';
+import { CategoryResponse, CategoriesResponse } from './type';
 import apiClient from './apiClient';
 
 type Interests = {

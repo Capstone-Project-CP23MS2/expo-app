@@ -1,15 +1,19 @@
-import { ActivitiesResponse, ParticipantResponse, ParticipantsResponse, ActivityUpdateRequest, ActivitiesRequestParams, PaginateResponse } from '../type';
+import { ActivitiesResponse, ParticipantResponse, ParticipantsResponse, ActivityUpdateRequest, PaginateResponse } from '../type';
 import apiClient from "../apiClient";
 import { objToFormData } from '@/utils';
 import { AxiosRequestConfig } from 'axios';
-import { ActivitiesParams, Activity, ActivityCreateRequest, GetActivitiesByLocationParams } from './type';
+import { ActivitiesParams, Activity, ActivityCreateRequest, GetActivitiesByLocationParams, Participant, ParticipantsParams } from './type';
 
 class ActivitiesApi {
   async getActivities(params: ActivitiesParams) {
     const config: AxiosRequestConfig = {
-      params,
+      params: {
+        ...params,
+        pageSize: 10,
+
+      } as ActivitiesParams,
       paramsSerializer: {
-        indexes: null
+        indexes: null,
       }
     };
     const { data } = await apiClient.get<PaginateResponse<Activity>>('/activities', config);
@@ -70,10 +74,10 @@ class ActivitiesApi {
     await apiClient.delete<void>(`/users/${id}`);
   }
 
-  async getActivityParticipants(activityId: string | string[]) {
-    const { data } = await apiClient.get<ParticipantsResponse>(
+  async getActivityParticipants(params: ParticipantsParams) {
+    const { data } = await apiClient.get<PaginateResponse<Participant>>(
       'participants',
-      { params: { activityId: activityId } }
+      { params }
     );
     return data;
   }
@@ -100,7 +104,7 @@ class ActivitiesApi {
 
   // deprecated
 
-  async getActivitiesNew(params: ActivitiesRequestParams) {
+  async getActivitiesNew(params: ActivitiesParams) {
     const config: AxiosRequestConfig = {
       params,
       paramsSerializer: {

@@ -3,10 +3,12 @@ import { Redirect, Stack, useRouter } from 'expo-router';
 import { useAuth } from '@/context/authContext';
 import { LoaderScreen } from 'react-native-ui-lib';
 import AppLoaderScreen from '@/components/AppLoaderScreen';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 type Props = {};
 
 const AppEntry = (props: Props) => {
+  const { styles } = useStyles(stylesheet);
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
@@ -20,12 +22,13 @@ const AppEntry = (props: Props) => {
     <Stack
       screenOptions={{
         headerTitleAlign: 'center',
+        headerTitleStyle: styles.title,
       }}
     >
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       {/* <Stack.Screen name="(tabs)/activities" options={{ headerShown: false }} /> */}
-      <Stack.Screen name="activities/[id]" options={{ headerTitle: 'Activity Details' }} />
-      <Stack.Screen name="activities/create-form" options={{ headerTitle: 'Create Activity' }} />
+      <Stack.Screen name="activities/[id]" options={{ headerTitle: 'รายละเอียดกิจกรรม' }} />
+      <Stack.Screen name="activities/create-form" options={{ headerTitle: 'สร้างกิจกรรม' }} />
       <Stack.Screen
         name="activities/edit"
         options={{
@@ -40,15 +43,16 @@ const AppEntry = (props: Props) => {
           headerTitle: 'Participants',
           animation: 'slide_from_right',
           animationDuration: 200,
+          // presentation: 'transparentModal',
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="activities/search"
         options={{
           headerTitle: 'Search Activity',
           animation: 'fade',
         }}
-      />
+      /> */}
 
       <Stack.Screen
         name="explore/filter"
@@ -74,10 +78,16 @@ const AppEntry = (props: Props) => {
         options={{ headerTitle: 'In', animation: 'slide_from_right', animationDuration: 200 }}
       />
 
-      <Stack.Screen name="map/index" options={{ headerTitle: 'Explore your activities' }} />
+      <Stack.Screen name="map/index" options={{ headerTitle: 'สำรวจกิจกรรม' }} />
       {/* <Stack.Screen name="notification/notification" options={{ headerTitle: 'Notification' }} /> */}
     </Stack>
   );
 };
 
 export default AppEntry;
+
+const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
+  title: {
+    ...typography.lgB,
+  },
+}));

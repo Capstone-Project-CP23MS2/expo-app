@@ -12,7 +12,7 @@ class UsersApi {
     return data;
   }
 
-  async getUserById(id: number | string) {
+  async getUserById(id: number) {
     const { data } = await apiClient.get<User>(`/users/${id}`);
     return data;
   }

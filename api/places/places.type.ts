@@ -1,9 +1,7 @@
-import { APIPaginationResponse } from "../type";
+import { PaginateParams, PaginateResponse } from "../type";
 
-export type PlacesRequestParameters = {
-  page?: number;
-  pageSize?: number;
-  sortBy?: string;
+export type PlacesParams = PaginateParams & {
+
 };
 
 export type Place = {
@@ -13,6 +11,13 @@ export type Place = {
   longitude: number;
 };
 
-export type PlacesResponseBody = APIPaginationResponse<Place>;
-
-// export type PlacesRequestParameters = PlaceRequestParameters;
+//TODO:
+// export type ActivitiesParams = PaginateParams & {
+//   sortBy?: ActivitiesSortBy;
+//   categoryIds?: number[];
+//   title?: string;
+//   hostId?: number;
+//   userId?: number;
+//   dateStatus?: ActivitiesParamsDateStatus;
+//   date?: string;
+// };

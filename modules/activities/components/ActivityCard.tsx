@@ -4,6 +4,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { ActivityResponse } from '@/api/type';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { useRouter } from 'expo-router';
 
 type ActivityCardProps = {
   activity: ActivityResponse;
@@ -11,17 +12,23 @@ type ActivityCardProps = {
 };
 const ActivityCard = ({ activity, onPress }: ActivityCardProps) => {
   const { styles } = useStyles(stylesheet);
+  const router = useRouter();
+
+  const handlePress = () => {
+    if (onPress) return onPress();
+    //default behavior
+    router.push(`/activities/${activity.activityId}`);
+  };
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container} activeOpacity={0.6}>
-      <View style={styles.content}>
+    <TouchableOpacity onPress={handlePress} style={styles.container} activeOpacity={0.6}>
+      <View>
         <Text style={styles.textDatetime}>
           {dayjs(activity.dateTime).format('ddd, MMMM D, YYYY h:mm')}
         </Text>
-        <Text style={styles.title}>{activity.title}</Text>
-        {/* <RNUIText md-b>{activity.title}</RNUIText> */}
-
-        {/* <Text sm>{activity.description}</Text> */}
+        <Text style={styles.title} numberOfLines={1}>
+          {activity.title}
+        </Text>
         <View style={styles.chipsList}>
           <Chip label={activity.categoryName} />
           <Chip label={`${activity.users.length}/${activity.noOfMembers}`} />
@@ -39,19 +46,11 @@ export default ActivityCard;
 const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   container: {
     padding: spacings.lg,
-    // gap: spacings.xs,
-    // flex: 1,
-    // justifyContent: 'space-between',
-    // alignItems: 'center',
-    // flexDirection: 'row',
     borderRadius: spacings.md,
     backgroundColor: '#FFF',
     elevation: 3,
-    // ...SHADOWS.medium,
-    // shadowColor: COLORS.white,
-  },
-  content: {
-    // gap: 4,
+    borderColor: colors.lightgray,
+    borderWidth: 1,
   },
   title: {
     ...typography.mdB,
@@ -65,7 +64,6 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
     gap: spacings.xs,
     marginBottom: spacings.xs,
   },
-  //TODO: style
   textDescription: {
     ...typography.xsB,
     color: '#888693',

@@ -13,10 +13,12 @@ import {
 
 import { UseGetNotificationById } from '@/hooks/useAPI';
 import { useAuth } from '@/context/authContext';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 type Props = {};
 
 const TabsLayout = (props: Props) => {
+  const { styles } = useStyles(stylesheet);
   const { user } = useAuth();
   const { data } = UseGetNotificationById(user?.userId);
   const { content: notifications } = data || {};
@@ -32,13 +34,14 @@ const TabsLayout = (props: Props) => {
         tabBarStyle: styles.tabBar,
         headerStyle: styles.header,
         headerTitleAlign: 'center',
+        headerTitleStyle: styles.title,
       }}
     >
       <Tabs.Screen
         name="explore"
         options={{
           tabBarIcon: ({ size, color }) => (
-            <MaterialCommunityIcons name="magnify" size={24} color="black" />
+            <MaterialCommunityIcons name="magnify" size={size} color={color} />
           ),
         }}
       />
@@ -54,7 +57,7 @@ const TabsLayout = (props: Props) => {
           tabBarIcon: ({ size, color }) => (
             <FontAwesome5 name="calendar" size={size - 3} color={color} />
           ),
-          headerTitle: 'Calendar',
+          headerTitle: 'ปฏิทิน',
         }}
       />
 
@@ -62,7 +65,7 @@ const TabsLayout = (props: Props) => {
         name="wishLists"
         options={{
           tabBarIcon: ({ size, color }) => <AntDesign name="star" size={size} color={color} />,
-          headerTitle: 'Wish Lists',
+          headerTitle: 'ชื่นชอบ',
         }}
       />
 
@@ -72,7 +75,7 @@ const TabsLayout = (props: Props) => {
           tabBarIcon: ({ size, color }) => (
             <NotificationIcon size={size} color={color} unreadCount={unreadCount} />
           ),
-          headerTitle: 'Notifications',
+          headerTitle: 'แจ้งเตือน',
         }}
       />
 
@@ -80,7 +83,7 @@ const TabsLayout = (props: Props) => {
         name="profile"
         options={{
           tabBarIcon: ({ size, color }) => <Ionicons name="person" size={size} color={color} />,
-          headerTitle: 'Profile',
+          headerTitle: 'โปรไฟล์',
         }}
       />
       <Tabs.Screen
@@ -89,7 +92,7 @@ const TabsLayout = (props: Props) => {
           tabBarIcon: ({ size, color }) => (
             <MaterialIcons name="home-filled" size={size} color={color} />
           ),
-          headerTitle: 'Home',
+          headerTitle: 'หน้าหลัก',
         }}
       />
     </Tabs>
@@ -121,13 +124,15 @@ const NotificationIcon = ({ size, color, unreadCount }: any) => (
 
 export default TabsLayout;
 
-const styles = StyleSheet.create({
+const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   tabBar: {
-    fontFamily: FONT.semiBold,
     height: 60,
     backgroundColor: '#FFF',
   },
   header: {
     shadowColor: '#000',
   },
-});
+  title: {
+    ...typography.lgB,
+  },
+}));
