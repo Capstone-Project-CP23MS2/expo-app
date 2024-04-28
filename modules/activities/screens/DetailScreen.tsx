@@ -130,6 +130,10 @@ const DetailScreen = (props: Props) => {
   }, []);
 
   const renderButton = () => {
+    if (activity?.duration === 1001) return <RNUIButton label={'กิจกรรมเสร็จสิ้น'} disabled />;
+    if (!isFuture && activity?.goingCounts === 1)
+      return <RNUIButton label={'กิจกรรมหมดเวลา'} disabled />;
+
     if (isOwner)
       return (
         <RNUIButton
