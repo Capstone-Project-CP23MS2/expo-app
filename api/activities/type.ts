@@ -1,5 +1,5 @@
 import { Place } from "../places/places.type";
-import { PaginateParams } from "../type";
+import { PaginateParams, PaginateParamsOrderBy } from "../type";
 
 export type Activity = {
   activityId: number;
@@ -12,6 +12,8 @@ export type Activity = {
   duration: number;
   noOfMembers: number;
   memberCounts?: number;
+  goingCounts: number,
+  lineGroupUrl: string,
   categoryName?: string;
   users: {
     userId: number;
@@ -33,6 +35,7 @@ export type ActivitiesParams = PaginateParams & {
   userId?: number;
   dateStatus?: ActivitiesParamsDateStatus;
   date?: string;
+  orderBy?: PaginateParamsOrderBy;
 };
 
 export type GetActivitiesByLocationParams = {
@@ -67,6 +70,16 @@ export type Participant = {
 export type ParticipantsParams = PaginateParams & {
   activityId?: number;
   userId?: number;
+  status?: AttendanceStatus;
+  rsvpStatus?: RSVPStatus;
+};
+
+export type ParticipantUpdateParams = {
+  activityId: number;
+  userId: number;
+};
+
+export type ParticipantUpdateRequest = {
   status?: AttendanceStatus;
   rsvpStatus?: RSVPStatus;
 };

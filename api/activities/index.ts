@@ -1,8 +1,8 @@
-import { ActivitiesResponse, ParticipantResponse, ParticipantsResponse, ActivityUpdateRequest, PaginateResponse } from '../type';
+import { ActivitiesResponse, ParticipantResponse, ActivityUpdateRequest, PaginateResponse } from '../type';
 import apiClient from "../apiClient";
 import { objToFormData } from '@/utils';
 import { AxiosRequestConfig } from 'axios';
-import { ActivitiesParams, Activity, ActivityCreateRequest, GetActivitiesByLocationParams, Participant, ParticipantsParams } from './type';
+import { ActivitiesParams, Activity, ActivityCreateRequest, GetActivitiesByLocationParams, Participant, ParticipantUpdateParams, ParticipantUpdateRequest, ParticipantsParams } from './type';
 
 class ActivitiesApi {
   async getActivities(params: ActivitiesParams) {
@@ -94,6 +94,16 @@ class ActivitiesApi {
     return data;
   };
 
+  async updateParticipant(params: ParticipantUpdateParams, updateRequest: ParticipantUpdateRequest) {
+    const headers = {
+      // 'Content-Type': 'multipart/form-data',
+    };
+    const { data } = await apiClient.patch<Participant>(
+      `participants/${params.activityId}_${params.userId}`, updateRequest, { headers }
+    );
+    return data;
+  }
+
   async deleteActivityParticipant(params: any) {
     const { activityId, userId } = params;
     const url = `participants/${activityId}_${userId}`;
@@ -102,19 +112,7 @@ class ActivitiesApi {
     return data;
   };
 
-  // deprecated
 
-  async getActivitiesNew(params: ActivitiesParams) {
-    const config: AxiosRequestConfig = {
-      params,
-      paramsSerializer: {
-        indexes: null
-      }
-    };
-    const { data: { content: activities, ...paginationData } }
-      = await apiClient.get<ActivitiesResponse>('/activities', config);
-    return { activities, paginationData };
-  }
 }
 
 const activitiesApi = new ActivitiesApi();

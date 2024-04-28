@@ -32,8 +32,9 @@ const ActivityUpcomingTab = (props: Props) => {
   } = UseGetActivities({
     hostId: user?.userId,
     pageSize: 5,
-    sortBy: 'dateTime',
     dateStatus: 'upcoming',
+    sortBy: 'dateTime',
+    orderBy: 'ASC',
   });
   const { activities } = data || {};
 

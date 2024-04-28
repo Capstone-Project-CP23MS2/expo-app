@@ -32,7 +32,9 @@ const ExploreScreen = (props: Props) => {
     debouncedSearchQuery,
   } = UseGetActivities(
     {
-      // categoryIds: [1],
+      dateStatus: 'upcoming',
+      sortBy: 'dateTime',
+      orderBy: 'ASC',
     },
     'all',
   );

@@ -5,9 +5,10 @@ import dayjs from 'dayjs';
 import { ActivityResponse } from '@/api/type';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { useRouter } from 'expo-router';
+import { Activity } from '@/api/activities/type';
 
 type ActivityCardProps = {
-  activity: ActivityResponse;
+  activity: Activity;
   onPress?: () => void;
 };
 const ActivityCard = ({ activity, onPress }: ActivityCardProps) => {
@@ -31,7 +32,7 @@ const ActivityCard = ({ activity, onPress }: ActivityCardProps) => {
         </Text>
         <View style={styles.chipsList}>
           <Chip label={activity.categoryName} />
-          <Chip label={`${activity.users.length}/${activity.noOfMembers}`} />
+          <Chip label={`${activity.goingCounts}/${activity.noOfMembers}`} />
         </View>
         <View style={styles.placeContainer}>
           <Text style={styles.textDescription}>{activity.location.name}</Text>

@@ -1,9 +1,17 @@
 import { StyleSheet, Text, View, ToastAndroid } from 'react-native';
 import React from 'react';
 import AppButton from '@/modules/shared/AppButton';
-import { UseCreateParticipant, UseDeleteParticipant, UseCreateNotification } from '@/hooks/useAPI';
+import {
+  UseCreateParticipant,
+  UseDeleteParticipant,
+  UseCreateNotification,
+  UseUpdateParticipant,
+  UseGetActivityParticipants,
+  UseGetParticipant,
+} from '@/hooks/useAPI';
 import { objToFormData } from '@/utils';
 import { useRouter } from 'expo-router';
+import { createStyleSheet, useStyles } from 'react-native-unistyles';
 
 type Props = {
   userId?: number;
@@ -23,9 +31,17 @@ export default function JoinButton({
   isParticipant,
   targetId,
 }: Props) {
+  const { styles } = useStyles(stylesheet);
   const router = useRouter();
   const createParticipantMutation = UseCreateParticipant();
   const deleteParticipantMutation = UseDeleteParticipant();
+  const { mutate: updateParticipantMutate } = UseUpdateParticipant();
+  const { data: participant, refetch: refetchParticipant } = UseGetParticipant(
+    Number(activityId),
+    Number(userId),
+    isParticipant,
+  );
+
   const createNotiMutation = UseCreateNotification();
   const unRead = true;
 
@@ -33,15 +49,18 @@ export default function JoinButton({
     const type = 'join';
     const message = `${userName} joined ${activityTitle}`;
 
-    createParticipantMutation.mutate(objToFormData({ userId, activityId }), {
-      onSuccess: data => {
-        ToastAndroid.show("You've joined Activitiy", ToastAndroid.SHORT);
-        console.log('🚀 ~ createParticipantMutation.mutate ~ data:', data);
+    createParticipantMutation.mutate(
+      objToFormData({ userId, activityId, rsvpStatus: 'interesting', status: 'waiting' }),
+      {
+        onSuccess: data => {
+          ToastAndroid.show("You've joined Activitiy", ToastAndroid.SHORT);
+          console.log('🚀 ~ createParticipantMutation.mutate ~ data:', data);
+        },
+        onError: error => {
+          console.log(error);
+        },
       },
-      onError: error => {
-        console.log(error);
-      },
-    });
+    );
     createNotiMutation.mutate(objToFormData({ targetId, message, unRead, type }), {
       onSuccess: data => {
         console.log('🚀 ~ notificationMutation.mutate ~ data:', data);
@@ -77,12 +96,42 @@ export default function JoinButton({
       },
     });
   };
+  const handleGoingActivity = async () => {
+    updateParticipantMutate(
+      {
+        params: { activityId: Number(activityId), userId: Number(userId) },
+        updateRequest: {
+          rsvpStatus: participant?.rsvpStatus === 'interesting' ? 'going' : 'interesting',
+        },
+      },
+      {
+        onSuccess(data, variables, context) {
+          console.log('🚀 ~ handleGoingActivity ~ data', data);
+        },
+      },
+    );
+  };
 
-  if (isParticipant) {
-    return <AppButton variant="danger" label="ออกจากกิจกรรม" onPress={onLeaveActivity} fullWidth />;
+  if (!isParticipant) {
+    return <AppButton label="เข้าร่วมกิจกรรม" onPress={onJoinActivity} fullWidth />;
   }
 
-  return <AppButton label="เข้าร่วมกิจกรรม" onPress={onJoinActivity} fullWidth />;
+  return (
+    <View style={styles.container}>
+      <AppButton variant="danger" label="ออกจากกิจกรรม" onPress={onLeaveActivity} fullWidth />
+      {participant?.rsvpStatus === 'interesting' ? (
+        <AppButton label="ยืนยันการไป" onPress={handleGoingActivity} fullWidth />
+      ) : (
+        <AppButton label="ยกเลิกการยืนยัน" onPress={handleGoingActivity} fullWidth />
+      )}
+    </View>
+  );
 }
 
-const styles = StyleSheet.create({});
+const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
+  container: {
+    // flex: 1,
+    flexDirection: 'row',
+    gap: spacings.sm,
+  },
+}));
