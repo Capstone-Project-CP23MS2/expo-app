@@ -93,7 +93,7 @@ export default function JoinButton({
     updateParticipantMutate(
       {
         params: { activityId: Number(activityId), userId: Number(userId) },
-        updateRequest: { rsvpStatus: 'going', status: 'waiting' },
+        updateRequest: { rsvpStatus: 'going' },
       },
       {
         onSuccess(data, variables, context) {

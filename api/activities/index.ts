@@ -96,10 +96,10 @@ class ActivitiesApi {
 
   async updateParticipant(params: ParticipantUpdateParams, updateRequest: ParticipantUpdateRequest) {
     const headers = {
-      'Content-Type': 'multipart/form-data',
+      // 'Content-Type': 'multipart/form-data',
     };
     const { data } = await apiClient.patch<Participant>(
-      `participants/${params.activityId}_${params.userId}`, objToFormData(updateRequest), { headers }
+      `participants/${params.activityId}_${params.userId}`, updateRequest, { headers }
     );
     return data;
   }
