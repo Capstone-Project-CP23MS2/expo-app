@@ -107,20 +107,6 @@ export function UseGetJoinedActivities(params = { pageSize: 50 } as ActivitiesPa
   });
 };
 
-//ใช้ initialData 
-export function UseSearchActivities(params: ActivitiesParams = {}, test: any = '') {
-  console.log('🚚 UseSearchActivities:');
-  const { data, ...rest } = useQuery({
-    queryKey: ['activities-search'],
-    queryFn: () => activitiesApi.getActivities(params),
-  });
-
-  const { content: activities, ...paginationData } = data!;
-  console.log(activities);
-
-  return { activities, paginationData, ...rest };
-};
-
 // TODO: https://tkdodo.eu/blog/placeholder-and-initial-data-in-react-query
 // https://tanstack.com/query/latest/docs/framework/react/guides/initial-query-data
 // https://tanstack.com/query/latest/docs/framework/react/guides/placeholder-query-data
@@ -220,6 +206,21 @@ export function UseGetActivityParticipants(params = {} as ParticipantsParams) {
     selectedRSVPStatus, setSelectedRSVPStatus
   };
 }
+
+export function UseGetParticipant(activityId: number, userId: number, isParticipant = false) {
+  return useQuery({
+    queryKey: ['activity-participants', Number(activityId), Number(userId),],
+    queryFn: () => activitiesApi.getActivityParticipants({ activityId, userId }),
+    enabled: isParticipant,
+    select: (data) => {
+      return data.content[0];
+    },
+    // select: (data) => {
+    //   const { content, ...paginationData } = data;
+    //   return { activities: content, paginationData };
+    // },
+  });
+};
 
 export function UseCreateParticipant() {
   const queryClient = useQueryClient();

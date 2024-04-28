@@ -6,6 +6,8 @@ import {
   UseDeleteParticipant,
   UseCreateNotification,
   UseUpdateParticipant,
+  UseGetActivityParticipants,
+  UseGetParticipant,
 } from '@/hooks/useAPI';
 import { objToFormData } from '@/utils';
 import { useRouter } from 'expo-router';
@@ -33,6 +35,13 @@ export default function JoinButton({
   const router = useRouter();
   const createParticipantMutation = UseCreateParticipant();
   const deleteParticipantMutation = UseDeleteParticipant();
+  const { mutate: updateParticipantMutate } = UseUpdateParticipant();
+  const { data: participant, refetch: refetchParticipant } = UseGetParticipant(
+    Number(activityId),
+    Number(userId),
+    isParticipant,
+  );
+
   const createNotiMutation = UseCreateNotification();
   const unRead = true;
 
@@ -87,13 +96,13 @@ export default function JoinButton({
       },
     });
   };
-  const { mutate: updateParticipantMutate } = UseUpdateParticipant();
   const handleGoingActivity = async () => {
-    console.log('d');
     updateParticipantMutate(
       {
         params: { activityId: Number(activityId), userId: Number(userId) },
-        updateRequest: { rsvpStatus: 'going' },
+        updateRequest: {
+          rsvpStatus: participant?.rsvpStatus === 'interesting' ? 'going' : 'interesting',
+        },
       },
       {
         onSuccess(data, variables, context) {
@@ -110,7 +119,11 @@ export default function JoinButton({
   return (
     <View style={styles.container}>
       <AppButton variant="danger" label="ออกจากกิจกรรม" onPress={onLeaveActivity} fullWidth />
-      <AppButton label="ยืนยันการไป" onPress={handleGoingActivity} fullWidth />
+      {participant?.rsvpStatus === 'interesting' ? (
+        <AppButton label="ยืนยันการไป" onPress={handleGoingActivity} fullWidth />
+      ) : (
+        <AppButton label="ยกเลิกการยืนยัน" onPress={handleGoingActivity} fullWidth />
+      )}
     </View>
   );
 }
