@@ -1,1 +1,1 @@
-export { default } from '@/modules/Explore/screens/FilterScreen';
+export { default } from '@/modules/explore/screens/FilterScreen';

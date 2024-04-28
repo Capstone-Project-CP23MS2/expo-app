@@ -7,7 +7,7 @@ import { removeObjectFromArrayById } from "@/utils";
 import { UseGetMyUserInfo } from "./users";
 import { ActivitiesParams, ActivitiesParamsDateStatus, AttendanceStatus, GetActivitiesByLocationParams, ParticipantsParams, RSVPStatus } from "@/api/activities/type";
 import { useCallback, useState } from 'react';
-import { useDebounce } from '@/modules/Explore/hooks/useDebounce';
+import { useDebounce } from '@/modules/explore/hooks/useDebounce';
 
 //default option
 // const getNextPageParam = useCallback((lastPage: PaginateResponse<object>) => {

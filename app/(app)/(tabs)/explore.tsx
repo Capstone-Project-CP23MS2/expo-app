@@ -1,1 +1,1 @@
-export { default } from '@/modules/Explore/screens/ExploreScreen';
+export { default } from '@/modules/explore/screens/ExploreScreen';
