@@ -26,8 +26,9 @@ const ActivityPastTab = (props: Props) => {
   } = UseGetActivities({
     hostId: user?.userId,
     pageSize: 5,
-    sortBy: 'dateTime',
     dateStatus: 'past',
+    sortBy: 'dateTime',
+    orderBy: 'DESC',
   });
   const { activities } = data || {};
 
