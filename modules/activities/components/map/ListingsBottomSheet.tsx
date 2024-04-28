@@ -26,7 +26,7 @@ const ListingsBottomSheet = ({ placeId }: Props) => {
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      index={1}
+      index={0}
       snapPoints={snapPoints}
       enablePanDownToClose={false}
       // handleIndicatorStyle={{ backgroundColor: Colors.grey }}
@@ -97,6 +97,7 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
       width: 1,
       height: 1,
     },
+    // marginTop: -16,
   },
 }));
 

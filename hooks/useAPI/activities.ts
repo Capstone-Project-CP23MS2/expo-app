@@ -21,13 +21,13 @@ export function UseGetActivities(params = {} as ActivitiesParams, type: UseGetAc
   const [dateStatus, setDateStatus] = useState<ActivitiesParamsDateStatus | undefined>(params.dateStatus);
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
-  console.log(params);
-  console.log({
-    ...params,
-    title: searchQuery ? searchQuery : undefined,
-    categoryIds: selectedCategoryIds.length ? selectedCategoryIds : undefined,
-    dateStatus: dateStatus ? dateStatus : undefined,
-  });
+  // console.log(params);
+  // console.log({
+  //   ...params,
+  //   title: searchQuery ? searchQuery : undefined,
+  //   categoryIds: selectedCategoryIds.length ? selectedCategoryIds : undefined,
+  //   dateStatus: dateStatus ? dateStatus : undefined,
+  // });
 
   const query = useInfiniteQuery({
     queryKey: ['activities', type, debouncedSearchQuery, selectedCategoryIds, dateStatus],

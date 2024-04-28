@@ -4,6 +4,12 @@ export type PlacesParams = PaginateParams & {
 
 };
 
+export type PlacesMapParams = {
+  lat?: number;
+  lng?: number;
+  radius?: number;
+};
+
 export type Place = {
   locationId: number,
   name: string,

@@ -12,7 +12,7 @@ import { AppBottomSheetModal, RNUIButton } from '@/components';
 import MapViewStyle from '@/assets/data/map-view-style.json';
 import { UseGetActivities } from '@/hooks/useAPI';
 import { Activity } from '@/api/activities/type';
-import { UseGetPlaces } from '@/hooks/useAPI/places';
+import { UseGetPlaces, UseGetPlacesMap } from '@/hooks/useAPI/places';
 import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
 import ActivityListMapBottomSheet from '@/modules/activities/components/map/ActivityListMapBottomSheet';
 import { Place } from '@/api/places/places.type';
@@ -23,6 +23,7 @@ import { placesMockup } from '@/assets/data/examples/places';
 import ListingsBottomSheet from '@/modules/activities/components/map/ListingsBottomSheet';
 import { Stack } from 'expo-router';
 import ExploreHeader from '@/modules/dev-test/ExploreHeader';
+import { useLocationContext } from '@/context/locationContext';
 // import * as Location from 'expo-location';
 
 type Props = {};
@@ -37,13 +38,22 @@ const DevMap = (props: Props) => {
   const [selectedPlace, setSelectedPlace] = useState<string | null>(null);
   const mapRef = useRef<any>(null);
   const [initialRegion, setInitialRegion] = useState<Region | undefined>(undefined);
-  const { location, isLoading, error } = useLocation();
+
+  const { location, isLoading, error, getLocation } = useLocationContext();
+  console.log('😂location', getLocation());
+  console.log('🍞location', location);
   const { data } = UseGetActivities({});
   const { activities } = data || {};
 
-  const { data: placesData } = UseGetPlaces();
-  const { content: places } = placesData || {};
-  console.log(places);
+  const { data: places } = UseGetPlacesMap({
+    lat: location?.coords.latitude,
+    lng: location?.coords.longitude,
+    radius: 1000,
+  });
+
+  // console.log(location?.coords.longitude);
+
+  // console.log(places);
 
   const focusMap = (coord: LatLng) => {
     mapRef.current?.animateCamera({ center: coord, zoom: 16 }, { duration: 750 });
