@@ -1,3 +1,4 @@
+import { Category } from "../categories/categories.type";
 import { Place } from "../places/places.type";
 
 export type UserInterestCreateRequest = {
@@ -22,7 +23,9 @@ export type UserBase = {
 export type User = UserBase & {
   lastLogin?: string;
   registrationDate?: string;
-  userInterests?: number[];
+  userInterests?: UserInterest[];
   location?: Place;
   locationId?: number;
 };
+
+export type UserInterest = Category & {};

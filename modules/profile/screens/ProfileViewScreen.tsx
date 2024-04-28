@@ -7,6 +7,8 @@ import { Avatar } from 'react-native-ui-lib';
 import { UseGetReviewsUserByUserId } from '@/hooks/useAPI/reviews';
 import { RNUIButton } from '@/components';
 import { ReviewUser } from '@/api/reviews/type';
+import { UserInterest } from '@/api/users/users.type';
+import { getAge } from '@/utils/datetime';
 
 type Props = {};
 
@@ -17,9 +19,6 @@ const ProfileViewScreen = (props: Props) => {
 
   const { data: reviewsRes } = UseGetReviewsUserByUserId({ userId: Number(userId) });
   const { reviews } = reviewsRes || {};
-
-  // const {} = UseGetIne
-  console.log(reviews);
 
   return (
     <>
@@ -42,15 +41,25 @@ const ProfileViewScreen = (props: Props) => {
           <Text style={styles.username}>{user?.username}</Text>
           <Text style={styles.email}>{user?.email}</Text>
         </View>
+        <Text>LineId: {user?.lineId}</Text>
+        <Text>Gender: {user?.gender}</Text>
+        <Text>อายุ: {getAge(user?.dateOfBirth!)}</Text>
         <Text>สนใจใน</Text>
+        <View style={styles.interestListContainer}>
+          {user?.userInterests?.map((interest: UserInterest) => (
+            <Text key={interest.categoryId}>{interest.name}</Text>
+          ))}
+        </View>
+
         <Text>รีวิว</Text>
-        {/* <RNUIButton label="log" onPress={refetch} /> */}
-        {/* <RNUIButton label="log" onPress={() => console.log(reviews)} /> */}
-        {reviews?.map((review: ReviewUser) => (
-          <View key={review.reviewId}>
-            <Text>{review.comment}</Text>
-          </View>
-        ))}
+        <View style={styles.reviewListContainer}>
+          {reviews?.map((review: ReviewUser) => (
+            <View key={review.reviewId}>
+              <Text>{review.comment}</Text>
+            </View>
+          ))}
+        </View>
+
         {/* <View style={styles.reviews}>
           
         </View> */}

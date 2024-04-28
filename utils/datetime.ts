@@ -35,3 +35,6 @@ export function isWeekend(date: string | Date): boolean {
   return dayOfWeek === 6 || dayOfWeek === 0; // เสาร์ = 6, อาทิตย์ = 0
 }
 
+export function getAge(dateOfBirth: string | Date): number {
+  return dayjs().diff(dateOfBirth, 'year');
+}
