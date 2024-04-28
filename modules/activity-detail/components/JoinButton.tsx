@@ -33,15 +33,18 @@ export default function JoinButton({
     const type = 'join';
     const message = `${userName} joined ${activityTitle}`;
 
-    createParticipantMutation.mutate(objToFormData({ userId, activityId }), {
-      onSuccess: data => {
-        ToastAndroid.show("You've joined Activitiy", ToastAndroid.SHORT);
-        console.log('🚀 ~ createParticipantMutation.mutate ~ data:', data);
+    createParticipantMutation.mutate(
+      objToFormData({ userId, activityId, rsvpStatus: 'interesting' }),
+      {
+        onSuccess: data => {
+          ToastAndroid.show("You've joined Activitiy", ToastAndroid.SHORT);
+          console.log('🚀 ~ createParticipantMutation.mutate ~ data:', data);
+        },
+        onError: error => {
+          console.log(error);
+        },
       },
-      onError: error => {
-        console.log(error);
-      },
-    });
+    );
     createNotiMutation.mutate(objToFormData({ targetId, message, unRead, type }), {
       onSuccess: data => {
         console.log('🚀 ~ notificationMutation.mutate ~ data:', data);
