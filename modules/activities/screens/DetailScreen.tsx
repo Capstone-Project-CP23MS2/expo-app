@@ -1,5 +1,5 @@
 import { View, Text, ToastAndroid, Pressable } from 'react-native';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Tabs, useLocalSearchParams, useRouter } from 'expo-router';
 import {
@@ -41,7 +41,11 @@ const DetailScreen = (props: Props) => {
   const { participants } = participantsData || {};
 
   const { data: user } = UseGetMyUserInfo();
-  const isParticipant = participants?.some(participant => participant.userId === user?.userId);
+  const isParticipant = useMemo(
+    () => participants?.some(participant => participant.userId === user?.userId),
+    [participants],
+  );
+
   const isOwner = user?.userId === activity?.hostUserId;
 
   const diffTime = dayjs().diff(dayjs(activity?.dateTime!));
@@ -112,6 +116,19 @@ const DetailScreen = (props: Props) => {
     optionBottomSheetRef.current?.dismiss();
   }, []);
 
+  const handleEventCompleted = useCallback(() => {
+    // Toast.show({
+    //   type: 'success',
+    //   text1: 'เดินทางสำเร็จ',
+    //   text2: 'ขอบคุณที่ใช้บริการของเรา',
+    //   visibilityTime: 6000
+    // })
+    router.push({
+      pathname: '/activities/feedback',
+      params: { activityId },
+    });
+  }, []);
+
   const renderButton = () => {
     if (isOwner)
       return (
@@ -121,6 +138,7 @@ const DetailScreen = (props: Props) => {
               ? `กิจกรรมจะเริ่มในอีก ${remainingTime}`
               : `จบกิจกรรม (เหลือเวลาอีก ${remainingExpireTime})`
           }
+          onPress={handleEventCompleted}
           disabled={!isLive}
         />
       );

@@ -5,7 +5,7 @@ import { ActivitiesResponse, ActivityResponse, ActivityUpdateRequest, PaginateRe
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { removeObjectFromArrayById } from "@/utils";
 import { UseGetMyUserInfo } from "./users";
-import { ActivitiesParams, ActivitiesParamsDateStatus, AttendanceStatus, GetActivitiesByLocationParams, ParticipantsParams, RSVPStatus } from "@/api/activities/type";
+import { ActivitiesParams, ActivitiesParamsDateStatus, AttendanceStatus, GetActivitiesByLocationParams, ParticipantUpdateParams, ParticipantUpdateRequest, ParticipantsParams, RSVPStatus } from "@/api/activities/type";
 import { useCallback, useState } from 'react';
 import { useDebounce } from '@/modules/explore/hooks/useDebounce';
 
@@ -21,6 +21,13 @@ export function UseGetActivities(params = {} as ActivitiesParams, type: UseGetAc
   const [dateStatus, setDateStatus] = useState<ActivitiesParamsDateStatus | undefined>(params.dateStatus);
 
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  console.log(params);
+  console.log({
+    ...params,
+    title: searchQuery ? searchQuery : undefined,
+    categoryIds: selectedCategoryIds.length ? selectedCategoryIds : undefined,
+    dateStatus: dateStatus ? dateStatus : undefined,
+  });
 
   const query = useInfiniteQuery({
     queryKey: ['activities', type, debouncedSearchQuery, selectedCategoryIds, dateStatus],
@@ -119,7 +126,7 @@ export function UseSearchActivities(params: ActivitiesParams = {}, test: any = '
 // https://tanstack.com/query/latest/docs/framework/react/guides/placeholder-query-data
 export function UseGetActivity(activityId: number | string | string[]) {
   return useQuery({
-    queryKey: ['activities', activityId],
+    queryKey: ['activities', Number(activityId)],
     queryFn: () => activitiesApi.getActivityById(activityId),
   });
 };
@@ -161,10 +168,17 @@ export function UseDeleteActivity() {
     mutationKey: ['deleteActivity'],
     mutationFn: (activityId: string) => activitiesApi.deleteActivity(activityId),
     onSuccess: async (data, activityId) => {
-      await queryClient.setQueryData(['activities'], (oldData: ActivitiesResponse) => ({
-        ...oldData,
-        content: removeObjectFromArrayById(oldData.content, Number(activityId), 'activityId')
-      }));
+      // await queryClient.setQueryData(['activities'], (oldData: ActivitiesResponse) => ({
+      //   ...oldData,
+      //   content: removeObjectFromArrayById(oldData.content, Number(activityId), 'activityId')
+      // }));
+      await queryClient.invalidateQueries({ queryKey: ['activities'], type: 'all' });
+      // queryClient.setQueriesData(
+      //   { queryKey: ['activities'], type: 'all' },
+      //   (oldData: ActivitiesResponse) => ({
+      //     ...oldData,
+      //     content: removeObjectFromArrayById(oldData.content, Number(activityId), 'activityId')
+      //   }));
     },
   });
 }
@@ -178,7 +192,7 @@ export function UseGetActivityParticipants(params = {} as ParticipantsParams) {
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
 
   const query = useInfiniteQuery({
-    queryKey: ['activities', params.activityId, selectedRSVPStatus],
+    queryKey: ['activity-participants', params.activityId, selectedRSVPStatus],
     queryFn: ({ pageParam }) => activitiesApi.getActivityParticipants({
       ...params,
       page: pageParam,
@@ -211,14 +225,32 @@ export function UseCreateParticipant() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['createActivityParticipants'],
+    mutationKey: ['createActivityParticipant'],
     mutationFn: activitiesApi.createActivityParticipant,
     onSuccess: async (data) => {
-
-      await queryClient.invalidateQueries({ queryKey: ['activityParticipants', String(data.activityId)] });
+      await queryClient.invalidateQueries({ queryKey: ['activity-participants', Number(data.activityId)] });
+      await queryClient.invalidateQueries({ queryKey: ["activities", Number(data.activityId)] });
     },
   });
 };
+
+export function UseUpdateParticipant() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['updateActivityParticipant'],
+    mutationFn: ({
+      params, updateRequest
+    }: {
+      params: ParticipantUpdateParams, updateRequest: ParticipantUpdateRequest;
+    }) => activitiesApi.updateParticipant(params, updateRequest),
+
+    onSuccess: async (activity) => {
+      await queryClient.invalidateQueries({ queryKey: ['activity-participants', Number(activity.activityId)] });
+      await queryClient.invalidateQueries({ queryKey: ["activities", Number(activity.activityId)] });
+    },
+  });
+}
 
 export function UseDeleteParticipant() {
   const queryClient = useQueryClient();
@@ -226,7 +258,9 @@ export function UseDeleteParticipant() {
   return useMutation({
     mutationFn: activitiesApi.deleteActivityParticipant,
     onSuccess: async (data, variables) => {
-      await queryClient.invalidateQueries({ queryKey: ['activityParticipants', String(variables.activityId)] });
+      await queryClient.invalidateQueries({ queryKey: ['activity-participants', Number(variables.activityId)] });
+      await queryClient.invalidateQueries({ queryKey: ["activities", Number(variables.activityId)] });
+
     },
   });
 }

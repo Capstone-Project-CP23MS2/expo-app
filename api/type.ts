@@ -14,6 +14,8 @@ export type PaginateParams = {
   pageSize?: number;
 };
 
+export type PaginateParamsOrderBy = 'ASC' | 'DESC';
+
 // Activity
 export type ActivityResponse = {
   activityId: number;
