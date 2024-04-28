@@ -10,7 +10,7 @@ import { Slider } from 'react-native-ui-lib';
 import { RNUIButton } from '@/components';
 import { FiltersCategoryListItemPressHandler } from '../components/filters/FiltersCategoryListItem';
 import { useFilterStore } from '../stores/filter-store';
-import { useRouter } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { SliderRef } from 'react-native-ui-lib/src/incubator';
 import { set } from 'react-hook-form';
 
@@ -52,36 +52,49 @@ const FilterScreen = (props: Props) => {
   };
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={{ padding: 20 }} style={{ flex: 1 }}>
-        <Text style={styles.heading}>ระยะทางภายใน {distance.toFixed()} กิโล</Text>
-        <Slider
-          ref={sliderRef}
-          value={initialSliderValue}
-          onValueChange={setDistance}
-          minimumValue={0}
-          maximumValue={50}
-          step={1}
-          containerStyle={styles.sliderContainer}
-          // disableRTL={forceLTR}
-          // ref={this.slider}
-          // onReset={this.onSliderReset}
-        />
+    <>
+      <Stack.Screen
+        options={{
+          headerTitle: 'ตัวกรอง',
+          animation: 'slide_from_right',
+          animationDuration: 200,
+          presentation: 'transparentModal',
+        }}
+      />
 
-        <Text style={styles.heading}>ประเภท</Text>
-
-        <View style={{ height: '100%' }}>
-          <FiltersCategoryList
-            onSelectedCategoryIdsChange={setSelectedCategoryIds}
-            selectedCategoryIds={selectedCategoryIds}
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={{ padding: 20 }} style={{ flex: 1 }}>
+          <Text style={styles.heading}>ระยะทางภายใน {distance.toFixed()} กิโล</Text>
+          <Slider
+            ref={sliderRef}
+            value={initialSliderValue}
+            onValueChange={setDistance}
+            minimumValue={0}
+            maximumValue={50}
+            step={1}
+            containerStyle={styles.sliderContainer}
+            // disableRTL={forceLTR}
+            // ref={this.slider}
+            // onReset={this.onSliderReset}
           />
+
+          <Text style={styles.heading}>ประเภท</Text>
+
+          <View style={{ height: '100%' }}>
+            <FiltersCategoryList
+              onSelectedCategoryIdsChange={setSelectedCategoryIds}
+              selectedCategoryIds={selectedCategoryIds}
+            />
+          </View>
+
+          <Text style={styles.heading}>เรียงตาม</Text>
+        </ScrollView>
+        <View style={styles.footer}>
+          <RNUIButton label="ล้างค่า" color="disable" onPress={handleReset} />
+          <RNUIButton label="ค้นหา" onPress={handleSearch} />
         </View>
-      </ScrollView>
-      <View style={styles.footer}>
-        <RNUIButton label="ล้างค่า" color="disable" onPress={handleReset} />
-        <RNUIButton label="ค้นหา" onPress={handleSearch} />
       </View>
-    </View>
+    </>
   );
 };
 

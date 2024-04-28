@@ -5,20 +5,21 @@ import Listings from '../components/Listings';
 import { UseGetActivities, UseGetActivity } from '@/hooks/useAPI';
 import { FlashList } from '@shopify/flash-list';
 import { ActivityCard } from '@/modules/activities/components';
-import ExploreFilter from '../components/ExploreFilter';
+import ExploreHeader from '../components/ExploreHeader';
 import { Stack, useRouter } from 'expo-router';
-import ExploreHeader from '@/modules/dev-test/ExploreHeader';
 import { useCounterStore } from '@/modules/dev-test/stores/counter-store';
 import { RNUIButton } from '@/components';
 
 import { RefreshControl } from 'react-native-gesture-handler';
 import { useFilterStore } from '../stores/filter-store';
+import { useLocationContext } from '@/context/locationContext';
 
 type Props = {};
 
 const ExploreScreen = (props: Props) => {
   const { styles } = useStyles(stylesheet);
   const router = useRouter();
+
   const {
     data,
     fetchNextPage,
@@ -75,7 +76,7 @@ const ExploreScreen = (props: Props) => {
       <Stack.Screen
         options={{
           header: () => (
-            <ExploreFilter
+            <ExploreHeader
               searchQuery={searchQuery}
               onSearchChanged={setSearchQuery}
               onFilterPress={handleFilterPress}

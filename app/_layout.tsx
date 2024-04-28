@@ -12,6 +12,7 @@ import * as Location from 'expo-location';
 import { useContext, useEffect, useState } from 'react';
 import { UserLocationContext } from '@/context/userLocationContext';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import LocationProvider from '@/context/locationContext';
 
 // Create a client
 const queryClient = new QueryClient({
@@ -54,9 +55,11 @@ export default function RootLayout() {
 function RootLayoutNav() {
   return (
     <AuthProvider>
-      <BottomSheetModalProvider>
-        <Slot />
-      </BottomSheetModalProvider>
+      <LocationProvider>
+        <BottomSheetModalProvider>
+          <Slot />
+        </BottomSheetModalProvider>
+      </LocationProvider>
     </AuthProvider>
   );
 }

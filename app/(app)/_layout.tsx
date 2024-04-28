@@ -55,16 +55,6 @@ const AppEntry = (props: Props) => {
       /> */}
 
       <Stack.Screen
-        name="explore/filter"
-        options={{
-          headerTitle: 'Participants',
-          animation: 'slide_from_right',
-          animationDuration: 200,
-          presentation: 'transparentModal',
-        }}
-      />
-
-      <Stack.Screen
         name="profile/edit"
         options={{
           headerTitle: 'Edit Profile',
