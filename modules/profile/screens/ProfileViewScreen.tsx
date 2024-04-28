@@ -1,8 +1,8 @@
 import { View, Text } from 'react-native';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import { Stack, useLocalSearchParams } from 'expo-router';
-import { UseGetUserById } from '@/hooks/useAPI';
+import { UseGetActivityParticipants, UseGetParticipant, UseGetUserById } from '@/hooks/useAPI';
 import { Avatar } from 'react-native-ui-lib';
 import { UseGetReviewsUserByUserId } from '@/hooks/useAPI/reviews';
 import { RNUIButton } from '@/components';
@@ -13,12 +13,26 @@ import { getAge } from '@/utils/datetime';
 type Props = {};
 
 const ProfileViewScreen = (props: Props) => {
-  const { styles } = useStyles(stylesheet);
+  const { styles, theme } = useStyles(stylesheet);
   const { id: userId } = useLocalSearchParams<{ id: string }>();
   const { data: user } = UseGetUserById(Number(userId));
 
   const { data: reviewsRes } = UseGetReviewsUserByUserId({ userId: Number(userId) });
   const { reviews } = reviewsRes || {};
+
+  const { data: participantsRes, refetch } = UseGetActivityParticipants({ userId: user?.userId });
+  const { participants } = participantsRes || {};
+
+  const arrivedAmount = useMemo(() => {
+    return participants?.reduce((acc, participant) => {
+      return acc + (participant.status === 'arrived' ? 1 : 0);
+    }, 0);
+  }, [participants]);
+  const notArrivedAmount = useMemo(() => {
+    return participants?.reduce((acc, participant) => {
+      return acc + (participant.status === 'not_arrived' ? 1 : 0);
+    }, 0);
+  }, [participants]);
 
   return (
     <>
@@ -31,7 +45,7 @@ const ProfileViewScreen = (props: Props) => {
         }}
       />
       <View style={styles.container}>
-        <View style={styles.uContainer}>
+        <View style={styles.heroSectionContainer}>
           <Avatar
             source={{
               uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg',
@@ -40,6 +54,18 @@ const ProfileViewScreen = (props: Props) => {
           />
           <Text style={styles.username}>{user?.username}</Text>
           <Text style={styles.email}>{user?.email}</Text>
+          <View style={styles.arrivedStatContainer}>
+            <View style={styles.arrivedStatLabel}>
+              <Text style={theme.typography.lg}>มา</Text>
+              <Text style={theme.typography.h5}>{arrivedAmount}</Text>
+            </View>
+            <View style={styles.verticleLine}></View>
+
+            <View style={styles.arrivedStatLabel}>
+              <Text style={theme.typography.lg}>เท</Text>
+              <Text style={theme.typography.h5}>{notArrivedAmount}</Text>
+            </View>
+          </View>
         </View>
         <Text>LineId: {user?.lineId}</Text>
         <Text>Gender: {user?.gender}</Text>
@@ -73,7 +99,7 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
     flex: 1,
     padding: spacings.page,
   },
-  uContainer: {
+  heroSectionContainer: {
     // flex: 1,
     alignItems: 'center',
   },
@@ -82,6 +108,20 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   },
   email: {
     ...typography.md,
+  },
+  arrivedStatContainer: {
+    flexDirection: 'row',
+    // justifyContent: 'space-between',
+  },
+  arrivedStatLabel: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: spacings.lg,
+  },
+  verticleLine: {
+    height: '100%',
+    width: 2,
+    backgroundColor: '#909090',
   },
 }));
 
