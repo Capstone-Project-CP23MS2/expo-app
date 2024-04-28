@@ -12,6 +12,8 @@ export type Activity = {
   duration: number;
   noOfMembers: number;
   memberCounts?: number;
+  goingCounts: number,
+  lineGroupUrl: string,
   categoryName?: string;
   users: {
     userId: number;

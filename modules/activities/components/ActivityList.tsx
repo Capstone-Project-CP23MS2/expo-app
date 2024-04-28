@@ -16,7 +16,7 @@ type Props = {
   isFetching?: boolean;
 };
 
-const ParticipantList = ({
+const ActivityList = ({
   activities,
   onPress,
   onRefresh,
@@ -77,4 +77,4 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   },
 }));
 
-export default ParticipantList;
+export default ActivityList;

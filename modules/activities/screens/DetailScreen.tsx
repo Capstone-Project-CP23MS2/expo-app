@@ -213,7 +213,7 @@ const DetailScreen = (props: Props) => {
 
             <ActivityParticipants
               noOfMembers={activity?.noOfMembers}
-              memberCounts={activity?.memberCounts}
+              memberCounts={activity?.goingCounts}
               onPress={handlePressParticipants}
             />
           </View>
