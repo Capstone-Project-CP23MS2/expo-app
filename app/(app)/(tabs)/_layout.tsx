@@ -38,7 +38,7 @@ const TabsLayout = (props: Props) => {
       }}
     >
       <Tabs.Screen
-        name="index"
+        name="หน้าแรก"
         options={{
           tabBarIcon: ({ size, color }) => (
             <MaterialIcons name="home-filled" size={size} color={color} />
