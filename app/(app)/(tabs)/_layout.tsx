@@ -38,6 +38,14 @@ const TabsLayout = (props: Props) => {
       }}
     >
       <Tabs.Screen
+        name="index"
+        options={{
+          tabBarIcon: ({ size, color }) => (
+            <MaterialIcons name="home-filled" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="explore"
         options={{
           tabBarIcon: ({ size, color }) => (
@@ -45,12 +53,7 @@ const TabsLayout = (props: Props) => {
           ),
         }}
       />
-      <Tabs.Screen
-        name="index"
-        options={{
-          tabBarIcon: ({ size, color }) => <Entypo name="list" size={size} color={color} />,
-        }}
-      />
+
       <Tabs.Screen
         name="calendar"
         options={{
@@ -86,7 +89,7 @@ const TabsLayout = (props: Props) => {
           headerTitle: 'โปรไฟล์',
         }}
       />
-      <Tabs.Screen
+      {/* <Tabs.Screen
         name="home-old"
         options={{
           tabBarIcon: ({ size, color }) => (
@@ -94,7 +97,7 @@ const TabsLayout = (props: Props) => {
           ),
           headerTitle: 'หน้าหลัก',
         }}
-      />
+      /> */}
     </Tabs>
   );
 };

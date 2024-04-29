@@ -74,10 +74,10 @@ const ProfileViewScreen = (props: Props) => {
                 </View>
               </View>
             </View>
-            <View style={{ gap: 5 }}>
+            {/* <View style={{ gap: 5 }}>
               <Text style={styles.textBold}>ไลน์ไอดี</Text>
               <Text style={[styles.text, styles.textbox]}>{user?.lineId}</Text>
-            </View>
+            </View> */}
             <View style={{ gap: 5 }}>
               <Text style={styles.textBold}>เพศ</Text>
               <Text style={[styles.text, styles.textbox]}>{user?.gender}</Text>

@@ -2,7 +2,7 @@ import { useAuth } from '@/context/authContext';
 import { UseDeleteUser, UseGetActivities, UseGetMyUserInfo } from '@/hooks/useAPI';
 import { BaseButton, RefreshControl, ScrollView, TextInput } from 'react-native-gesture-handler';
 import { useRouter } from 'expo-router';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { SafeAreaView, Modal, StyleSheet, View } from 'react-native';
 import { Button, Chip, Text } from 'react-native-ui-lib';
 import { FontAwesome, MaterialIcons, AntDesign } from '@expo/vector-icons';
@@ -12,15 +12,24 @@ import { ActivityCard } from '../activities/components/';
 import { TouchableOpacity } from 'react-native-ui-lib';
 import StatusListView from './components/StatusListView';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import MapActivities from '../activities/components/MapActivities';
+import { Category } from '@/api/categories/categories.type';
 
 type Props = {};
 
 const Page = (props: Props) => {
   const { styles } = useStyles(stylesheet);
   const router = useRouter();
+  const { data: user } = UseGetMyUserInfo();
+  const userInterests = useMemo(() => {
+    return user?.userInterests?.map((interest: Category) => interest.categoryId);
+  }, [user]);
 
-  const { data, isLoading, isError, error, refetch } = UseGetActivities({});
+  const { data, isLoading, isError, error, refetch, setSelectedCategoryIds } = UseGetActivities({});
   const { activities } = data || {};
+  useEffect(() => {
+    setSelectedCategoryIds(userInterests || []);
+  }, []);
 
   const { user: userInfo } = useAuth();
 
@@ -64,94 +73,26 @@ const Page = (props: Props) => {
       >
         <View style={styles.container}>
           <View style={styles.cardsContainer}>
+            <MapActivities />
+
             <View style={{ gap: 5, flexDirection: 'row' }}>
-              <Text style={styles.title}>เข้าร่วมกิจกรรม</Text>
-              <Chip label={String(activityJoined)} />
-            </View>
-            {isLoading ? (
-              <ActivityIndicator size="large" color={COLORS.gray} />
-            ) : isError ? (
-              <Text>Error! {error.message}</Text>
-            ) : activityJoined ? (
-              activities
-                ?.filter(
-                  activity =>
-                    activity.users.some((user: any) => user.userId === userInfo?.userId) &&
-                    activity.hostUserId !== userInfo?.userId,
-                )
-                .map(activity => (
-                  <ActivityCard
-                    key={`activity-${activity.activityId}`}
-                    activity={activity}
-                    onPress={() => router.push(`/activities/${activity.activityId}`)}
-                  />
-                ))
-            ) : (
-              <View style={styles.blank}>
-                <Text style={styles.blankText}>ไม่มีกิจกรรม</Text>
-              </View>
-            )}
-            <View style={{ gap: 5, flexDirection: 'row' }}>
-              <Text style={styles.title}>เจ้าของกิจกรรม</Text>
-              <Chip label={String(activityHost)} />
+              <Text style={styles.title}>กิจกรรมตามความสนใจของคุณ</Text>
             </View>
             {isLoading ? (
               <ActivityIndicator size="large" color={COLORS.gray} />
             ) : isError ? (
               <Text>Error! {error.message}</Text>
             ) : activityHost ? (
-              activities
-                ?.filter(activity => activity.hostUserId === userInfo?.userId)
-                .map(activity => (
-                  <ActivityCard
-                    key={`activity-${activity.activityId}`}
-                    activity={activity}
-                    onPress={() => router.push(`/activities/${activity.activityId}`)}
-                  />
-                ))
+              activities?.map(activity => (
+                <ActivityCard
+                  key={`activity-${activity.activityId}`}
+                  activity={activity}
+                  onPress={() => router.push(`/activities/${activity.activityId}`)}
+                />
+              ))
             ) : (
               <View style={styles.blank}>
                 <Text style={styles.blankText}>ไม่มีกิจกรรม</Text>
-              </View>
-            )}
-            <View style={{ gap: 2 }}>
-              <Text style={styles.title}>สถานะกิจกรรม</Text>
-            </View>
-            <StatusListView onStatusChanged={onDataChanged} />
-            {activities?.length && (
-              <View style={{ gap: 10, marginBottom: 15 }}>
-                {status === 'ALL' &&
-                  activities
-                    ?.filter(activity =>
-                      activity.users.some((user: any) => user.userId === userInfo?.userId),
-                    )
-                    .map(activity => (
-                      <ActivityCard
-                        key={`activity-${activity.activityId}`}
-                        activity={activity}
-                        onPress={() => router.push(`/activities/${activity.activityId}`)}
-                      />
-                    ))}
-                {status === 'GOING' &&
-                  activities
-                    ?.filter(activity => isInDuration(activity))
-                    .map(activity => (
-                      <ActivityCard
-                        key={`activity-${activity.activityId}`}
-                        activity={activity}
-                        onPress={() => router.push(`/activities/${activity.activityId}`)}
-                      />
-                    ))}
-                {status === 'PAST' &&
-                  activities
-                    ?.filter(activity => !isInDuration(activity))
-                    .map(activity => (
-                      <ActivityCard
-                        key={`activity-${activity.activityId}`}
-                        activity={activity}
-                        onPress={() => router.push(`/activities/${activity.activityId}`)}
-                      />
-                    ))}
               </View>
             )}
           </View>

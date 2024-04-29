@@ -33,14 +33,14 @@ const Page = (props: Props) => {
         router.push('/profile/edit');
       },
     },
-    {
-      id: 'user-interest',
-      title: 'สิ่งที่สนใจ',
-      icon: 'heart',
-      onPress: () => {
-        interestsBottomSheetRef.current?.open();
-      },
-    },
+    // {
+    //   id: 'user-interest',
+    //   title: 'สิ่งที่สนใจ',
+    //   icon: 'heart',
+    //   onPress: () => {
+    //     interestsBottomSheetRef.current?.open();
+    //   },
+    // },
     {
       id: 'user-manage-account',
       title: 'จัดการบัญชี',
@@ -50,15 +50,15 @@ const Page = (props: Props) => {
         router.push('/profile/manage-account');
       },
     },
-    {
-      id: 'dev-test',
-      title: 'Dev',
-      icon: 'dev',
-      onPress: () => {
-        console.log('👤 Dev');
-        router.push('/dev/');
-      },
-    },
+    // {
+    //   id: 'dev-test',
+    //   title: 'Dev',
+    //   icon: 'dev',
+    //   onPress: () => {
+    //     console.log('👤 Dev');
+    //     router.push('/dev/');
+    //   },
+    // },
   ];
 
   const [showSignOutModal, setShowSignOutModal] = useState(false);
