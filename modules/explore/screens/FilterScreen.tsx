@@ -64,8 +64,8 @@ const FilterScreen = (props: Props) => {
 
       <View style={styles.container}>
         <ScrollView contentContainerStyle={{ padding: 20 }} style={{ flex: 1 }}>
-          <Text style={styles.heading}>ระยะทางภายใน {distance.toFixed()} กิโล</Text>
-          <Slider
+          {/* <Text style={styles.heading}>ระยะทางภายใน {distance.toFixed()} กิโล</Text> */}
+          {/* <Slider
             ref={sliderRef}
             value={initialSliderValue}
             onValueChange={setDistance}
@@ -76,7 +76,7 @@ const FilterScreen = (props: Props) => {
             // disableRTL={forceLTR}
             // ref={this.slider}
             // onReset={this.onSliderReset}
-          />
+          /> */}
 
           <Text style={styles.heading}>ประเภท</Text>
 
