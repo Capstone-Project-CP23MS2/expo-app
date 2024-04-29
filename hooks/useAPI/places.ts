@@ -11,7 +11,8 @@ export function UseGetPlaces(params = { pageSize: 25 } as PlacesParams) {
 
 export function UseGetPlacesMap(params = {} as PlacesMapParams) {
     return useQuery({
-        queryKey: ['places'],
+        queryKey: ['places-map'],
         queryFn: () => placesApi.getPlacesMap(params),
+        enabled: !!params.lat && !!params.lng,
     });
 };

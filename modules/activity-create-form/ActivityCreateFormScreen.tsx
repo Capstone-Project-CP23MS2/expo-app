@@ -13,14 +13,14 @@ import {
   RNUIButton,
   RNUITextField,
 } from '@/components';
-import { NumberInput, Picker } from 'react-native-ui-lib';
-import { MaterialIcons } from '@expo/vector-icons';
+import { NumberInput, Picker, TouchableOpacity } from 'react-native-ui-lib';
+import { AntDesign, Entypo, MaterialIcons } from '@expo/vector-icons';
 import { UseGetPlaces } from '@/hooks/useAPI/places';
 import { objToFormData } from '@/utils';
 import dayjs from 'dayjs';
 
 export default function ActivityCreateForm() {
-  const { styles } = useStyles(stylesheet);
+  const { styles, theme } = useStyles(stylesheet);
   const router = useRouter();
 
   const { data: userInfo } = UseGetMyUserInfo();
@@ -136,14 +136,14 @@ export default function ActivityCreateForm() {
           name="categoryId"
           render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
             <Picker
-              placeholder={'select your category'}
+              placeholder={'เลือกประเภทกิจกรรม'}
               value={value}
               enableModalBlur={false}
               onChange={onChange}
               onBlur={onBlur}
-              topBarProps={{ title: 'Categories' }}
+              topBarProps={{ title: 'กิจกรรม' }}
               showSearch
-              searchPlaceholder={'Search a category'}
+              searchPlaceholder={'เลือกประเภทกิจกรรม'}
               renderPicker={(_value?: any, label?: string) => (
                 <RNUITextField
                   value={label}
@@ -168,23 +168,38 @@ export default function ActivityCreateForm() {
           name="locationId"
           render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
             <Picker
-              placeholder={'select your category'}
+              placeholder={'เลือกสถานที่'}
               value={value}
               enableModalBlur={false}
               onChange={onChange}
               onBlur={onBlur}
-              topBarProps={{ title: 'Categories' }}
+              topBarProps={{ title: 'สถานที่' }}
               showSearch
               searchPlaceholder={'Search a category'}
               renderPicker={(_value?: any, label?: string) => (
                 <RNUITextField
                   value={label}
-                  placeholder={'้เลือกสถานที่'}
+                  placeholder={'เลือกสถานที่'}
                   enableErrors
                   error={error}
                 />
               )}
             >
+              {/* <TouchableOpacity
+                style={{
+                  paddingHorizontal: 20,
+                  height: 56.5,
+                  flexDirection: 'row',
+                  gap: 8,
+                  borderBottomWidth: 1,
+                  borderColor: '#E8ECF0',
+                  alignItems: 'center',
+                }}
+                onPress={() => router.push('/activities/create-place')}
+              >
+                <Entypo name="plus" size={24} color="black" />
+                <Text style={theme.typography.md}>สร้างสถานที่ใหม่</Text>
+              </TouchableOpacity> */}
               {places?.map(place => (
                 <Picker.Item key={place.locationId} value={place.locationId} label={place.name} />
               ))}

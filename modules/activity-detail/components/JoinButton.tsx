@@ -12,6 +12,7 @@ import {
 import { objToFormData } from '@/utils';
 import { useRouter } from 'expo-router';
 import { createStyleSheet, useStyles } from 'react-native-unistyles';
+import { RNUIButton } from '@/components';
 
 type Props = {
   userId?: number;
@@ -21,6 +22,7 @@ type Props = {
   isOwner?: boolean;
   isParticipant?: boolean;
   targetId?: number;
+  isFull?: boolean;
 };
 
 export default function JoinButton({
@@ -30,6 +32,7 @@ export default function JoinButton({
   activityTitle,
   isParticipant,
   targetId,
+  isFull,
 }: Props) {
   const { styles } = useStyles(stylesheet);
   const router = useRouter();
@@ -80,7 +83,6 @@ export default function JoinButton({
       {
         onSuccess: () => {
           ToastAndroid.show("You've left Activity", ToastAndroid.SHORT);
-          router.push('/(app)/(tabs)/');
         },
         onError: error => {
           console.log(error);
@@ -118,11 +120,16 @@ export default function JoinButton({
 
   return (
     <View style={styles.container}>
-      <AppButton variant="danger" label="ออกจากกิจกรรม" onPress={onLeaveActivity} fullWidth />
+      <RNUIButton color="danger" label="ออกจากกิจกรรม" onPress={onLeaveActivity} fullWidth />
       {participant?.rsvpStatus === 'interesting' ? (
-        <AppButton label="ยืนยันการไป" onPress={handleGoingActivity} fullWidth />
+        <RNUIButton
+          label={isFull ? 'กิจกรรมเต็ม' : 'ยืนยันการไป'}
+          onPress={handleGoingActivity}
+          fullWidth
+          disabled={isFull}
+        />
       ) : (
-        <AppButton label="ยกเลิกการยืนยัน" onPress={handleGoingActivity} fullWidth />
+        <RNUIButton label="ยกเลิกการยืนยัน" onPress={handleGoingActivity} fullWidth />
       )}
     </View>
   );

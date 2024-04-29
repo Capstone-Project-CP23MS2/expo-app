@@ -8,17 +8,21 @@ type Props = {
 
 type LocationContext = {
   location: LocationObject | null;
+  isLoading: boolean;
+  error: Error | null;
 };
 
 const LocationContext = createContext<LocationContext>({} as LocationContext);
 export const useLocationContext = () => useContext(LocationContext);
 
 export default function LocationProvider({ children }: Props) {
-  const { location } = useLocation();
+  const { location, error, isLoading } = useLocation();
 
   const value = useMemo(
     () => ({
       location,
+      isLoading,
+      error,
     }),
     [location],
   );

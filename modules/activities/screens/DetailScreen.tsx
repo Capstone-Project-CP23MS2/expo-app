@@ -48,7 +48,7 @@ const DetailScreen = (props: Props) => {
   );
 
   const isOwner = user?.userId === activity?.hostUserId;
-
+  const isFull = activity?.goingCounts === activity?.noOfMembers;
   const diffTime = dayjs().diff(dayjs(activity?.dateTime!));
   const remainingTime = dayjs.duration(diffTime).humanize();
   const activityStart = dayjs(activity?.dateTime!);
@@ -147,6 +147,7 @@ const DetailScreen = (props: Props) => {
           disabled={!isLive}
         />
       );
+
     return (
       <JoinButton
         userId={user?.userId}
@@ -156,6 +157,7 @@ const DetailScreen = (props: Props) => {
         isParticipant={isParticipant}
         isOwner={isOwner}
         targetId={activity?.hostUserId}
+        isFull={isFull}
       />
     );
   };
@@ -214,7 +216,8 @@ const DetailScreen = (props: Props) => {
               duration={activity?.duration}
               // onPress={handlePressDatetime}
             />
-            <GroupURLSection url={activity?.lineGroupUrl} />
+            {isParticipant && <GroupURLSection url={activity?.lineGroupUrl} />}
+
             <ActivityPlace place={activity?.location} />
             <ActivityParticipants
               noOfMembers={activity?.noOfMembers}

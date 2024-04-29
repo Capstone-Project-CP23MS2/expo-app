@@ -32,6 +32,8 @@ const index = () => {
   }, []);
 
   const handleRegionChange = (newRegion: any) => {
+    console.log(newRegion);
+
     setRegion(newRegion);
   };
 

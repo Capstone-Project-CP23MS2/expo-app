@@ -33,7 +33,7 @@ const INITIAL_REGION = {
   latitudeDelta: 0.0422,
   longitudeDelta: 0.0421,
 };
-const DevMap = (props: Props) => {
+const ExploreMap = (props: Props) => {
   const { styles } = useStyles(stylesheet);
   const router = useRouter();
   const navigation = useNavigation();
@@ -176,4 +176,4 @@ const stylesheet = createStyleSheet(({ colors, spacings, typography }) => ({
   },
 }));
 
-export default DevMap;
+export default ExploreMap;
