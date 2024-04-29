@@ -30,7 +30,8 @@ const ActivityUpcomingTab = (props: Props) => {
     debouncedSearchQuery,
     setDateStatus,
   } = UseGetActivities({
-    hostId: user?.userId,
+    // hostId: user?.userId,
+    userId: user?.userId,
     pageSize: 5,
     dateStatus: 'upcoming',
     sortBy: 'dateTime',

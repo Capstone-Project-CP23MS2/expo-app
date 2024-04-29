@@ -20,13 +20,13 @@ const items: TabControllerItemProps[] = [
     label: 'กำลังมาถึง', //เป็นเจ้าของ
   },
   {
-    label: 'จบไปแล้ว',
+    label: 'ผ่านไปแล้ว',
     // badge: { label: '2', style: { marginLeft: 4 }, size: 24 },
   },
-  {
-    // key: 'favorite',
-    label: 'ยกเลิก/ไม่ได้ไป',
-  },
+  // {
+  //   // key: 'favorite',
+  //   label: 'ยกเลิก/ไม่ได้ไป',
+  // },
 ];
 
 const WishListsScreen = (props: Props) => {
