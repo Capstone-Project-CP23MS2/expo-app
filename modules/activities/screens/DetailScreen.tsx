@@ -19,6 +19,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import OptionsBottomSheet from '../components/details/OptionsBottomSheet';
 import { BottomSheetModal, useBottomSheetModal } from '@gorhom/bottom-sheet';
 import dayjs from 'dayjs';
+import GroupURLSection from '../components/details/GroupURLSection';
 
 type Props = {};
 // note: ต้องเห็นข้อมูลทุกอย่างที่ใช้ในการตัดสินใจใน 1 หน้าจอ
@@ -211,10 +212,10 @@ const DetailScreen = (props: Props) => {
             <ActivityDatetime
               datetime={activity?.dateTime}
               duration={activity?.duration}
-              onPress={handlePressDatetime}
+              // onPress={handlePressDatetime}
             />
+            <GroupURLSection url={activity?.lineGroupUrl} />
             <ActivityPlace place={activity?.location} />
-
             <ActivityParticipants
               noOfMembers={activity?.noOfMembers}
               memberCounts={activity?.goingCounts}

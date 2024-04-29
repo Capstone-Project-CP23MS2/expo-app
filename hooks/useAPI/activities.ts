@@ -5,7 +5,7 @@ import { ActivitiesResponse, ActivityResponse, ActivityUpdateRequest, PaginateRe
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { removeObjectFromArrayById } from "@/utils";
 import { UseGetMyUserInfo } from "./users";
-import { ActivitiesParams, ActivitiesParamsDateStatus, AttendanceStatus, GetActivitiesByLocationParams, ParticipantUpdateParams, ParticipantUpdateRequest, ParticipantsParams, RSVPStatus } from "@/api/activities/type";
+import { ActivitiesMapParams, ActivitiesParams, ActivitiesParamsDateStatus, AttendanceStatus, GetActivitiesByLocationParams, ParticipantUpdateParams, ParticipantUpdateRequest, ParticipantsParams, RSVPStatus } from "@/api/activities/type";
 import { useCallback, useState } from 'react';
 import { useDebounce } from '@/modules/explore/hooks/useDebounce';
 
@@ -46,6 +46,42 @@ export function UseGetActivities(params = {} as ActivitiesParams, type: UseGetAc
       const activities = data.pages.flatMap(page => page.content);
       return { activities, ...data };
     }
+  });
+
+  return {
+    ...query,
+    searchQuery,
+    setSearchQuery,
+    debouncedSearchQuery,
+    selectedCategoryIds,
+    setSelectedCategoryIds,
+    dateStatus,
+    setDateStatus
+  };
+}
+
+export function UseGetActivitiesMap(params = {} as ActivitiesMapParams,) {
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [dateStatus, setDateStatus] = useState<ActivitiesParamsDateStatus | undefined>(params.dateStatus);
+
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
+  // console.log(params);
+  // console.log({
+  //   ...params,
+  //   title: searchQuery ? searchQuery : undefined,
+  //   categoryIds: selectedCategoryIds.length ? selectedCategoryIds : undefined,
+  //   dateStatus: dateStatus ? dateStatus : undefined,
+  // });
+  const query = useQuery({
+    queryKey: ['activities-map', debouncedSearchQuery, selectedCategoryIds, dateStatus],
+    queryFn: () => activitiesApi.getActivitiesMap({
+      ...params,
+      title: searchQuery ? searchQuery : undefined,
+      categoryIds: selectedCategoryIds.length ? selectedCategoryIds : undefined,
+      dateStatus: dateStatus ? dateStatus : undefined,
+    }),
+    enabled: !!params.lat && !!params.lng,
   });
 
   return {

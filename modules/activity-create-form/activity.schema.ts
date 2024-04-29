@@ -9,6 +9,7 @@ export const ActivityInfoSchema = z.object({
     dateTime: z.string().datetime(),
     duration: z.number().min(1),
     noOfMembers: z.number(),
+    lineGroupUrl: z.string(),
 });
 
 // extract the inferred type

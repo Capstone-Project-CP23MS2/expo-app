@@ -2,7 +2,7 @@ import { ActivitiesResponse, ParticipantResponse, ActivityUpdateRequest, Paginat
 import apiClient from "../apiClient";
 import { objToFormData } from '@/utils';
 import { AxiosRequestConfig } from 'axios';
-import { ActivitiesParams, Activity, ActivityCreateRequest, GetActivitiesByLocationParams, Participant, ParticipantUpdateParams, ParticipantUpdateRequest, ParticipantsParams } from './type';
+import { ActivitiesMapParams, ActivitiesParams, Activity, ActivityCreateRequest, GetActivitiesByLocationParams, Participant, ParticipantUpdateParams, ParticipantUpdateRequest, ParticipantsParams } from './type';
 
 class ActivitiesApi {
   async getActivities(params: ActivitiesParams) {
@@ -19,6 +19,18 @@ class ActivitiesApi {
     const { data } = await apiClient.get<PaginateResponse<Activity>>('/activities', config);
     return data;
   }
+
+  async getActivitiesMap(params: ActivitiesMapParams) {
+    const config: AxiosRequestConfig = {
+      params,
+      paramsSerializer: {
+        indexes: null,
+      }
+    };
+    const { data } = await apiClient.get<Activity[]>('/activities/getList', config);
+    return data;
+  }
+
 
 
   async getActivityById(id: number | string | string[]) {

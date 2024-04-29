@@ -13,15 +13,16 @@ export type Activity = {
   noOfMembers: number;
   memberCounts?: number;
   goingCounts: number,
-  lineGroupUrl: string,
+  lineGroupUrl?: string,
   categoryName?: string;
   users: {
     userId: number;
     username: string;
     email: string;
   }[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
+
 };
 
 type ActivitiesSortBy = 'activityId' | 'createdAt' | 'dateTime' | 'noOfMembers' | 'title';
@@ -37,6 +38,19 @@ export type ActivitiesParams = PaginateParams & {
   date?: string;
   orderBy?: PaginateParamsOrderBy;
 };
+export type ActivitiesMapParams = {
+  categoryIds?: number[];
+  title?: string; //TODO: change name later
+  hostId?: number;
+  userId?: number;
+  dateStatus?: ActivitiesParamsDateStatus;
+  date?: string;
+  orderBy?: PaginateParamsOrderBy;
+  lat?: number;
+  lng?: number;
+  radius?: number;
+};
+
 
 export type GetActivitiesByLocationParams = {
   lat: number;
@@ -53,6 +67,7 @@ export type ActivityCreateRequest = {
   dateTime: string;
   duration: number;
   noOfMembers: number;
+  lineGroupUrl: string;
 };
 
 export type AttendanceStatus = 'arrived' | 'not_arrived' | 'waiting' | 'none';

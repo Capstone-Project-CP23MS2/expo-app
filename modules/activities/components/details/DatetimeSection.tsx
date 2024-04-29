@@ -4,26 +4,27 @@ import { createStyleSheet, useStyles } from 'react-native-unistyles';
 import dayjs from 'dayjs';
 import { formatDate } from '@/utils/datetime';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 // import 'dayjs/locale/th';
 
 type Props = {
   datetime?: string;
   duration?: number;
-  onPress: () => void;
+  onPress?: () => void;
 };
 
 const DatetimeSection = ({ datetime, duration, onPress }: Props) => {
   const { styles } = useStyles(stylesheet);
 
   return (
-    <Pressable style={styles.container} onPress={onPress}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.iconContainer}>
         <MaterialCommunityIcons name="calendar-clock" size={24} color="black" />
       </View>
       <View style={styles.content}>
         <Text style={styles.date}>{formatDate(datetime!)} น.</Text>
       </View>
-    </Pressable>
+    </TouchableOpacity>
   );
 };
 

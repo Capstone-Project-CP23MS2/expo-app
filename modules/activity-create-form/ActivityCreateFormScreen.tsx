@@ -25,7 +25,7 @@ export default function ActivityCreateForm() {
 
   const { data: userInfo } = UseGetMyUserInfo();
   const { data: categoriesData, isLoading: isLoadingCategories } = UseGetCategories();
-  const { categories, paginationData } = categoriesData || {};
+  const { categories } = categoriesData || {};
 
   const { data: placesData, isLoading: isLoadingPlaces } = UseGetPlaces();
   const { content: places } = placesData || {};
@@ -39,6 +39,7 @@ export default function ActivityCreateForm() {
     resolver: zodResolver(ActivityInfoSchema),
     defaultValues: {
       hostUserId: userInfo?.userId,
+      duration: 30,
     },
   });
 
@@ -107,9 +108,21 @@ export default function ActivityCreateForm() {
 
         <Controller
           control={control}
-          name="duration"
+          name="lineGroupUrl"
           render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
             <RNUITextField
+              value={value}
+              onBlur={onBlur}
+              onChangeText={onChange}
+              enableErrors
+              error={error}
+              label="ลิงค์กลุ่ม (เช่น line, discord)"
+              placeholder={'ชื่อกิจกรรม'}
+            />
+          )}
+        />
+
+        {/*  <RNUITextField
               keyboardType="numeric"
               value={value ? value.toString() : ''}
               onBlur={onBlur}
@@ -117,10 +130,7 @@ export default function ActivityCreateForm() {
               enableErrors
               error={error}
               placeholder={'ระยะเวลา (นาที)'}
-            />
-          )}
-        />
-
+            /> */}
         <Controller
           control={control}
           name="categoryId"
